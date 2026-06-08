@@ -93,7 +93,7 @@ A sanitized visual architecture diagram may be added later.
 | Component | Status | Purpose | Notes |
 |---|---|---|---|
 | pfSense | Implemented | Router/firewall, DNS filtering, security services | Currently used as the main firewall platform |
-| OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP |
+| OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP with main Wi-Fi and separate guest Wi-Fi |
 | Proxmox VE | Implemented | Virtualization platform | Used for virtualized services and lab systems |
 | Proxmox Backup Server | Implemented | Backup and restore platform | Used for VM/container backup workflows |
 | TrueNAS | Implemented | Storage platform | Used for storage and snapshots |
@@ -179,6 +179,19 @@ Example allowed traffic patterns, expressed generically:
 - VoIP devices to the VoIP server
 
 Exact firewall rules, internal addresses, and real network details are intentionally not published.
+
+### Wi-Fi and Guest Network
+
+Wireless access is provided through an OpenWrt router configured as a dumb wireless access point.
+
+The access point provides:
+
+- Main Wi-Fi for trusted devices
+- Separate guest Wi-Fi for visitors
+- Guest access intended to reduce exposure of trusted devices and internal services
+- Central routing/firewall handling through pfSense
+
+The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC addresses, internal addressing, and exact access rules are intentionally not published.
 
 ---
 
