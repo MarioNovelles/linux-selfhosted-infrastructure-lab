@@ -52,6 +52,10 @@ This repository is a portfolio and documentation project.
 
 The lab is organized around separate infrastructure roles: routing/firewalling, virtualization, storage, backups, application services, monitoring, VoIP, and experimentation.
 
+![Home Lab Architecture Overview](./docs/images/home-lab-architecture-overview-public-version.png)
+
+The diagram above is a sanitized public overview. It avoids real domains, IP addresses, credentials, exact firewall rules, and sensitive internal details.
+
 <pre>
 Internet
    |
