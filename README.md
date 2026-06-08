@@ -14,7 +14,7 @@ This lab is designed around practical infrastructure tasks rather than only runn
 
 The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, HAProxy reverse proxying, Cloudflare DNS, ACME/TLS certificates, pfSense firewalling, Tailscale VPN access, monitoring, VoIP, and local AI experimentation.
 
-Some components are fully implemented, while others are planned or being improved. The goal of this repository is to show practical learning, structured thinking, security awareness, and documentation habits without publishing sensitive configuration details.
+Some components are implemented, some were previously tested, and others are planned or being improved. The goal of this repository is to show practical learning, structured thinking, security awareness, and documentation habits without publishing sensitive configuration details.
 
 ---
 
@@ -88,8 +88,6 @@ Home / lab network
          - Sensors / testing
 </pre>
 
-A sanitized visual architecture diagram may be added later.
-
 ---
 
 ## Implemented and Planned Components
@@ -116,8 +114,8 @@ A sanitized visual architecture diagram may be added later.
 | FreePBX | Implemented | VoIP server | Used for VoIP experimentation and service separation |
 | Ollama | Implemented | Local AI experimentation | Used for local LLM workflows |
 | Open WebUI | Implemented | Local AI web interface | Used together with Ollama |
-| OpenClaw | Previously implemented | Agentic AI experimentation | Previously tested; replaced in current workflow by Hermes |
-| Hermes Agent | Implemented | Agentic automation / admin experimentation | Used for local agentic workflows |
+| OpenClaw | Previously implemented | Agentic AI experimentation | Previously tested in the lab |
+| Hermes Agent | Implemented | Agentic automation experimentation | Used for local agentic workflows and job-search automation |
 | Traefik | Planned | Reverse proxy exploration | Planned for comparison/learning |
 | Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
 | Home Assistant | Planned | Smart home automation | Planned, not currently central |
@@ -127,7 +125,7 @@ A sanitized visual architecture diagram may be added later.
 
 ## Services
 
-The lab has included the following self-hosted services.
+The lab includes or has included the following self-hosted services.
 
 | Service | Status | Purpose |
 |---|---|---|
@@ -219,7 +217,7 @@ The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC a
 - pfBlockerNG
 - Tailscale
 - WireGuard
-- Firewall rules
+- Firewall policy design
 - SSH hardening
 - TLS certificates
 - Cloudflare DNS
