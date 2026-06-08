@@ -61,9 +61,18 @@ Internet
    |
    v
 Firewall / Router
+(pfSense)
+   |
+   +-- OpenWrt access point
+   |     - Main Wi-Fi
+   |     - Separate guest Wi-Fi
    |
    v
 Home / lab network
+   |
+   v
+Planned managed VLAN switch
+(not currently deployed)
    |
    +-- Virtualization host
    |     - Linux VMs
