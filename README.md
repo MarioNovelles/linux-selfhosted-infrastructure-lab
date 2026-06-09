@@ -191,6 +191,8 @@ Example allowed traffic patterns, expressed generically:
 
 Exact firewall rules, internal addresses, and real network details are intentionally not published.
 
+To avoid VPN routing conflicts, the home network was moved away from very common private ranges such as `192.168.1.0/24` to a less common private subnet. The exact subnet is intentionally not published.
+
 ### Wi-Fi and Guest Network
 
 Wireless access is provided through an OpenWrt router configured as a dumb wireless access point.
