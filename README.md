@@ -234,6 +234,7 @@ The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC a
 - Cloudflare DNS
 - ACME / Let's Encrypt
 - Suricata
+- Basic security lab practice with Kali Linux, nmap, Wireshark, and network/service exposure checks
 
 ### Containers and Services
 
