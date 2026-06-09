@@ -25,7 +25,7 @@ sudo apt --fix-broken install -y
 sudo dpkg --configure -a
 sudo apt autoremove --purge -y
 sudo apt autoclean -y
-echo "System packages updated sucessfully."
+echo "System packages updated successfully."
 
 # Show the updating sign setting set off and on to not show the echo part
 set +x
@@ -38,7 +38,7 @@ set -x
 flatpak update -y
 flatpak uninstall --unused -y
 flatpak repair
-echo "Flatpaks updated sucessfully."
+echo "Flatpaks updated successfully."
 
 # Show the updating sign setting set off and on to not show the echo part
 set +x
@@ -64,7 +64,7 @@ sudo docker compose up -d
 
 # Removes obsolete image
 sudo docker image prune --force
-echo "Containers updated sucessfully."
+echo "Containers updated successfully."
 
 # Show the updating sign setting set off and on to not show the echo part
 set +x
@@ -97,7 +97,7 @@ fi
 
 echo "Updating plugins..."
 nvim --headless "+Lazy! sync" +qa
-echo "Neovim and Lazyvim updated sucessfully."
+echo "Neovim and Lazyvim updated successfully."
 
 # Update opencode at the end, because it fails sometimes, and here doest stop the rest of the update
 # and when i see it fails i can run it manually afterwards
@@ -105,6 +105,6 @@ docker pull ghcr.io/anomalyco/opencode:latest
 # Show the updating sign setting set off and on to not show the echo part
 set +x
 echo "============================================"
-echo "========== UPDATED SUCESSFULLY ============="
+echo "========== UPDATED SUCCESSFULLY ============="
 echo "============================================"
 #set -x
