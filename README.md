@@ -131,7 +131,7 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 | Cloudflare DNS | Implemented | DNS and domain management | Used for DNS/domain routing |
 | WireGuard | Previously implemented | VPN access | Used in the past; currently less central because of CGNAT |
 | Tailscale | Implemented | VPN-style remote access | Used because the current connection is behind CGNAT |
-| Pi-hole | Previously implemented / planned again | DNS filtering | Used in the past; currently pfBlockerNG is used inside pfSense |
+| Pi-hole | Previously implemented / planned again | DNS filtering | Planned as a possible dedicated DNS filtering layer outside pfSense |
 | Uptime Kuma | Implemented | Uptime monitoring | Used for service availability checks |
 | Grafana | Implemented | Dashboards / monitoring | Used for visibility and metrics |
 | Prometheus | Implemented | Metrics collection | Used with monitoring/dashboard workflows |
@@ -140,8 +140,7 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 | Open WebUI | Implemented | Local AI web interface | Used together with Ollama |
 | OpenClaw | Previously implemented | Agentic AI experimentation | Previously tested in the lab |
 | Hermes Agent | Implemented | Agentic automation experimentation | Used for local agentic workflows and job-search automation |
-| Traefik | Planned | Reverse proxy exploration | Planned for comparison/learning |
-| Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
+| Traefik | Planned | Reverse proxy exploration | Planned for learning and for evaluating reverse proxy / certificate management outside pfSense || Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
 | Home Assistant | Planned | Smart home automation | Planned, not currently central |
 | Immich | Planned | Photo/media management | Planned |
 
@@ -178,6 +177,8 @@ The lab includes or has included the following self-hosted services.
 The current network uses pfSense and OpenWrt-based components. OpenWrt is used as a wireless access point, while pfSense handles firewall/router duties.
 
 In this setup, pfSense also manages several edge/security services through packages: pfBlockerNG for DNS/IP filtering, Suricata for IDS/IPS visibility, ACME for Let's Encrypt certificate workflows, and HAProxy for reverse proxy routing.
+
+As a future improvement, I want to reduce how many supporting services are tightly coupled to pfSense. The goal is to keep pfSense focused on routing, firewalling, and edge security, while moving some service-level functions to dedicated hosts or VMs where appropriate. This includes evaluating Pi-hole for DNS filtering and evaluating a dedicated reverse proxy / certificate workflow, for example with Traefik or a Linux-hosted HAProxy and ACME setup.
 
 VLAN-based segmentation is planned for the next stage after adding a managed switch. The planned design separates different types of systems into logical zones rather than treating the whole network as one flat environment.
 
@@ -510,6 +511,7 @@ Concrete lessons:
 - Hardening public-facing services
 - Planning VLAN-based segmentation with managed switch hardware
 - Building a clean portfolio of practical Linux and networking projects
+- Reducing pfSense service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
 
 ---
 
