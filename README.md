@@ -12,7 +12,7 @@ This repository documents a private/self-managed infrastructure environment used
 
 This lab is designed around practical infrastructure tasks rather than only running applications. I use it to practice installing, maintaining, documenting, and troubleshooting Linux-based services in a realistic home and small-business-style environment.
 
-The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, HAProxy reverse proxying, Cloudflare DNS, ACME/TLS certificates, pfSense firewalling, Tailscale VPN access, monitoring, VoIP, and local AI experimentation.
+pfSense as the central edge platform for firewalling, pfBlockerNG DNS/IP filtering, Suricata IDS/IPS visibility, ACME/TLS certificate management, and HAProxy reverse proxy routing, plus Cloudflare DNS and Tailscale VPN access.
 
 Some components are implemented, some were previously tested, and others are planned or being improved. The goal of this repository is to show practical learning, structured thinking, security awareness, and documentation habits without publishing sensitive configuration details.
 
@@ -117,20 +117,21 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 
 | Component | Status | Purpose | Notes |
 |---|---|---|---|
-| pfSense | Implemented | Router/firewall, DNS filtering, security services | Currently used as the main firewall platform |
+| pfSense | Implemented | Edge firewall/router and security platform | Used as the central platform for firewalling, routing, pfBlockerNG, Suricata, ACME certificates, and HAProxy reverse proxying |
+| HAProxy | Implemented | Reverse proxy | Used for routing services. Managed through the pfSense HAProxy package |
+| ACME / Let's Encrypt | Implemented | TLS certificates | Used for certificate workflows. Managed through the pfSense ACME package |
+| pfBlockerNG | Implemented | DNS/IP filtering | Managed through pfSense for DNS filtering and IP block lists |
+| Suricata | Implemented | IDS/IPS visibility | Managed through pfSense for traffic alerts and security monitoring |
 | OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP with main Wi-Fi and separate guest Wi-Fi |
 | Proxmox VE | Implemented | Virtualization platform | Used for virtualized services and lab systems |
 | Proxmox Backup Server | Implemented | Backup and restore platform | Used for VM/container backup workflows |
 | TrueNAS | Implemented | Storage platform | Used for storage and snapshots |
 | Docker | Implemented | Container runtime | Used for self-hosted services |
 | Docker Compose | Implemented | Service deployment | Used to define and operate multi-container services |
-| HAProxy | Implemented | Reverse proxy | Used for routing services |
 | Cloudflare DNS | Implemented | DNS and domain management | Used for DNS/domain routing |
-| ACME / Let's Encrypt | Implemented | TLS certificates | Used for certificate workflows |
 | WireGuard | Previously implemented | VPN access | Used in the past; currently less central because of CGNAT |
 | Tailscale | Implemented | VPN-style remote access | Used because the current connection is behind CGNAT |
 | Pi-hole | Previously implemented / planned again | DNS filtering | Used in the past; currently pfBlockerNG is used inside pfSense |
-| pfBlockerNG | Implemented | DNS/IP filtering | Current DNS filtering approach |
 | Uptime Kuma | Implemented | Uptime monitoring | Used for service availability checks |
 | Grafana | Implemented | Dashboards / monitoring | Used for visibility and metrics |
 | Prometheus | Implemented | Metrics collection | Used with monitoring/dashboard workflows |
@@ -175,6 +176,8 @@ The lab includes or has included the following self-hosted services.
 ## Network Design
 
 The current network uses pfSense and OpenWrt-based components. OpenWrt is used as a wireless access point, while pfSense handles firewall/router duties.
+
+In this setup, pfSense also manages several edge/security services through packages: pfBlockerNG for DNS/IP filtering, Suricata for IDS/IPS visibility, ACME for Let's Encrypt certificate workflows, and HAProxy for reverse proxy routing.
 
 VLAN-based segmentation is planned for the next stage after adding a managed switch. The planned design separates different types of systems into logical zones rather than treating the whole network as one flat environment.
 
@@ -234,6 +237,8 @@ The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC a
 - Raspberry Pi OS
 
 ### Networking and Security
+
+- pfSense as the edge firewall/router platform, managing pfBlockerNG, Suricata, ACME, and HAProxy packages
 
 - pfSense
 - OpenWrt
