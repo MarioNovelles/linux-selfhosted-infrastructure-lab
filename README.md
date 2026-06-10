@@ -2,7 +2,7 @@
 
 Practical self-hosted infrastructure lab focused on Linux administration, networking, virtualization, Docker-based services, firewalls, DNS, VPN access, reverse proxies, backups, monitoring, and troubleshooting.
 
-This repository documents a private/self-managed infrastructure environment used to build hands-on skills relevant to IT support, Linux system administration, networking, infrastructure operations, and self-hosted service management.
+This repository documents a private, self-managed infrastructure environment that I use to build hands-on skills relevant to IT support, Linux system administration, networking, infrastructure operations, and self-hosted service management.
 
 > **Security note:** This repository intentionally omits or redacts sensitive details such as public IP addresses, real domains, credentials, private keys, internal addressing, exact firewall rules, secrets, and production configuration values.
 
@@ -10,11 +10,11 @@ This repository documents a private/self-managed infrastructure environment used
 
 ## Summary
 
-This lab is designed around practical infrastructure tasks rather than only running applications. I use it to practice installing, maintaining, documenting, and troubleshooting Linux-based services in a realistic home and small-business-style environment.
+This lab is built around practical infrastructure work, not just running applications. I use it to practice installing, maintaining, documenting, and troubleshooting Linux-based services in a realistic home and small-business-style environment.
 
-The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, Cloudflare DNS, Tailscale VPN access, monitoring, VoIP, local AI experimentation, and pfSense as the central edge platform for firewalling, pfBlockerNG DNS/IP filtering, Suricata IDS/IPS visibility, ACME/TLS certificate management, and HAProxy reverse proxy routing.
+The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, Cloudflare DNS, Tailscale VPN-style access, monitoring, VoIP, local AI experimentation, and pfSense as the central edge platform. pfSense currently handles firewalling, pfBlockerNG DNS/IP filtering, Suricata IDS/IPS visibility, ACME/TLS certificate management, and HAProxy reverse proxy routing.
 
-Some components are implemented, some were previously tested, and others are planned or being improved. The goal of this repository is to show practical learning, structured thinking, security awareness, and documentation habits without publishing sensitive configuration details.
+Some components are implemented, some were previously tested, and others are planned or being improved. The goal of this repository is to show practical learning, structured troubleshooting, security awareness, and documentation habits without publishing sensitive configuration details.
 
 ---
 
@@ -27,7 +27,7 @@ This project demonstrates practical experience with:
 - Managing reverse proxy access with HAProxy
 - Managing DNS and ACME/TLS certificate workflows
 - Using VPN tools for secure remote access
-- Operating pfSense-based firewalling, DNS/IP filtering, Suricata visibility, ACME, and HAProxy package workflows
+- Operating pfSense-based firewalling, DNS/IP filtering with pfBlockerNG, Suricata visibility, ACME certificate workflows, and HAProxy reverse proxy routing
 - Working with Proxmox VE, Proxmox Backup Server, and TrueNAS
 - Troubleshooting Linux services, containers, DNS, firewall, and connectivity issues
 - Planning backups and recovery workflows
@@ -101,7 +101,7 @@ Planned managed VLAN switch
 
 ## Documentation
 
-Sanitized documentation that shows troubleshooting logic and operational habits without exposing real domains, IP addresses, credentials, private keys, internal addressing, or firewall rules.
+This repository includes sanitized documentation that shows troubleshooting logic and operational habits without exposing real domains, IP addresses, credentials, private keys, internal addressing, or firewall rules.
 
 ### Case Studies
 
@@ -115,11 +115,11 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 
 ## Infrastructure Components and Platforms
 
-This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below. The table is ordered roughly from the network edge and access layer, through virtualization/storage, to deployment tooling and planned decoupling experiments.
+This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below. The table is ordered roughly from the network edge and access layer through virtualization, storage, deployment tooling, and planned decoupling experiments.
 
 | Component | Status | Purpose | Notes |
 |---|---|---|---|
-| pfSense | Implemented | Edge firewall/router and security platform | Used as the central platform for firewalling, routing, pfBlockerNG, Suricata, ACME certificates, and HAProxy reverse proxying |
+| pfSense | Implemented | Edge firewall/router and security platform | Central platform for firewalling, routing, pfBlockerNG, Suricata, ACME certificates, and HAProxy reverse proxying |
 | pfBlockerNG | Implemented | DNS/IP filtering | Managed through pfSense for DNS filtering and IP block lists |
 | Suricata | Implemented | IDS/IPS visibility | Managed through pfSense for traffic alerts and security monitoring |
 | HAProxy | Implemented | Reverse proxy | Managed through the pfSense HAProxy package; future improvement is evaluating a dedicated reverse proxy outside pfSense |
@@ -141,7 +141,7 @@ This section lists the infrastructure building blocks: platforms, network/securi
 
 ## Self-Hosted Applications and Workloads
 
-This section lists the applications and service-like workloads running on top of the infrastructure components above. The table is grouped by purpose: productivity/data, web/information services, monitoring, media, communication, AI/automation experimentation, and planned applications.
+This section lists the applications and service-like workloads that run on top of the infrastructure components above. The table is grouped by purpose: productivity/data, web/information services, monitoring, media, communication, AI/automation experimentation, and planned applications.
 
 | Workload | Status | Purpose |
 |---|---|---|
@@ -175,13 +175,13 @@ This section lists the applications and service-like workloads running on top of
 
 ## Network Design
 
-The current network uses pfSense and OpenWrt-based components. OpenWrt is used as a wireless access point, while pfSense handles firewall/router duties.
+The current network uses pfSense and OpenWrt-based components. OpenWrt provides wireless access point functionality, while pfSense handles firewall/router duties.
 
-In this setup, pfSense also manages several edge/security services through packages: pfBlockerNG for DNS/IP filtering, Suricata for IDS/IPS visibility, ACME for Let's Encrypt certificate workflows, and HAProxy for reverse proxy routing.
+In this setup, pfSense also manages several edge and security services through packages: pfBlockerNG for DNS/IP filtering, Suricata for IDS/IPS visibility, ACME for Let's Encrypt certificate workflows, and HAProxy for reverse proxy routing.
 
 As a future improvement, I want to reduce how many supporting services are tightly coupled to pfSense. The goal is to keep pfSense focused on routing, firewalling, and edge security, while moving some service-level functions to dedicated hosts or VMs where appropriate. This includes evaluating Pi-hole for DNS filtering and evaluating a dedicated reverse proxy / certificate workflow, for example with Traefik or a Linux-hosted HAProxy and ACME setup.
 
-VLAN-based segmentation is planned for the next stage after adding a managed switch. The planned design separates different types of systems into logical zones rather than treating the whole network as one flat environment.
+VLAN-based segmentation is planned for the next stage after adding a managed switch. The planned design separates different types of systems into logical zones instead of treating the whole network as one flat environment.
 
 Planned or designed network zones:
 
@@ -236,12 +236,12 @@ Endpoint types include:
 | Desktop workstation | Main administration and daily-use system | Used for SSH access, documentation, Git workflows, testing, and service administration |
 | Laptop | Mobile client and secondary admin device | Used for testing access from another client and working from different network locations |
 | Smartphone | Mobile access and user-device testing | Useful for checking VPN access, mobile web access, notifications, and real user behavior |
-| Remote warrior clients | Remote laptop or smartphone access | Connect back to selected internal services through VPN-style access, currently mainly Tailscale because of CGNAT |
+| Remote access clients | Remote laptop or smartphone access | Connect back to selected internal services through VPN-style access, currently mainly Tailscale because of CGNAT |
 | IoT / smart devices | Less trusted endpoint category | Intended to be separated more clearly with future VLAN-based segmentation |
 | Guest devices | Visitor access | Intended to stay separated from trusted devices and internal services |
 | VoIP clients / phones | Telephony endpoint category | Related to FreePBX and planned VoIP network separation |
 
-Remote warrior devices such as a laptop or smartphone can connect back to selected internal services through VPN-style access. In the current setup, Tailscale is used for this because the internet connection is behind CGNAT, while WireGuard was previously tested. These devices are treated differently from local trusted LAN clients because they may connect from external or less trusted networks.
+Remote access devices such as a laptop or smartphone can connect back to selected internal services through VPN-style access. In the current setup, Tailscale is used for this because the internet connection is behind CGNAT, while WireGuard was previously tested. These devices are treated differently from local trusted LAN clients because they may connect from external or less trusted networks.
 
 The goal is to treat different endpoint types according to their trust level. Administrative systems, trusted personal devices, guest clients, IoT devices, and VoIP devices should not all have the same level of access to internal services.
 
@@ -275,6 +275,7 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - TLS certificates
 - Cloudflare DNS
 - ACME / Let's Encrypt
+- HAProxy
 - Suricata
 - Basic security lab practice with Kali Linux, nmap, Wireshark, and network/service exposure checks
 
@@ -359,7 +360,7 @@ The long-term goal is not only to create backups, but to test restores and docum
 
 ## Security Practices
 
-Security is treated as a core design goal.
+Security is treated as a core design goal in this self-managed lab.
 
 Implemented practices include:
 
@@ -438,7 +439,7 @@ After moving behind CGNAT, direct inbound access became less practical. I adapte
 
 #### Backup and restore planning
 
-For important services and configuration data, I separate VM/container backups, storage snapshots, exported configuration backups, and selected offsite encrypted backups. The next improvement is formal restore testing and documenting recovery steps.
+For important services and configuration data, I separate VM/container backups, storage snapshots, exported configuration backups, and selected offsite encrypted backups. The next improvement is formal restore testing and documented recovery steps.
 
 ---
 
