@@ -12,7 +12,7 @@ This repository documents a private/self-managed infrastructure environment used
 
 This lab is designed around practical infrastructure tasks rather than only running applications. I use it to practice installing, maintaining, documenting, and troubleshooting Linux-based services in a realistic home and small-business-style environment.
 
-pfSense as the central edge platform for firewalling, pfBlockerNG DNS/IP filtering, Suricata IDS/IPS visibility, ACME/TLS certificate management, and HAProxy reverse proxy routing, plus Cloudflare DNS and Tailscale VPN access.
+The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, Cloudflare DNS, Tailscale VPN access, monitoring, VoIP, local AI experimentation, and pfSense as the central edge platform for firewalling, pfBlockerNG DNS/IP filtering, Suricata IDS/IPS visibility, ACME/TLS certificate management, and HAProxy reverse proxy routing.
 
 Some components are implemented, some were previously tested, and others are planned or being improved. The goal of this repository is to show practical learning, structured thinking, security awareness, and documentation habits without publishing sensitive configuration details.
 
@@ -25,9 +25,9 @@ This project demonstrates practical experience with:
 - Installing and maintaining Linux server environments
 - Running self-hosted services with Docker Compose
 - Managing reverse proxy access with HAProxy
-- Managing DNS and TLS certificates
+- Managing DNS and ACME/TLS certificate workflows
 - Using VPN tools for secure remote access
-- Operating pfSense-based firewalling and DNS filtering
+- Operating pfSense-based firewalling, DNS/IP filtering, Suricata visibility, ACME, and HAProxy package workflows
 - Working with Proxmox VE, Proxmox Backup Server, and TrueNAS
 - Troubleshooting Linux services, containers, DNS, firewall, and connectivity issues
 - Planning backups and recovery workflows
@@ -113,44 +113,37 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 
 ---
 
-## Implemented and Planned Components
+## Infrastructure Components and Platforms
+
+This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below.
 
 | Component | Status | Purpose | Notes |
 |---|---|---|---|
 | pfSense | Implemented | Edge firewall/router and security platform | Used as the central platform for firewalling, routing, pfBlockerNG, Suricata, ACME certificates, and HAProxy reverse proxying |
-| HAProxy | Implemented | Reverse proxy | Used for routing services. Managed through the pfSense HAProxy package |
-| ACME / Let's Encrypt | Implemented | TLS certificates | Used for certificate workflows. Managed through the pfSense ACME package |
-| pfBlockerNG | Implemented | DNS/IP filtering | Managed through pfSense for DNS filtering and IP block lists |
-| Suricata | Implemented | IDS/IPS visibility | Managed through pfSense for traffic alerts and security monitoring |
 | OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP with main Wi-Fi and separate guest Wi-Fi |
 | Proxmox VE | Implemented | Virtualization platform | Used for virtualized services and lab systems |
 | Proxmox Backup Server | Implemented | Backup and restore platform | Used for VM/container backup workflows |
 | TrueNAS | Implemented | Storage platform | Used for storage and snapshots |
 | Docker | Implemented | Container runtime | Used for self-hosted services |
 | Docker Compose | Implemented | Service deployment | Used to define and operate multi-container services |
+| HAProxy | Implemented | Reverse proxy | Managed through the pfSense HAProxy package; future improvement is evaluating a dedicated reverse proxy outside pfSense |
 | Cloudflare DNS | Implemented | DNS and domain management | Used for DNS/domain routing |
+| ACME / Let's Encrypt | Implemented | TLS certificates | Managed through the pfSense ACME package; future improvement is evaluating a dedicated ACME workflow outside pfSense |
 | WireGuard | Previously implemented | VPN access | Used in the past; currently less central because of CGNAT |
 | Tailscale | Implemented | VPN-style remote access | Used because the current connection is behind CGNAT |
 | Pi-hole | Previously implemented / planned again | DNS filtering | Planned as a possible dedicated DNS filtering layer outside pfSense |
-| Uptime Kuma | Implemented | Uptime monitoring | Used for service availability checks |
-| Grafana | Implemented | Dashboards / monitoring | Used for visibility and metrics |
-| Prometheus | Implemented | Metrics collection | Used with monitoring/dashboard workflows |
-| FreePBX | Implemented | VoIP server | Used for VoIP experimentation and service separation |
-| Ollama | Implemented | Local AI experimentation | Used for local LLM workflows |
-| Open WebUI | Implemented | Local AI web interface | Used together with Ollama |
-| OpenClaw | Previously implemented | Agentic AI experimentation | Previously tested in the lab |
-| Hermes Agent | Implemented | Agentic automation experimentation | Used for local agentic workflows and job-search automation |
-| Traefik | Planned | Reverse proxy exploration | Planned for learning and for evaluating reverse proxy / certificate management outside pfSense || Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
-| Home Assistant | Planned | Smart home automation | Planned, not currently central |
-| Immich | Planned | Photo/media management | Planned |
+| pfBlockerNG | Implemented | DNS/IP filtering | Managed through pfSense for DNS filtering and IP block lists |
+| Suricata | Implemented | IDS/IPS visibility | Managed through pfSense for traffic alerts and security monitoring |
+| Traefik | Planned | Reverse proxy exploration | Planned for comparison and for evaluating reverse proxy / certificate management outside pfSense |
+| Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
 
 ---
 
-## Services
+## Self-Hosted Applications and Workloads
 
-The lab includes or has included the following self-hosted services.
+This section lists the applications and service-like workloads running on top of the infrastructure components above.
 
-| Service | Status | Purpose |
+| Workload | Status | Purpose |
 |---|---|---|
 | Nextcloud | Implemented | File access and collaboration |
 | Syncthing | Implemented | File synchronization |
@@ -167,8 +160,16 @@ The lab includes or has included the following self-hosted services.
 | Radarr | Implemented | Media automation |
 | Prowlarr | Implemented | Indexer management |
 | MeTube | Implemented | Media download workflow |
-| Ollama / Open WebUI | Implemented | Local AI experimentation |
+| Uptime Kuma | Implemented | Uptime and availability monitoring |
+| Grafana | Implemented | Monitoring dashboards and metrics visualization |
+| Prometheus | Implemented | Metrics collection |
+| FreePBX | Implemented | VoIP server and telephony experimentation |
+| Ollama | Implemented | Local AI experimentation |
+| Open WebUI | Implemented | Local AI web interface for Ollama |
+| Hermes Agent | Implemented | Local agentic automation experimentation |
+| OpenClaw | Previously implemented | Agentic AI experimentation |
 | Immich | Planned | Photo management |
+| Home Assistant | Planned | Smart home automation |
 
 ---
 
@@ -239,9 +240,8 @@ The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC a
 
 ### Networking and Security
 
-- pfSense as the edge firewall/router platform, managing pfBlockerNG, Suricata, ACME, and HAProxy packages
-
-- pfSense
+- pfSense as the edge firewall/router platform
+- pfSense packages: pfBlockerNG, Suricata, ACME, and HAProxy
 - OpenWrt
 - DHCP
 - DNS
@@ -260,7 +260,6 @@ The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC a
 
 - Docker
 - Docker Compose
-- HAProxy
 - Uptime Kuma
 - Grafana
 - Prometheus
@@ -295,11 +294,11 @@ The guest Wi-Fi is documented at a high level only. Real SSIDs, passwords, MAC a
 
 - Installed and maintained Linux server environments
 - Deployed self-hosted applications using Docker Compose
-- Configured reverse proxy access for multiple services using HAProxy
+- Configured reverse proxy access for multiple services using the pfSense HAProxy package
 - Managed DNS records and domain routing through Cloudflare
-- Managed TLS certificates using ACME / Let's Encrypt workflows
+- Managed TLS certificates using the pfSense ACME package / Let's Encrypt workflows
 - Configured VPN-style remote access using Tailscale and previously WireGuard
-- Configured routing, DHCP/DNS, DNS filtering, firewall concepts, and service access rules with pfSense
+- Configured routing, DHCP/DNS, DNS/IP filtering with pfBlockerNG, Suricata visibility, firewall concepts, and service access rules with pfSense
 - Used OpenWrt as a wireless access point
 - Built and operated storage workflows with TrueNAS and snapshots
 - Used Proxmox VE for virtualization and Proxmox Backup Server for backup workflows
@@ -347,9 +346,9 @@ Implemented practices include:
 - SSH key-based administration where appropriate
 - Reduced password-based SSH access, with continued hardening in progress
 - TLS certificates for web services
-- DNS/IP filtering with pfBlockerNG
+- DNS/IP filtering with pfBlockerNG managed in pfSense
 - Password manager usage
-- Suricata IDS/IPS exposure
+- Suricata IDS/IPS visibility through pfSense
 - Regular review of exposed ports and service access
 - Sensitive values excluded from public documentation
 
@@ -360,6 +359,7 @@ Planned or improving practices:
 - Offline backup media
 - Formalized backup restore testing
 - More sanitized configuration examples
+- Reducing service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
 
 ---
 
@@ -510,8 +510,8 @@ Concrete lessons:
 - Improving monitoring and alerting
 - Hardening public-facing services
 - Planning VLAN-based segmentation with managed switch hardware
-- Building a clean portfolio of practical Linux and networking projects
 - Reducing pfSense service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
+- Building a clean portfolio of practical Linux and networking projects
 
 ---
 
