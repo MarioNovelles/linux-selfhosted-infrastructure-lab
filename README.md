@@ -99,11 +99,17 @@ Planned managed VLAN switch
 
 ---
 
-## Case Studies
+## Documentation
 
-These sanitized case studies show how I troubleshoot and document infrastructure issues without exposing real domains, IP addresses, credentials, private keys, internal addressing, or firewall rules.
+Sanitized documentation that shows troubleshooting logic and operational habits without exposing real domains, IP addresses, credentials, private keys, internal addressing, or firewall rules.
+
+### Case Studies
 
 - [Service unreachable troubleshooting flow](./docs/case-studies/service-unreachable-troubleshooting.md)
+
+### Runbooks
+
+- [Linux service troubleshooting checklist](./docs/runbooks/linux-service-troubleshooting-checklist.md)
 
 ## Implemented and Planned Components
 
