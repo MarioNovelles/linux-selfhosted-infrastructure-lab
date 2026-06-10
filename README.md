@@ -115,25 +115,25 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 
 ## Infrastructure Components and Platforms
 
-This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below.
+This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below. The table is ordered roughly from the network edge and access layer, through virtualization/storage, to deployment tooling and planned decoupling experiments.
 
 | Component | Status | Purpose | Notes |
 |---|---|---|---|
 | pfSense | Implemented | Edge firewall/router and security platform | Used as the central platform for firewalling, routing, pfBlockerNG, Suricata, ACME certificates, and HAProxy reverse proxying |
-| OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP with main Wi-Fi and separate guest Wi-Fi |
-| Proxmox VE | Implemented | Virtualization platform | Used for virtualized services and lab systems |
-| Proxmox Backup Server | Implemented | Backup and restore platform | Used for VM/container backup workflows |
-| TrueNAS | Implemented | Storage platform | Used for storage and snapshots |
-| Docker | Implemented | Container runtime | Used for self-hosted services |
-| Docker Compose | Implemented | Service deployment | Used to define and operate multi-container services |
-| HAProxy | Implemented | Reverse proxy | Managed through the pfSense HAProxy package; future improvement is evaluating a dedicated reverse proxy outside pfSense |
-| Cloudflare DNS | Implemented | DNS and domain management | Used for DNS/domain routing |
-| ACME / Let's Encrypt | Implemented | TLS certificates | Managed through the pfSense ACME package; future improvement is evaluating a dedicated ACME workflow outside pfSense |
-| WireGuard | Previously implemented | VPN access | Used in the past; currently less central because of CGNAT |
-| Tailscale | Implemented | VPN-style remote access | Used because the current connection is behind CGNAT |
-| Pi-hole | Previously implemented / planned again | DNS filtering | Planned as a possible dedicated DNS filtering layer outside pfSense |
 | pfBlockerNG | Implemented | DNS/IP filtering | Managed through pfSense for DNS filtering and IP block lists |
 | Suricata | Implemented | IDS/IPS visibility | Managed through pfSense for traffic alerts and security monitoring |
+| HAProxy | Implemented | Reverse proxy | Managed through the pfSense HAProxy package; future improvement is evaluating a dedicated reverse proxy outside pfSense |
+| ACME / Let's Encrypt | Implemented | TLS certificates | Managed through the pfSense ACME package; future improvement is evaluating a dedicated ACME workflow outside pfSense |
+| OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP with main Wi-Fi and separate guest Wi-Fi |
+| Cloudflare DNS | Implemented | DNS and domain management | Used for DNS/domain routing |
+| Tailscale | Implemented | VPN-style remote access | Used because the current connection is behind CGNAT |
+| WireGuard | Previously implemented | VPN access | Used in the past; currently less central because of CGNAT |
+| Proxmox VE | Implemented | Virtualization platform | Used for virtualized services and lab systems |
+| TrueNAS | Implemented | Storage platform | Used for storage and snapshots |
+| Proxmox Backup Server | Implemented | Backup and restore platform | Used for VM/container backup workflows |
+| Docker | Implemented | Container runtime | Used for self-hosted services |
+| Docker Compose | Implemented | Service deployment | Used to define and operate multi-container services |
+| Pi-hole | Previously implemented / planned again | DNS filtering | Planned as a possible dedicated DNS filtering layer outside pfSense |
 | Traefik | Planned | Reverse proxy exploration | Planned for comparison and for evaluating reverse proxy / certificate management outside pfSense |
 | Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
 
@@ -141,16 +141,19 @@ This section lists the infrastructure building blocks: platforms, network/securi
 
 ## Self-Hosted Applications and Workloads
 
-This section lists the applications and service-like workloads running on top of the infrastructure components above.
+This section lists the applications and service-like workloads running on top of the infrastructure components above. The table is grouped by purpose: productivity/data, web/information services, monitoring, media, communication, AI/automation experimentation, and planned applications.
 
 | Workload | Status | Purpose |
 |---|---|---|
 | Nextcloud | Implemented | File access and collaboration |
 | Syncthing | Implemented | File synchronization |
-| WordPress | Implemented | Web hosting practice |
-| SearXNG | Implemented | Self-hosted search |
 | Vaultwarden | Implemented | Password manager service |
 | Joplin | Implemented | Notes / documentation workflow |
+| WordPress | Implemented | Web hosting practice |
+| SearXNG | Implemented | Self-hosted search |
+| Uptime Kuma | Implemented | Uptime and availability monitoring |
+| Grafana | Implemented | Monitoring dashboards and metrics visualization |
+| Prometheus | Implemented | Metrics collection |
 | Jellyfin | Implemented | Media service |
 | Jellyseerr | Implemented | Media request workflow |
 | Navidrome | Implemented | Music streaming |
@@ -160,14 +163,11 @@ This section lists the applications and service-like workloads running on top of
 | Radarr | Implemented | Media automation |
 | Prowlarr | Implemented | Indexer management |
 | MeTube | Implemented | Media download workflow |
-| Uptime Kuma | Implemented | Uptime and availability monitoring |
-| Grafana | Implemented | Monitoring dashboards and metrics visualization |
-| Prometheus | Implemented | Metrics collection |
 | FreePBX | Implemented | VoIP server and telephony experimentation |
 | Ollama | Implemented | Local AI experimentation |
 | Open WebUI | Implemented | Local AI web interface for Ollama |
-| Hermes Agent | Implemented | Local agentic automation experimentation |
 | OpenClaw | Previously implemented | Agentic AI experimentation |
+| Hermes Agent | Implemented | Local agentic automation experimentation |
 | Immich | Planned | Photo management |
 | Home Assistant | Planned | Smart home automation |
 
