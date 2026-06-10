@@ -301,7 +301,7 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - systemd
 - journalctl
 - cron
-- SSH / scp / rsync
+- SSH key-based administration / scp / rsync
 - Bash scripting
 - ping
 - dig
@@ -366,8 +366,8 @@ Implemented practices include:
 
 - VPN-first access model for internal and administrative services
 - No public exposure of firewall, NAS, hypervisor, or backup administration interfaces
-- SSH key-based administration where appropriate
-- Reduced password-based SSH access, with continued hardening in progress
+- SSH key-based administration for server access where appropriate
+- Password-based SSH login disabled or reduced on managed Linux hosts, with continued hardening in progress
 - TLS certificates for web services
 - DNS/IP filtering with pfBlockerNG managed in pfSense
 - Password manager usage
