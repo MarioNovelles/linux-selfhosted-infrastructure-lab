@@ -111,6 +111,8 @@ Sanitized documentation that shows troubleshooting logic and operational habits 
 
 - [Linux service troubleshooting checklist](./docs/runbooks/linux-service-troubleshooting-checklist.md)
 
+---
+
 ## Implemented and Planned Components
 
 | Component | Status | Purpose | Notes |
