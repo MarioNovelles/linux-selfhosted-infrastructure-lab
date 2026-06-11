@@ -2,13 +2,13 @@
 
 Practical self-hosted infrastructure lab focused on Linux administration, networking, virtualization, Docker-based services, firewalls, DNS, VPN access, reverse proxies, backups, monitoring, and troubleshooting.
 
-This repository documents a private, self-managed infrastructure environment that I use to build hands-on skills relevant to IT support, Linux system administration, networking, infrastructure operations, and self-hosted service management.
-
 > **Security note:** This repository intentionally omits or redacts sensitive details such as public IP addresses, real domains, credentials, private keys, internal addressing, exact firewall rules, secrets, and production configuration values.
 
 ---
 
 ## Summary
+
+This repository documents a private, self-managed infrastructure environment that I use to build hands-on skills relevant to IT support, Linux system administration, networking, infrastructure operations, and self-hosted service management.
 
 This lab is built around practical infrastructure work, not just running applications. I use it to practice installing, maintaining, documenting, and troubleshooting Linux-based services in a realistic home and small-business-style environment.
 
@@ -301,7 +301,7 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - systemd
 - journalctl
 - cron
-- SSH key-based administration / scp / rsync
+ - SSH key-based administration / scp / rsync
 - Bash scripting
 - ping
 - dig
