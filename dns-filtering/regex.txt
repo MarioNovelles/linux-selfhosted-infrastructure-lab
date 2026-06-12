@@ -1,0 +1,82 @@
+# DNS filtering regex rules used or evaluated in my lab.
+# Intended for DNS-level filtering tools such as Pi-hole or pfBlockerNG.
+# Regex rules can cause false positives. Test carefully before enabling broadly.
+# Due to the restrictive nature of these regexps, you may encounter a small number of false positives
+# for domain names that are similar to ad-serving / tracking domains.
+
+# Internationalized / punycode domains
+# May reduce homograph-phishing risk, but can block legitimate international domains.
+(^|\.)xn--
+
+# first-party trackers
+^(.+[_.-])?eulerian\.net$
+^(.+[_.-])?dnsdelegation\.io$
+
+# Blocks RT domain and subdomains
+(^|\.)rt\.com$
+
+# Blocks facebook entirely (erase # from the links below to activate)
+#^(.+[_.-])?(facebook|fb(cdn|sbx)?|tfbnw)\.[^.]+$
+
+# Blocks twitter entirely (erase # from the links below to activate)
+#^(.+[_.-])?(twitter|twimg|cms-twdigitalassets)\.(co\.)?[^.]+$
+
+# Block youtube entirely (erase # from the links below to activate)
+#(^|\.)youtube\.com$
+#(^|\.)youtu\.be$
+#(^|\.)googlevideo\.com$
+#(^|\.)ytimg\.com$
+
+# Blocks other time wasters: reddit
+#(^|\.)reddit\.com$
+
+# Regex list to block tiktok traffic on your network
+(\.|^)bytecdn\.cn$
+(\.|^)bytedance\.com$
+(\.|^)bytedance\.net$
+(\.|^)bytedns\.net$
+(\.|^)byteicdn\.com$
+(\.|^)byteimg\.com$
+(\.|^)byteoversea\.com$
+(\.|^)byteoversea\.net$
+(\.|^)bytetcdn\.com$
+(\.|^)hypstarcdn\.com$
+(\.|^)ibytedtos\.com$
+(\.|^)ibyteimg\.com$
+(\.|^)ipstatp\.com$
+(\.|^)isnssdk\.com$
+(\.|^)muscdn\.com$
+(\.|^)musemuse\.cn$
+(\.|^)musical\.ly$
+(\.|^)pstatp\.com$
+(\.|^)sgpstatp\.com$
+(\.|^)sgsnssdk\.com$
+(\.|^)snssdk\.com$
+(\.|^)tiktok\.com$
+(\.|^)tiktokcdn\.com$
+(\.|^)tiktokv\.com$
+(\.|^)toutiao\.com$
+(\.|^)worldfcdn\.com$
+(\.|^)wsdvs\.com$
+
+# Blocks selected adult-oriented TLDs. May cause false positives.
+(\.porn$|\.sex$|\.xxx$|\.sexy$|\.webcam$|\.cam$|\.tube$|\.adult$|\.gay$)
+
+# Blocks selected gambling-related TLDs. May cause false positives.
+(\.casino$|\.bet$|\.poker$)
+
+# Block advertising and trackers
+^ad([sxv]?[0-9]*|system)[_.-]([^.[:space:]]+\.){1,}|[_.-]ad([sxv]?[0-9]*|system)[_.-]
+^(.+[_.-])?adse?rv(er?|ice)?s?[0-9]*[_.-]
+^(.+[_.-])?telemetry[_.-]
+^adim(age|g)s?[0-9]*[_.-]
+^adtrack(er|ing)?[0-9]*[_.-]
+^advert(s|is(ing|ements?))?[0-9]*[_.-]
+^aff(iliat(es?|ion))?[_.-]
+^analytics?[_.-]
+^banners?[_.-]
+^beacons?[0-9]*[_.-]
+^count(ers?)?[0-9]*[_.-]
+^mads\.
+^pixels?[-.]
+^stat(s|istics)?[0-9]*[_.-]
