@@ -115,7 +115,9 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 - [Maintenance scripts overview](./scripts/README.md)
 
----
+### DNS Filtering
+
+- [DNS filtering notes, blocklists, allowlists, and regex rules](./dns-filtering/README.md)---
 
 ## Infrastructure Components and Platforms
 
