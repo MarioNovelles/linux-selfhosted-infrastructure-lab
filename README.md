@@ -117,16 +117,6 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 ---
 
-## Scripts
-
-| Script | Purpose |
-|---|---|
-| update-laptop.sh | Updates APT packages, Flatpaks, selected Docker services, Neovim, and LazyVim |
-| update-ubuntu-server.sh | Updates Ubuntu Server packages and cleans unused packages |
-| start-jellyfin.sh | Starts the local Jellyfin workflow |
-
----
-
 ## Infrastructure Components and Platforms
 
 This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below. The table is ordered roughly from the network edge and access layer through virtualization, storage, deployment tooling, and planned decoupling experiments.
