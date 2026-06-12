@@ -113,6 +113,12 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 ### Scripts
 
+- [Maintenance scripts overview](./scripts/README.md)
+
+---
+
+## Scripts
+
 | Script | Purpose |
 |---|---|
 | update-laptop.sh | Updates APT packages, Flatpaks, selected Docker services, Neovim, and LazyVim |
