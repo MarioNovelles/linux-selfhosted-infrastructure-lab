@@ -301,7 +301,7 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - systemd
 - journalctl
 - cron
- - SSH key-based administration / scp / rsync
+- SSH key-based administration / scp / rsync
 - Bash scripting
 - ping
 - dig
