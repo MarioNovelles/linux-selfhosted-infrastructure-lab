@@ -244,12 +244,12 @@ Endpoint types include:
 | Desktop workstation | Main administration and daily-use system | Used for SSH access, documentation, Git workflows, testing, and service administration |
 | Laptop | Mobile client and secondary admin device | Used for testing access from another client and working from different network locations |
 | Smartphone | Mobile access and user-device testing | Useful for checking VPN access, mobile web access, notifications, and real user behavior |
-| Remote access clients | Remote laptop or smartphone access | Connect back to selected internal services through VPN-style access, currently mainly Tailscale because of CGNAT |
+| Road warrior / remote access devices | Trusted remote laptop, smartphone, or tablet access | Connect back to selected internal services through VPN-style access, currently mainly Tailscale because of CGNAT |
 | IoT / smart devices | Less trusted endpoint category | Intended to be separated more clearly with future VLAN-based segmentation |
 | Guest devices | Visitor access | Intended to stay separated from trusted devices and internal services |
 | VoIP clients / phones | Telephony endpoint category | Related to FreePBX and planned VoIP network separation |
 
-Remote access devices such as a laptop or smartphone can connect back to selected internal services through VPN-style access. In the current setup, Tailscale is used for this because the internet connection is behind CGNAT, while WireGuard was previously tested. These devices are treated differently from local trusted LAN clients because they may connect from external or less trusted networks.
+Road warrior devices, also called remote access devices in this lab, are trusted remote clients such as laptops, smartphones, or tablets that connect back to selected internal services through VPN-style access. In the current setup, Tailscale is used for this because the internet connection is behind CGNAT, while WireGuard was previously used. These devices are treated differently from local trusted LAN clients because they may connect from external or less trusted networks.
 
 The goal is to treat different endpoint types according to their trust level. Administrative systems, trusted personal devices, guest clients, IoT devices, and VoIP devices should not all have the same level of access to internal services.
 
