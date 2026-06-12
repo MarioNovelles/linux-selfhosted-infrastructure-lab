@@ -111,6 +111,14 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 - [Linux service troubleshooting checklist](./docs/runbooks/linux-service-troubleshooting-checklist.md)
 
+### Scripts
+
+| Script | Purpose |
+|---|---|
+| update-laptop.sh | Updates APT packages, Flatpaks, selected Docker services, Neovim, and LazyVim |
+| update-ubuntu-server.sh | Updates Ubuntu Server packages and cleans unused packages |
+| start-jellyfin.sh | Starts the local Jellyfin workflow |
+
 ---
 
 ## Infrastructure Components and Platforms
