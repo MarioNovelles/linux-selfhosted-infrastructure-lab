@@ -6,3 +6,10 @@ I now prefer a smaller, more reliable set of blocklists and carefully reviewed r
 
 Regex rules are tested carefully before being used broadly because they can match more than intended.
 
+DNS filtering can reduce unwanted traffic and casual DNS bypass, but it does not fully prevent bypass through third-party VPNs, manually configured encrypted DNS, or unmanaged devices.
+
+## Related Notes
+
+- [DNS redirect / DNS enforcement](./dns-redirect.md)
+
+- [`encrypted-dns-providers.txt`](./encrypted-dns-providers.txt) — known DoH/DoT/DoQ provider domains used or evaluated for DNS bypass reduction

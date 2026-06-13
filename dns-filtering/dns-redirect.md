@@ -30,6 +30,14 @@ Firefox supports organization controls for DoH and also supports a canary domain
 
 For managed browsers, Firefox has enterprise policy support for DNSOverHTTPS, and Microsoft Edge has a DnsOverHttpsMode policy where off disables DNS-over-HTTPS.
 
+## VPN Bypass Considerations
+
+DNS filtering rules only apply when client DNS traffic passes through the local network resolver or firewall policy.
+
+A client using a third-party VPN may bypass local DNS filtering entirely because its DNS traffic can be sent through the encrypted VPN tunnel instead of the local firewall resolver. In that case, local DNS redirect rules, DNSBL blocklists, regex rules, and encrypted DNS provider blocking may not apply.
+
+For this reason, DNS filtering is treated as one layer of network control, not a complete security boundary. Stronger control requires endpoint management, device trust rules, VPN restrictions, or firewall policies that limit unauthorized outbound VPN traffic.
+
 ## Notes
 
 Rule order matters. DNS allow or redirect behavior should be placed before broader DNS block rules.
