@@ -13,3 +13,5 @@ DNS filtering can reduce unwanted traffic and casual DNS bypass, but it does not
 - [DNS redirect / DNS enforcement](./dns-redirect.md)
 
 - [`encrypted-dns-providers.txt`](./encrypted-dns-providers.txt) — known DoH/DoT/DoQ provider domains used or evaluated for DNS bypass reduction
+
+- [IP blocklist notes](./ip-blocklists.md)
