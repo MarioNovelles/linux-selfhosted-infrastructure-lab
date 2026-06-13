@@ -1,0 +1,145 @@
+# Known encrypted DNS provider domains used for DoH/DoT/DoQ blocking.
+# Source inspiration: pfBlockerNG DNSBL SafeSearch DoH/DoT/DoQ provider list.
+# Purpose: reduce DNS filtering bypass by blocking known encrypted DNS resolver domains.
+# Note: this is a best-effort list, not a complete DoH/DoT/DoQ blocking solution.
+
+use-application-dns.net # Firefox
+cloudflare-dns.com # CloudFlare DoH/DoT
+security.cloudflare-dns.com # CloudFlare Security DoH/DoT
+family.cloudflare-dns.com # CloudFlare Family DoH/DoT
+one.one.one.one # CloudFlare One
+1dot1dot1dot1.cloudflare-dns.com # CloudFlare 1dot DoT
+dns.google # Google DoH/DoT
+doh.dns.apple.com # Apple
+mask.icloud.com # Apple iCloud Private Relay
+mask-h2.icloud.com # Apple iCloud Private Relay
+mask-api.icloud.com # Apple iCloud Private Relay
+mask-t.apple-dns.net # Apple iCloud Private Relay
+mask.apple-dns.net # Apple iCloud Private Relay
+mask-api.fe.apple-dns.net # Apple iCloud Private Relay
+doh.opendns.com # OpenDNS DoH
+doh.familyshield.opendns.com # OpenDNS Family DoH
+dns.quad9.net # Quad9 DoH/DoT
+dns10.quad9.net # Quad9 Unsecured DoH/DoT
+dns11.quad9.net # Quad9 ECS DoH/DoT
+dns.adguard-dns.com # AdGuard DoH/DoT/DoQ
+unfiltered.adguard-dns.com # AdGuard Unfiltered DoH/DoT/DoQ
+family.adguard-dns.com # AdGuard Family DoH/DoT/DoQ
+doh.cleanbrowsing.org # CleanBrowsing
+security-filter-dns.cleanbrowsing.org # CleanBrowsing Security
+family-filter-dns.cleanbrowsing.org # CleanBrowsing Family
+adult-filter-dns.cleanbrowsing.org # CleanBrowsing Adult
+dns.nextdns.io # NextDNS DoH/DoT/DoQ
+dns.switch.ch # SWITCH DoH/DoT
+dns.futuredns.me # FutureDNS DoH/DoT/DoQ
+dns.comss.one # Comss.ru West DoH/DoT
+dns.east.comss.one # Comss.ru East
+private.canadianshield.cira.ca # CIRA Private
+protected.canadianshield.cira.ca # CIRA Protected
+family.canadianshield.cira.ca # CIRA Family
+doh-fi.blahdns.com # BlahDNS DoH Finland
+doh-jp.blahdns.com # BlahDNS DoH Japan
+doh-de.blahdns.com # BlahDNS DoH Germany
+dot-fi.blahdns.com # BlahDNS DoT Finland
+dot-jp.blahdns.com # BlahDNS DoT Japan
+dot-de.blahdns.com # BlahDNS DoT Germany
+fi.doh.dns.snopyta.org # Snopyta
+dns-doh.dnsforfamily.com # DNS for Family DoH
+dns-dot.dnsforfamily.com # DNS for Family DoT
+odvr.nic.cz # CZ.NIC ODVR
+dns.alidns.com # Ali
+dns.cfiec.net # CFIEC
+asia.dnscepat.id # DNSCEPAT Asia
+eropa.dnscepat.id # DNSCEPAT Eropa
+doh.360.cn # 360 Secure
+public.dns.iij.jp # IIJ.JP
+dns.pub # DNSPod
+doh.pub # DNSPod DoH
+dot.pub # DNSPod DoT
+dns.twnic.tw # Quad101
+doh.tiarap.org # Privacy-First Singapore
+doh.tiar.app # Privacy-First Singapore DoH/DoQ
+dot.tiar.app # Privacy-First Singapore DoT
+jp.tiarap.org # Privacy-First Japan DoH
+jp.tiar.app # Privacy-First Japan DoT
+dns.oszx.co # OSZX
+dns.pumplex.com # Pumplex
+doh.applied-privacy.net # Applied Privacy DoH
+dot1.applied-privacy.net # Applied Privacy DoT
+dns.decloudus.com # DeCloudUs
+resolver-eu.lelux.fi # Lelux
+doh.dns.sb # DNS.SB
+dnsforge.de # DNS Forge
+kaitain.restena.lu # Fondation Restena
+doh.ffmuc.net # FFMUC DoH
+dot.ffmuc.net # FFMUC DoT
+dns.digitale-gesellschaft.ch # Digitale Gesellschaft
+doh.libredns.gr # LibreDNS DoH
+dot.libredns.gr # LibreDNS DoT
+ibksturm.synology.me # ibksturm
+getdnsapi.net # DNS Privacy
+dnsovertls.sinodun.com # DNS Privacy TLS
+dnsovertls1.sinodun.com # DNS Privacy TLS2
+unicast.censurfridns.dk # DNS Privacy Unicast
+anycast.censurfridns.dk # DNS Privacy Anycast
+dns.cmrg.net # DNS Privacy dkg
+dns.larsdebruin.net # DNS Privacy larsdebruin
+dns-tls.bitwiseshift.net # DNS Privacy bitwiseshift
+ns1.dnsprivacy.at # DNS Privacy dnsprivacy
+ns2.dnsprivacy.at # DNS Privacy dnsprivacy2
+dns.bitgeek.in # DNS Privacy bitgeek
+dns.neutopia.org # DNS Privacy neutopia
+privacydns.go6lab.si # DNS Privacy Go6Lab
+dot.securedns.eu # DNS Privacy securedns
+dnsotls.lab.nic.cl # DNS Privacy NIC Chile
+tls-dns-u.odvr.dns-oarc.net # DNS Privacy OARC
+doh.centraleu.pi-dns.com # PI-DNS Central EU DoH
+dot.centraleu.pi-dns.com # PI-DNS Central EU DoT
+doh.northeu.pi-dns.com # PI-DNS North EU DoH
+dot.northeu.pi-dns.com # PI-DNS North EU DoT
+doh.westus.pi-dns.com # PI-DNS West USA DoH
+dot.westus.pi-dns.com # PI-DNS West USA DoT
+doh.eastus.pi-dns.com # PI-DNS East USA DoH
+dot.eastus.pi-dns.com # PI-DNS East USA DoT
+doh.eastau.pi-dns.com # PI-DNS East AU DoH
+dot.eastau.pi-dns.com # PI-DNS East AU DoT
+doh.eastas.pi-dns.com # PI-DNS East AS DoH
+dot.eastas.pi-dns.com # PI-DNS East AS DoT
+doh.pi-dns.com # PI-DNS
+dot.seby.io # Seby
+doh-2.seby.io # Seby 2
+doh.dnslify.com # DNSlify
+yandex.dns # Yandex
+blitz.ahadns.com # AhaDNS Blitz
+doh.nl.ahadns.net # AhaDNS Blitz Netherlands DoH
+dot.nl.ahadns.net # AhaDNS Blitz Netherlands DoT
+doh.in.ahadns.net # AhaDNS Blitz India DoH
+dot.in.ahadns.net # AhaDNS Blitz India DoT
+doh.la.ahadns.net # AhaDNS Blitz Las Angeles DoH
+dot.la.ahadns.net # AhaDNS Blitz Las Angeles DoT
+doh.ny.ahadns.net # AhaDNS Blitz New York DoH
+dot.ny.ahadns.net # AhaDNS Blitz New York DoT
+doh.pl.ahadns.net # AhaDNS Blitz Poland DoH
+dot.pl.ahadns.net # AhaDNS Blitz Poland DoT
+doh.it.ahadns.net # AhaDNS Blitz Italy DoH
+dot.it.ahadns.net # AhaDNS Blitz Italy DoT
+doh.es.ahadns.net # AhaDNS Blitz Spain DoH
+dot.es.ahadns.net # AhaDNS Blitz Spain DoT
+doh.no.ahadns.net # AhaDNS Blitz Norway DoH
+dot.no.ahadns.net # AhaDNS Blitz Norway DoT
+doh.chi.ahadns.net # AhaDNS Blitz Chicago DoH
+dot.chi.ahadns.net # AhaDNS Blitz Chicago DoT
+doh.au.ahadns.net # AhaDNS Blitz Australia DoH
+dot.au.ahadns.net # AhaDNS Blitz Australia DoT
+basic.rethinkdns.com # RethinkDNS DoH
+max.rethinkdns.com # RethinkDNS DoT
+freedns.controld.com # ControlD DoH
+p0.freedns.controld.com # ControlD DoT
+p1.freedns.controld.com # ControlD DoT
+p2.freedns.controld.com # ControlD DoT
+p3.freedns.controld.com # ControlD DoT
+doh.mullvad.net # Mullvad
+adblock.doh.mullvad.net # Mullvad
+dns.arapurayil.com # Arapurayil
+dandelionsprout.asuscomm.com # Dandelion Sprout DoH/DoT/DoQ
+zero.dns0.eu # European public DNS DoH/DoT/DoQ
