@@ -121,6 +121,38 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 ---
 
+## Repository Structure
+
+This repository has grown into several sections. The structure below helps locate documentation, scripts, and sanitized examples more quickly.
+
+```text
+.
+├── README.md                     # Main overview of the lab
+├── dns-filtering/                # DNS filtering notes, lists, regex, and DNS enforcement notes
+│   ├── README.md
+│   ├── blocklists.md
+│   ├── allowlists.md
+│   ├── regex.txt
+│   ├── encrypted-dns-providers.txt
+│   ├── ip-blocklists.md
+│   └── dns-redirect.md
+├── docs/                         # General documentation and architecture notes
+│   ├── architecture.md
+│   ├── firewall-policy.md
+│   ├── docker-compose-architecture.md
+│   ├── case-studies/
+│   └── runbooks/
+├── scripts/                      # Small maintenance and administration scripts
+│   ├── README.md
+│   ├── update-laptop.sh
+│   ├── update-ubuntu-server.sh
+│   └── start-jellyfin.sh
+├── examples/                     # Sanitized example configurations and service examples
+└── .gitignore                    # Prevents secrets and sensitive files from being committed
+```
+
+---
+
 ## Infrastructure Components and Platforms
 
 This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below. The table is ordered roughly from the network edge and access layer through virtualization, storage, deployment tooling, and planned decoupling experiments.
