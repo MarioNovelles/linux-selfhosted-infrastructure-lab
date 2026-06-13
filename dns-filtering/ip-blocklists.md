@@ -19,6 +19,16 @@ The goal is not to block as much as possible, but to use a small number of reput
 | Spamhaus DROP                | `https://www.spamhaus.org/drop/drop_v4.json`                          | Malicious netblocks for firewall/routing protection | JSON feed; check pfBlockerNG compatibility and licensing/fair-use requirements |
 | Cisco Talos IP Blacklist     | `https://talosintelligence.com/documents/ip-blacklist`                | Cisco Talos IP blacklist                            | Check current access/terms before using automatically                          |
 
+## DoH Provider IP Blocking
+
+These feeds are used or evaluated specifically for reducing DNS-over-HTTPS bypass at the firewall level.
+
+| Feed                   | URL                                                                              | Purpose                            | Notes                                                                                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| TheGreatWall IPv4      | `https://raw.githubusercontent.com/Sekhan/TheGreatWall/master/TheGreatWall_ipv4` | Known DoH provider IPv4 addresses  | Useful for documenting firewall-level DoH blocking, but the list appears old and should be treated as best-effort/evaluated rather than complete |
+| DoH-IP-blocklists IPv4 | `https://raw.githubusercontent.com/dibdot/DoH-IP-blocklists/master/doh-ipv4.txt` | Public DoH resolver IPv4 addresses | More actively maintained DoH IP list; useful candidate for evaluation                                                                            |
+| DoH-IP-blocklists IPv6 | `https://raw.githubusercontent.com/dibdot/DoH-IP-blocklists/master/doh-ipv6.txt` | Public DoH resolver IPv6 addresses | Relevant if IPv6 is enabled or planned                                                                                                           |
+
 ## Operational Notes
 
 IP blocklists can create false positives, especially when cloud providers, CDNs, shared hosting, VPN providers, or dynamic infrastructure are involved.
@@ -34,6 +44,8 @@ For that reason, I treat IP blocking as one layer of defense, not as a complete 
 * careful review of blocked traffic
 
 Feeds should be reviewed periodically. Deprecated, unavailable, or noisy feeds should be removed instead of blindly kept enabled.
+
+DoH IP blocklists are only a best-effort layer. They can reduce access to known DoH resolvers, but they may become stale as providers change IP addresses, use CDNs, or new providers appear. They should be combined with DNS redirection, blocking external DNS on port `53`, blocking DNS-over-TLS on port `853`, DNSBL provider-domain blocking, and endpoint/browser controls where possible.
 
 ## Safety Notes
 
