@@ -154,12 +154,13 @@ This repository has grown into several sections. The structure below helps locat
 ### Quick Links
 
 - [DNS filtering notes](./dns-filtering/README.md)
+- [Documentation index](./docs/README.md)
 - [Firewall policy notes](./docs/firewall-policy.md)
 - [Docker Compose architecture plan](./docs/docker-compose-architecture.md)
 - [Case studies](./docs/case-studies/)
 - [Runbooks](./docs/runbooks/)
 - [Maintenance scripts](./scripts/README.md)
-- [Sanitized examples](./examples/)
+- [Sanitized examples](./examples/README.md)
 
 ---
 
