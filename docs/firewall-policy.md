@@ -48,6 +48,18 @@ This does not fully prevent every bypass method. Third-party VPNs, DNS-over-HTTP
 
 Because of these limitations, DNS enforcement should be treated as one layer. Depending on the environment, additional layers may include endpoint controls, browser policy, provider-domain blocking, DoH IP blocklists, network segmentation, and monitoring.
 
+## Remote Access Policy
+
+For self-hosted lab services, I prefer not to expose ports directly to the public internet unless there is a clear reason to do so.
+
+Most internal services are intended for private use only. When I need remote access to them, I prefer using VPN-style access, such as Tailscale or WireGuard, instead of opening inbound firewall ports.
+
+This reduces the public attack surface and keeps services such as dashboards, admin panels, monitoring tools, media applications, and internal utilities away from direct internet exposure.
+
+If a service is meant to be public and available to everyone 24/7, such as a public website or WordPress site, I prefer hosting it on a dedicated external hosting platform rather than exposing my home lab directly. In the past, I hosted public websites on cloud hosting such as AWS.
+
+This separates private lab services from public production-style web hosting and keeps the home network safer.
+
 ## IPv6 Notes
 
 IPv6 should not be left unmanaged. If IPv6 is enabled but not intentionally configured, filtered, and monitored, clients may use IPv6 paths that bypass parts of the intended IPv4 policy.

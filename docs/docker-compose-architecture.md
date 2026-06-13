@@ -12,12 +12,12 @@ The main goal is to make containerized services easier to manage and rebuild.
 
 The target approach is:
 
-* use Docker Compose for containerized applications where it makes sense
-* keep one Compose project per service or logical stack
-* keep persistent data and configuration in predictable locations
-* avoid storing secrets in public repositories
-* use Portainer as a management interface, not as the only source of truth
-* publish only sanitized examples in this public repository
+- use Docker Compose for containerized applications where it makes sense
+- keep one Compose project per service or logical stack
+- keep persistent data and configuration in predictable locations
+- avoid storing secrets in public repositories
+- use Portainer as a management interface, not as the only source of truth
+- publish only sanitized examples in this public repository
 
 This should make the lab easier to maintain and also make the documentation clearer for anyone reviewing the project.
 
@@ -82,12 +82,12 @@ The planned structure is one folder per Compose project:
 
 The exact folders can change depending on the service, but the general pattern should stay consistent:
 
-* `compose.yml` defines the service or stack
-* `.env` stores local environment values and stays private
-* `config/` stores application configuration when useful
-* `data/` stores persistent application data when using bind mounts
-* database-backed services keep application data and database data clearly separated
-* shared notes, networks, or reverse proxy information can live under `_shared/`
+- `compose.yml` defines the service or stack
+- `.env` stores local environment values and stays private
+- `config/` stores application configuration when useful
+- `data/` stores persistent application data when using bind mounts
+- database-backed services keep application data and database data clearly separated
+- shared notes, networks, or reverse proxy information can live under `_shared/`
 
 ## Single-Service and Multi-Service Stacks
 
@@ -170,10 +170,10 @@ volumes:
 
 For this lab, the preferred approach is:
 
-* use bind mounts for configuration and data that should be easy to inspect or back up
-* use named volumes when the service documentation recommends them or direct host access is not needed
-* document the data location for every service
-* avoid changing storage paths without a backup and restore plan
+- use bind mounts for configuration and data that should be easy to inspect or back up
+- use named volumes when the service documentation recommends them or direct host access is not needed
+- document the data location for every service
+- avoid changing storage paths without a backup and restore plan
 
 ## Environment Files and Secrets
 
@@ -253,24 +253,24 @@ Sanitized examples should show the structure and operational thinking without ex
 
 Public examples may include:
 
-* placeholder domains
-* placeholder ports
-* fake internal paths
-* example environment variables
-* comments explaining what must be changed
-* notes about backups, permissions, and security
+- placeholder domains
+- placeholder ports
+- fake internal paths
+- example environment variables
+- comments explaining what must be changed
+- notes about backups, permissions, and security
 
 Public examples should not include:
 
-* real domains
-* real public IP addresses
-* internal IP addresses
-* passwords
-* API keys
-* tokens
-* private volume paths
-* production database credentials
-* full production firewall or reverse proxy configuration
+- real domains
+- real public IP addresses
+- internal IP addresses
+- passwords
+- API keys
+- tokens
+- private volume paths
+- production database credentials
+- full production firewall or reverse proxy configuration
 
 ## Migration Strategy
 
@@ -293,17 +293,17 @@ High-risk services should be migrated last because they may contain important da
 
 Before migrating any service:
 
-* identify the current install method
-* inspect the container
-* document ports, volumes, networks, and environment variables
-* confirm where persistent data is stored
-* create a backup
-* create the new Compose project
-* stop the old container
-* start the new Compose project
-* check logs
-* test the service
-* remove the old container only after successful testing
+- identify the current install method
+- inspect the container
+- document ports, volumes, networks, and environment variables
+- confirm where persistent data is stored
+- create a backup
+- create the new Compose project
+- stop the old container
+- start the new Compose project
+- check logs
+- test the service
+- remove the old container only after successful testing
 
 ## Backup and Restore Notes
 
@@ -311,12 +311,12 @@ A clean Docker Compose structure is only useful if the data can be backed up and
 
 Each service should have documented backup-relevant paths, such as:
 
-* application data
-* configuration files
-* database data
-* uploaded files
-* media folders
-* private environment files or secrets
+- application data
+- configuration files
+- database data
+- uploaded files
+- media folders
+- private environment files or secrets
 
 Backups should be tested by restoring to a safe test location when possible.
 
@@ -341,3 +341,4 @@ The private server keeps the real configuration.
 
 This keeps the lab practical for daily use while also making the repository useful as a professional portfolio project.
 
+Network exposure decisions are documented separately in [Firewall Policy Notes](./firewall-policy.md). In general, private lab services are designed for VPN-style access rather than direct public exposure.
