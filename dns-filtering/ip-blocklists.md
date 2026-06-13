@@ -33,15 +33,17 @@ These feeds are used or evaluated specifically for reducing DNS-over-HTTPS bypas
 
 IP blocklists can create false positives, especially when cloud providers, CDNs, shared hosting, VPN providers, or dynamic infrastructure are involved.
 
+IP blocklists may also be used as a best-effort mitigation against some DNS filtering bypass methods, such as known third-party VPN providers, encrypted DNS providers, or other bypass services. This is not a complete solution because providers can change IP addresses, use shared infrastructure, or move behind CDNs. For that reason, IP blocking should be treated as an optional additional layer, not a replacement for endpoint controls, device trust, firewall policy, and monitoring.
+
 For that reason, I treat IP blocking as one layer of defense, not as a complete security solution. It should be combined with:
 
-* DNS filtering
-* firewall rules
-* network segmentation
-* patching
-* monitoring
-* backup and recovery planning
-* careful review of blocked traffic
+- DNS filtering
+- firewall rules
+- network segmentation
+- patching
+- monitoring
+- backup and recovery planning
+- careful review of blocked traffic
 
 Feeds should be reviewed periodically. Deprecated, unavailable, or noisy feeds should be removed instead of blindly kept enabled.
 
