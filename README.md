@@ -153,6 +153,39 @@ This repository has grown into several sections. The structure below helps locat
 
 ---
 
+## Repository Structure
+
+This repository has grown into several sections. The overview below helps locate documentation, scripts, and sanitized examples more quickly.
+
+* [`README.md`](./README.md) — main overview of the lab
+
+* [`dns-filtering/`](./dns-filtering/) — DNS filtering notes, blocklists, allowlists, regex rules, and DNS enforcement notes
+  ├── [`README.md`](./dns-filtering/README.md) — DNS filtering folder index
+  ├── [`blocklists.md`](./dns-filtering/blocklists.md) — public DNS blocklists used or evaluated
+  ├── [`allowlists.md`](./dns-filtering/allowlists.md) — allowlists used or evaluated to reduce false positives
+  ├── [`regex.txt`](./dns-filtering/regex.txt) — DNS regex rules used or evaluated
+  ├── [`encrypted-dns-providers.txt`](./dns-filtering/encrypted-dns-providers.txt) — known encrypted DNS provider domains
+  ├── [`ip-blocklists.md`](./dns-filtering/ip-blocklists.md) — IP blocklist feeds and limitations
+  └── [`dns-redirect.md`](./dns-filtering/dns-redirect.md) — DNS redirect and enforcement notes
+
+* [`docs/`](./docs/) — general documentation, architecture notes, case studies, and runbooks
+  ├── [`firewall-policy.md`](./docs/firewall-policy.md) — sanitized firewall policy notes
+  ├── [`docker-compose-architecture.md`](./docs/docker-compose-architecture.md) — planned Docker Compose architecture
+  ├── [`case-studies/`](./docs/case-studies/) — troubleshooting case studies
+  └── [`runbooks/`](./docs/runbooks/) — operational checklists and repeatable workflows
+
+* [`scripts/`](./scripts/) — maintenance and administration scripts
+  ├── [`README.md`](./scripts/README.md) — script overview
+  ├── [`update-laptop.sh`](./scripts/update-laptop.sh) — laptop maintenance script
+  ├── [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh) — Ubuntu server maintenance script
+  └── [`start-jellyfin.sh`](./scripts/start-jellyfin.sh) — Jellyfin startup helper script
+
+* [`examples/`](./examples/) — sanitized example configurations and service examples
+
+* [`.gitignore`](./.gitignore) — prevents secrets and sensitive files from being committed
+
+---
+
 ## Infrastructure Components and Platforms
 
 This section lists the infrastructure building blocks: platforms, network/security components, deployment tooling, storage, backup, and edge services. Application workloads are listed separately below. The table is ordered roughly from the network edge and access layer through virtualization, storage, deployment tooling, and planned decoupling experiments.
