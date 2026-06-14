@@ -13,6 +13,7 @@ It includes architecture notes, firewall policy notes, runbooks, and troubleshoo
 
 - [Linux service troubleshooting checklist](./runbooks/linux-service-troubleshooting-checklist.md) — repeatable checklist for investigating Linux service issues
 - [Git workflow](./runbooks/git-workflow.md) — basic Git workflow used for reviewing, committing, and pushing repository changes
+- [Cloudflare DDNS for WireGuard remote access](./runbooks/cloudflare-ddns-wireguard.md) — dynamic DNS approach used earlier for WireGuard access before CGNAT
 
 ## Case Studies
 
