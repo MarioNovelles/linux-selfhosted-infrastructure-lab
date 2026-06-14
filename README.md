@@ -210,9 +210,6 @@ This section lists the applications and service-like workloads that run on top o
 | Navidrome | Implemented | Music streaming |
 | Audiobookshelf | Implemented | Audiobook management |
 | Calibre-Web | Implemented | E-book library |
-| Sonarr | Implemented | Media automation |
-| Radarr | Implemented | Media automation |
-| Prowlarr | Implemented | Indexer management |
 | MeTube | Implemented | Media download workflow |
 | FreePBX | Implemented | VoIP server and telephony experimentation |
 | Ollama | Implemented | Local AI experimentation |
