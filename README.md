@@ -210,7 +210,7 @@ This section lists the applications and service-like workloads that run on top o
 | Navidrome | Implemented | Music streaming |
 | Audiobookshelf | Implemented | Audiobook management |
 | Calibre-Web | Implemented | E-book library |
-| MeTube | Implemented | Media download workflow |
+| Media-related services | Implemented | Used to practice container management, storage paths, permissions, service dependencies, and troubleshooting |
 | FreePBX | Implemented | VoIP server and telephony experimentation |
 | Ollama | Implemented | Local AI experimentation |
 | Open WebUI | Implemented | Local AI web interface for Ollama |
@@ -325,7 +325,7 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - ACME / Let's Encrypt
 - HAProxy
 - Suricata
-- Basic security lab practice with Kali Linux, nmap, Wireshark, and network/service exposure checks
+- Basic defensive security lab practice with Kali Linux, nmap, Wireshark, and authorized network/service exposure checks
 
 ### Containers and Services
 
@@ -400,7 +400,7 @@ The backup design separates service recovery, file recovery, configuration recov
 | Password vault, documents, photos, configuration files | Critical |
 | Service databases and application configs | High |
 | Media metadata and application state | Medium |
-| Download cache, transcodes, temporary files | Low / disposable |
+| Temporary files, caches, transcodes, generated data | Low / disposable |
 
 The long-term goal is not only to create backups, but to test restores and document recovery steps.
 
@@ -579,7 +579,7 @@ Concrete lessons:
 - Expanding backup and restore testing
 - Publishing sanitized configuration examples
 - Improving monitoring and alerting
-- Hardening public-facing services
+- Keeping internal services behind VPN-style access and hardening intentionally exposed services
 - Planning VLAN-based segmentation with managed switch hardware
 - Reducing pfSense service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
 - Building a clean portfolio of practical Linux and networking projects

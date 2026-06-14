@@ -282,7 +282,7 @@ Suggested migration order:
 
 1. Uptime Kuma
 2. SearXNG
-3. Navidrome or MeTube
+3. Navidrome
 4. Jellyfin
 5. Grafana and Prometheus
 6. WordPress or other database-backed apps
