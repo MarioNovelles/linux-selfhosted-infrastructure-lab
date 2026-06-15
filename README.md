@@ -119,6 +119,10 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 - [DNS filtering notes, blocklists, allowlists, and regex rules](./dns-filtering/README.md)
 
+### Architecture
+
+- [Architecture overview and design decisions](./docs/architecture.md)
+
 ---
 
 ## Repository Structure Navigation
