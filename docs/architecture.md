@@ -1,10 +1,8 @@
 # Architecture
 
-Status: active architecture reference / implementation in progress
-Scope: compute, storage, Docker Compose workloads, backups, monitoring, media storage, and operational design
-Security note: this document intentionally avoids real IP addresses, internal hostnames, domains, credentials, subnet details, secrets, exact firewall rules, and production configuration values.
-
----
+- **Status:** Active architecture reference / implementation in progress.
+- **Scope:** Compute, storage, Docker Compose workloads, backups, monitoring, media storage, and operational design.
+- **Security note:** This document intentionally avoids real IP addresses, internal hostnames, domains, credentials, subnet details, secrets, exact firewall rules, and production configuration values.---
 
 ## Purpose
 
