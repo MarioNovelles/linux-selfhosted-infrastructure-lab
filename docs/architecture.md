@@ -314,6 +314,8 @@ TrueNAS dataset -> NFS share -> Ubuntu Docker VM -> bind mount into containers
 
 The NAS is not mounted directly into random containers. The VM owns the NAS mount points, and containers receive only the paths they need. Ownership, UID/GID assumptions, and mount behavior are documented with the service configuration.
 
+NFS is used for Linux service-to-NAS mounts because the main consumers are Linux-based VMs and containers. It provides a straightforward way to expose TrueNAS datasets as normal filesystem paths inside the Docker VM. Application state remains on local VM storage; NFS is reserved for bulk datasets such as media, photo/video originals, shared files, and backup targets.
+
 ### TrueNAS Side
 
 Create a dedicated user/group for NFS access, for example:
