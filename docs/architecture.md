@@ -31,6 +31,12 @@ The architecture is designed around these priorities:
 
 ## High-Level Architecture
 
+The infrastructure is organized around separate roles for routing, wireless access, compute, storage, backups, VoIP, AI experimentation, monitoring, and fallback services.
+
+![Linux self-hosted infrastructure architecture overview](./images/linux-selfhosted-infrastructure-architecture-overview.png)
+
+The diagram above is a sanitized public overview of the lab architecture. It shows the main infrastructure roles, service placement, storage responsibilities, backup flow, and planned network segmentation model.
+
 ```text
                                   Internet
                                      |
