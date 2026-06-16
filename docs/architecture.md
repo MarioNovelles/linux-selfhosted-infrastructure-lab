@@ -150,13 +150,11 @@ Operational expectations:
 - Monitor growth from Docker images, Prometheus data, Immich generated files, Jellyfin metadata, and VM snapshots.
 - Avoid mixing experimental workloads with the hypervisor OS.
 
-### Docker Placement
+## Proxmox Docker Placement Pattern
 
-Docker runs inside a Ubuntu VM on Proxmox.
+Docker workloads hosted on Proxmox run inside a dedicated Debian or Ubuntu VM.
 
-Docker is not installed directly on the Proxmox node. Keeping Docker inside a VM keeps the hypervisor cleaner, reduces upgrade risk, and makes recovery easier because the Docker VM can be backed up, restored, migrated, or rebuilt as a normal VM.
-
-Placement pattern:
+Docker is not installed directly on the Proxmox host. This keeps the hypervisor focused on virtualization duties and allows the Docker environment to be backed up, restored, migrated, or rebuilt like a normal VM.
 
 ```text
 Proxmox VE
@@ -167,16 +165,19 @@ Proxmox VE
 │   └── NFS mounts from TrueNAS for bulk data
 ├── Home Assistant VM (planned)
 ├── monitoring / service VMs as needed
-└── test and validation VMs as needed
+└── test and validation VMs as needed---
+```
 
-Separate infrastructure roles
-├── Dedicated VoIP server
-│   └── FreePBX
-└── AI / experimentation role
-    ├── Ollama
-    ├── Open WebUI
-    ├── OpenClaw
-    └── Hermes Agent
+## Dedicated Service Nodes
+
+Some services are deployed on dedicated bare-metal machines instead of being containerized or virtualized. This keeps workloads with specific host, isolation, or hardware requirements separate from the main Proxmox and Docker environment.
+
+```text
+Dedicated VoIP server
+└── FreePBX on Debian bare metal
+
+Dedicated agentic AI node
+└── Hermes Agent on Ubuntu bare metal
 ```
 
 ---
