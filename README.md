@@ -163,6 +163,35 @@ This repository has grown into several sections. The structure below helps locat
 └── .gitignore                    # Prevents secrets and sensitive files from being committed
 ```
 
+## Repository Navigation
+
+This repository has grown into several sections. The structure below helps locate documentation, scripts, and sanitized examples more quickly.
+
+* [`README.md`](./README.md) — main overview of the lab
+* [`dns-filtering/`](./dns-filtering/README.md) — DNS filtering notes, blocklists, allowlists, regex rules, and DNS enforcement notes
+
+  * [`blocklists.md`](./dns-filtering/blocklists.md)
+  * [`allowlists.md`](./dns-filtering/allowlists.md)
+  * [`regex.txt`](./dns-filtering/regex.txt)
+  * [`encrypted-dns-providers.txt`](./dns-filtering/encrypted-dns-providers.txt)
+  * [`ip-blocklists.md`](./dns-filtering/ip-blocklists.md)
+  * [`dns-redirect.md`](./dns-filtering/dns-redirect.md)
+* [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, and case studies
+
+  * [`architecture.md`](./docs/architecture.md)
+  * [`docker-compose-architecture.md`](./docs/docker-compose-architecture.md)
+  * [`firewall-policy.md`](./docs/firewall-policy.md)
+  * [`case-studies/`](./docs/case-studies/)
+  * [`runbooks/`](./docs/runbooks/)
+* [`scripts/`](./scripts/README.md) — maintenance and administration scripts
+
+  * [`update-laptop.sh`](./scripts/update-laptop.sh)
+  * [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh)
+  * [`start-jellyfin.sh`](./scripts/start-jellyfin.sh)
+* [`examples/`](./examples/README.md) — sanitized example configurations and service examples
+* [`.gitignore`](./.gitignore) — prevents secrets and sensitive files from being committed
+
+
 ---
 
 ## Infrastructure Components and Platforms
