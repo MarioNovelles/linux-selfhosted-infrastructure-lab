@@ -65,7 +65,7 @@ The diagram above is a sanitized public overview of the lab architecture. It sho
    Proxmox VE node             TrueNAS node              Backup node
    Compute / VMs               NAS / storage             Critical backups
    Docker VM                   ZFS datasets              Restore points
-   Home Assistant VM           NFS / SMB shares          Config/data copies
+   Home Assistant OS VM           NFS / SMB shares          Config/data copies
    Monitoring / test VMs
           |
           v
@@ -90,7 +90,7 @@ The diagram above is a sanitized public overview of the lab architecture. It sho
 
 The lab uses a separated infrastructure-role design rather than placing every function on one system.
 
-- **Proxmox VE node:** runs virtual machines, the Docker application VM, monitoring workloads, test systems, and the planned Home Assistant VM.
+- **Proxmox VE node:** runs virtual machines, the Docker application VM, monitoring workloads, test systems, and the planned Home Assistant OS VM.
 - **Docker VM:** runs the main Docker Compose application stack and keeps container runtime state off the Proxmox host OS.
 - **TrueNAS node:** acts as the dedicated NAS with ZFS datasets shared over NFS/SMB.
 - **Backup node:** stores important backups, VM data, configs, databases, restore points, and irreplaceable files.
@@ -105,7 +105,7 @@ This keeps the design simple in the right places:
 - OpenWrt handles wireless access point duties without taking over core routing.
 - Docker runs inside a regular Linux VM.
 - FreePBX is documented as a dedicated VoIP server role, not as part of the Docker VM.
-- Home Assistant is planned as its own VM.
+- Home Assistant OS is planned as its own VM.
 - The NAS is not used as the main application platform.
 - The Proxmox node is not used as the long-term bulk storage system.
 
@@ -125,7 +125,7 @@ Operating pattern:
 | Platform / Role | Purpose | Responsibilities | Out of Scope |
 |---|---|---|---|
 | pfSense / edge layer | Routing, firewalling, reverse proxy, certificates, DNS filtering visibility | Edge routing, firewall policy, HAProxy, ACME, pfBlockerNG, Suricata visibility | Becoming the place where unrelated application logic accumulates |
-| Proxmox VE | Compute and virtualization | Linux VMs, the Docker VM, planned Home Assistant VM, VM backups, resource allocation, isolated test systems | Running Docker directly on the hypervisor OS |
+| Proxmox VE | Compute and virtualization | Linux VMs, the Docker VM, planned Home Assistant OS VM, VM backups, resource allocation, isolated test systems | Running Docker directly on the hypervisor OS |
 | OpenWrt access point | Wireless access | Main Wi-Fi, guest Wi-Fi, wireless client access | Acting as an unintended second router or NAT layer |
 | Docker VM | Main container runtime | Docker Compose stacks, app networks, bind mounts, container volumes, application service runtime | Holding large media or NAS-scale data on the VM disk |
 | TrueNAS | Storage and snapshots | ZFS pools, datasets, NFS/SMB shares, snapshots, disk health | Acting as the primary application platform |
@@ -139,7 +139,7 @@ Operating pattern:
 
 ### Proxmox VE Node
 
-The Proxmox node is the main virtualization layer. It hosts the Docker VM, Linux service VMs, monitoring workloads, test systems, and the planned Home Assistant VM.
+The Proxmox node is the main virtualization layer. It hosts the Docker VM, Linux service VMs, monitoring workloads, test systems, and the planned Home Assistant OS VM.
 
 The expected constraints are memory, local SSD capacity, and storage growth from service state. CPU usage is validated with monitoring before changes are made. Hardware models and exact specifications are intentionally not published in this document.
 
@@ -163,7 +163,7 @@ Proxmox VE
 │   ├── Docker Compose projects
 │   ├── local application state on VM disk
 │   └── NFS mounts from TrueNAS for bulk data
-├── Home Assistant VM (planned)
+├── Home Assistant OS VM (planned)
 ├── monitoring / service VMs as needed
 └── test and validation VMs as needed
 ```
@@ -259,7 +259,7 @@ Proxmox local SSD storage
 │   └── temporary export files
 └── VM storage
     ├── Docker VM disk
-    ├── Home Assistant VM disk
+    ├── Home Assistant OS VM disk
     ├── monitoring / service VM disks
     └── test VM disks
 ```
@@ -682,7 +682,7 @@ A clean architecture is only useful if it can be rebuilt. Keep the repo focused 
 - [ ] Configure local storage (`local`, `local-lvm`, or local ZFS depending on install choice).
 - [ ] Upload ISO images.
 - [ ] Create the Docker VM.
-- [ ] Create the planned Home Assistant VM and any additional service or test VMs that belong on Proxmox.
+- [ ] Create the planned Home Assistant OS VM and any additional service or test VMs that belong on Proxmox.
 - [ ] Configure VM backups.
 - [ ] Add host and VM monitoring.
 
