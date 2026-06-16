@@ -103,7 +103,7 @@ Planned managed VLAN switch
 
 ## Documentation
 
-This repository includes sanitized documentation that shows troubleshooting logic and operational habits without exposing real domains, IP addresses, credentials, private keys, internal addressing, or firewall rules.
+The documents below provide sanitized architecture notes, runbooks, case studies, and operational references for the lab.
 
 ### Architecture
 
