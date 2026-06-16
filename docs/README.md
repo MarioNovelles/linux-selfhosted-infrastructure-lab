@@ -6,6 +6,7 @@ It includes architecture notes, firewall policy notes, runbooks, and troubleshoo
 
 ## Architecture and Policy Notes
 
+- [Architecture overview and design decisions](./docs/architecture.md) — documents the lab roles, Proxmox and TrueNAS split, service placement, storage approach, backup assumptions, and major trade-offs.
 - [Docker Compose architecture plan](./docker-compose-architecture.md) — planned long-term structure for Docker Compose services
 - [Firewall policy notes](./firewall-policy.md) — sanitized firewall rule intent, DNS enforcement, remote access policy, and IPv6 notes
 
