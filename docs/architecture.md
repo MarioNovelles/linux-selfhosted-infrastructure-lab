@@ -165,8 +165,10 @@ Proxmox VE
 │   └── NFS mounts from TrueNAS for bulk data
 ├── Home Assistant VM (planned)
 ├── monitoring / service VMs as needed
-└── test and validation VMs as needed---
+└── test and validation VMs as needed
 ```
+
+---
 
 ## Dedicated Service Nodes
 
