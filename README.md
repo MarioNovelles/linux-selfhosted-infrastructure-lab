@@ -56,6 +56,8 @@ The lab is organized around separate infrastructure roles: routing/firewalling, 
 
 The diagram above is a sanitized public overview. It avoids real domains, IP addresses, credentials, exact firewall rules, and sensitive internal details.
 
+For the detailed topology, service placement, storage design, and architecture trade-offs, see [Architecture](./docs/architecture.md).
+
 <pre>
 Internet
    |
@@ -103,6 +105,12 @@ Planned managed VLAN switch
 
 This repository includes sanitized documentation that shows troubleshooting logic and operational habits without exposing real domains, IP addresses, credentials, private keys, internal addressing, or firewall rules.
 
+### Architecture
+
+- [Architecture overview and design decisions](./docs/architecture.md)
+- [Docker Compose architecture plan](./docs/docker-compose-architecture.md)
+- [Firewall policy notes](./docs/firewall-policy.md)
+
 ### Case Studies
 
 - [Service unreachable troubleshooting flow](./docs/case-studies/service-unreachable-troubleshooting.md)
@@ -119,9 +127,9 @@ This repository includes sanitized documentation that shows troubleshooting logi
 
 - [DNS filtering notes, blocklists, allowlists, and regex rules](./dns-filtering/README.md)
 
-### Architecture
+### Examples
 
-- [Architecture overview and design decisions](./docs/architecture.md)
+- [Sanitized examples](./examples/README.md)
 
 ---
 
@@ -154,17 +162,6 @@ This repository has grown into several sections. The structure below helps locat
 ├── examples/                     # Sanitized example configurations and service examples
 └── .gitignore                    # Prevents secrets and sensitive files from being committed
 ```
-
-### Quick Links
-
-- [DNS filtering notes](./dns-filtering/README.md)
-- [Documentation index](./docs/README.md)
-- [Firewall policy notes](./docs/firewall-policy.md)
-- [Docker Compose architecture plan](./docs/docker-compose-architecture.md)
-- [Case studies](./docs/case-studies/)
-- [Runbooks](./docs/runbooks/)
-- [Maintenance scripts](./scripts/README.md)
-- [Sanitized examples](./examples/README.md)
 
 ---
 
