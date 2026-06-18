@@ -47,10 +47,22 @@ backups/
 logs/
 
 # -----------------------------------------------------------------------------
-# Docker / Compose local override files
+# Local Docker Compose deployment files
 # -----------------------------------------------------------------------------
+# Public examples use compose.example.yml / compose.example.yaml.
+# Real local deployments may copy these to compose.yml or compose.yaml.
+compose.yml
+compose.yaml
+docker-compose.yml
+docker-compose.yaml
 compose.override.yml
 docker-compose.override.yml
+
+# Keep public example Compose files tracked.
+!compose.example.yml
+!compose.example.yaml
+!docker-compose.example.yml
+!docker-compose.example.yaml
 
 # -----------------------------------------------------------------------------
 # OS and editor noise
