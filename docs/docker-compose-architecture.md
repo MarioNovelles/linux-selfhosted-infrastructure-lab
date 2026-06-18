@@ -31,6 +31,8 @@ The planned host location for Compose projects is:
 
 I prefer `/srv/docker` because these services are part of the server workload and provide services from the system. This makes `/srv` a clean and Linux-friendly place for self-hosted application stacks and their related data.
 
+/srv/docker directories are owned by root and a restricted admin group. Runtime secrets such as .env are not committed to Git and are permission-restricted on the server. Container-created runtime data is not manually re-owned unless required by the service documentation.
+
 Other options were considered:
 
 | Path              | Notes                                                                                                               |
