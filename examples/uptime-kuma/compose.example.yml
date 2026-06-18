@@ -1,0 +1,180 @@
+# Uptime Kuma + MariaDB Docker Compose example
+#
+# Purpose:
+# - Demonstrate a small database-backed monitoring application stack.
+# - Keep the application and database in the same Compose project.
+# - Keep persistent data in predictable local folders.
+# - Avoid exposing the database directly to the host network.
+# - Use .env values for local settings and secrets.
+#
+# Intended real deployment path:
+# /srv/docker/uptime-kuma/
+#
+# Public repository note:
+# This is a sanitized example file. Real deployments should copy this to
+# compose.yml and use a private .env file that is not committed to Git.
+
+services:
+  # ---------------------------------------------------------------------------
+  # Uptime Kuma application container
+  # ---------------------------------------------------------------------------
+  uptime-kuma:
+    # Uptime Kuma v2 image.
+    # The major version is pinned to avoid unexpected upgrades across major releases.
+    image: louislam/uptime-kuma:2
+
+    # Fixed container name for easier local administration:
+    # docker logs uptime-kuma
+    # docker exec -it uptime-kuma sh
+    #
+    # Note:
+    # In larger environments, some teams avoid container_name because it can reduce
+    # Compose project flexibility. For this lab, readability is preferred.
+    container_name: uptime-kuma
+
+    # Restart the service automatically unless it was manually stopped.
+    # This is useful for a small always-on lab service after host reboots.
+    restart: unless-stopped
+
+    # Wait for MariaDB to pass its healthcheck before starting Uptime Kuma.
+    # This reduces startup errors where the application starts before the database
+    # is ready to accept connections.
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+    ports:
+      # Publish Uptime Kuma's web interface to the host.
+      #
+      # Format:
+      # HOST_BIND_ADDRESS:HOST_PORT:CONTAINER_PORT
+      #
+      # The default bind address is 127.0.0.1, which means the service is only
+      # reachable from the Docker host itself.
+      #
+      # In this lab architecture, external access should normally go through a
+      # reverse proxy, VPN path, or controlled firewall rule instead of exposing
+      # the service directly on all network interfaces.
+      - "${UPTIME_KUMA_BIND_ADDRESS:-127.0.0.1}:${UPTIME_KUMA_PORT:-3001}:3001"
+
+    environment:
+      # Time zone used by the application for logs and scheduling.
+      TZ: ${TZ:-Europe/Berlin}
+
+      # Tell Uptime Kuma to use MariaDB instead of the default local database.
+      UPTIME_KUMA_DB_TYPE: mariadb
+
+      # Docker Compose provides internal DNS.
+      # The hostname "mariadb" resolves to the MariaDB service below.
+      UPTIME_KUMA_DB_HOSTNAME: mariadb
+
+      # Default MariaDB/MySQL port inside the private Compose network.
+      UPTIME_KUMA_DB_PORT: 3306
+
+      # Database name and application user are read from .env.
+      #
+      # The ":?... is required" syntax makes Compose fail clearly if the value
+      # is missing, instead of starting with an empty password or broken config.
+      UPTIME_KUMA_DB_NAME: ${MARIADB_DATABASE:?MARIADB_DATABASE is required}
+      UPTIME_KUMA_DB_USERNAME: ${MARIADB_USER:?MARIADB_USER is required}
+      UPTIME_KUMA_DB_PASSWORD: ${MARIADB_PASSWORD:?MARIADB_PASSWORD is required}
+
+      # SSL/TLS is disabled because the database is local to this private Docker
+      # network. For remote or cloud databases, TLS should be enabled if required.
+      UPTIME_KUMA_DB_SSL: "false"
+
+    volumes:
+      # Persistent Uptime Kuma application data.
+      #
+      # On a real Docker host using the planned lab layout, this maps to:
+      # /srv/docker/uptime-kuma/data:/app/data
+      #
+      # Uptime Kuma documentation warns against unsupported network filesystems
+      # for its data path, so local storage is preferred.
+      - ./data:/app/data
+
+    networks:
+      # Attach the app to the private internal network so it can reach MariaDB.
+      - uptime-kuma-internal
+
+  # ---------------------------------------------------------------------------
+  # MariaDB database container
+  # ---------------------------------------------------------------------------
+  mariadb:
+    # MariaDB image used as the database backend.
+    #
+    # Pinning to a stable major/minor version makes upgrades intentional.
+    # Before changing this version in a real deployment, take a backup and read
+    # the MariaDB upgrade notes.
+    image: mariadb:11.8
+
+    # Fixed container name for easier local administration and log inspection.
+    container_name: uptime-kuma-mariadb
+
+    # Restart the database automatically unless manually stopped.
+    restart: unless-stopped
+
+    environment:
+      # Time zone used by the database container.
+      TZ: ${TZ:-Europe/Berlin}
+
+      # Root password for MariaDB.
+      # This should be a strong private value in the real .env file.
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?MARIADB_ROOT_PASSWORD is required}
+
+      # Initial application database created when the database is first initialized.
+      MARIADB_DATABASE: ${MARIADB_DATABASE:?MARIADB_DATABASE is required}
+
+      # Initial application database user.
+      MARIADB_USER: ${MARIADB_USER:?MARIADB_USER is required}
+
+      # Password for the application database user.
+      # This should be different from the root password.
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?MARIADB_PASSWORD is required}
+
+    volumes:
+      # Persistent MariaDB data directory.
+      #
+      # On a real Docker host using the planned lab layout, this maps to:
+      # /srv/docker/uptime-kuma/database:/var/lib/mysql
+      #
+      # This directory contains the actual database files and must be included
+      # in the backup/restore plan.
+      - ./database:/var/lib/mysql
+
+    healthcheck:
+      # Check whether MariaDB is alive and accepting local connections.
+      #
+      # The double dollar sign "$$" is intentional:
+      # - "$MARIADB_ROOT_PASSWORD" would be expanded by Docker Compose on the host.
+      # - "$$MARIADB_ROOT_PASSWORD" is passed into the container and expanded there.
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p\"$$MARIADB_ROOT_PASSWORD\" --silent"]
+
+      # Run the healthcheck every 10 seconds.
+      interval: 10s
+
+      # Mark an individual healthcheck attempt as failed if it takes longer than 5 seconds.
+      timeout: 5s
+
+      # Allow up to 10 failed attempts before marking the container unhealthy.
+      retries: 10
+
+      # Give MariaDB up to 30 seconds after startup before healthcheck failures count.
+      start_period: 30s
+
+    networks:
+      # Attach the database to the same private network as Uptime Kuma.
+      # No host port is published, so the database is not reachable directly from
+      # the host LAN or the public internet.
+      - uptime-kuma-internal
+
+# -----------------------------------------------------------------------------
+# Networks
+# -----------------------------------------------------------------------------
+networks:
+  uptime-kuma-internal:
+    # A bridge network is the standard Docker network type for containers on one host.
+    #
+    # Uptime Kuma can reach MariaDB by hostname "mariadb" on this network.
+    # MariaDB is not exposed with a host port.
+    driver: bridge
