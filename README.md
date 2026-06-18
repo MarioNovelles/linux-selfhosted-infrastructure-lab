@@ -541,12 +541,14 @@ Concrete lessons:
 
 ## Current Focus
 
-- Preparing for LPIC-1
-- Improving infrastructure documentation
-- Expanding backup and restore testing
-- Publishing sanitized configuration examples
-- Improving monitoring and alerting
-- Keeping internal services behind VPN-style access and hardening intentionally exposed services
-- Planning VLAN-based segmentation with managed switch hardware
-- Reducing pfSense service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
-- Building a clean portfolio of practical Linux and networking projects
+* Strengthening practical MariaDB and Apache administration skills
+* Preparing for LPIC-1
+* Improving infrastructure documentation
+* Expanding backup and restore testing
+* Publishing sanitized configuration examples
+* Improving monitoring and alerting
+* Keeping internal services behind VPN-style access and hardening intentionally exposed services
+* Planning VLAN-based segmentation with managed switch hardware
+* Reducing pfSense service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
+* Building a clean portfolio of practical Linux and networking projects
+
