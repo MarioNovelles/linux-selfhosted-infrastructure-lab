@@ -56,7 +56,9 @@ compose.yaml
 docker-compose.yml
 docker-compose.yaml
 compose.override.yml
+compose.override.yaml
 docker-compose.override.yml
+docker-compose.override.yaml
 
 # Keep public example Compose files tracked.
 !compose.example.yml
