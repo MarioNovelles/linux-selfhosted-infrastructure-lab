@@ -103,31 +103,74 @@ Planned managed VLAN switch
 
 ## Repository Navigation
 
-This repository has grown into several sections. The structure below helps locate documentation, scripts, and sanitized examples more quickly.
+This repository has grown into several sections. The structure below helps locate documentation, scripts, runbooks, and sanitized service examples more quickly.
 
-- [`README.md`](./README.md) — main overview of the lab
-- [`dns-filtering/`](./dns-filtering/README.md) — DNS filtering notes, blocklists, allowlists, regex rules, and DNS enforcement notes
+* [`README.md`](./README.md) — main overview of the lab
 
-  - [`blocklists.md`](./dns-filtering/blocklists.md)
-  - [`allowlists.md`](./dns-filtering/allowlists.md)
-  - [`regex.txt`](./dns-filtering/regex.txt)
-  - [`encrypted-dns-providers.txt`](./dns-filtering/encrypted-dns-providers.txt)
-  - [`ip-blocklists.md`](./dns-filtering/ip-blocklists.md)
-  - [`dns-redirect.md`](./dns-filtering/dns-redirect.md)
-- [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, and case studies
+* [`dns-filtering/`](./dns-filtering/README.md) — DNS filtering notes, blocklists, allowlists, regex rules, and DNS enforcement notes
 
-  - [`architecture.md`](./docs/architecture.md)
-  - [`docker-compose-architecture.md`](./docs/docker-compose-architecture.md)
-  - [`firewall-policy.md`](./docs/firewall-policy.md)
-  - [`case-studies/`](./docs/case-studies/)
-  - [`runbooks/`](./docs/runbooks/)
-- [`scripts/`](./scripts/README.md) — maintenance and administration scripts
+  * [`blocklists.md`](./dns-filtering/blocklists.md)
+  * [`allowlists.md`](./dns-filtering/allowlists.md)
+  * [`regex.txt`](./dns-filtering/regex.txt)
+  * [`encrypted-dns-providers.txt`](./dns-filtering/encrypted-dns-providers.txt)
+  * [`ip-blocklists.md`](./dns-filtering/ip-blocklists.md)
+  * [`dns-redirect.md`](./dns-filtering/dns-redirect.md)
 
-  - [`update-laptop.sh`](./scripts/update-laptop.sh)
-  - [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh)
-  - [`start-jellyfin.sh`](./scripts/start-jellyfin.sh)
-- [`examples/`](./examples/README.md) — sanitized example configurations and service examples
-- [`.gitignore`](./.gitignore) — prevents secrets and sensitive files from being committed
+* [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, security notes, and case studies
+
+  * [`architecture.md`](./docs/architecture.md) — high-level lab architecture
+
+  * [`docker-compose-architecture.md`](./docs/docker-compose-architecture.md) — Docker Compose layout, `/srv/docker` structure, and ownership model
+
+  * [`backup-strategy.md`](./docs/backup-strategy.md) — backup planning and restore strategy
+
+  * [`firewall-policy.md`](./docs/firewall-policy.md) — firewall policy notes
+
+  * [`security.md`](./docs/security.md) — security and hardening notes
+
+  * [`services.md`](./docs/services.md) — service inventory and service notes
+
+  * [`troubleshooting.md`](./docs/troubleshooting.md) — general troubleshooting notes
+
+  * [`case-studies/`](./docs/case-studies/) — documented troubleshooting and infrastructure case studies
+
+    * [`service-unreachable-troubleshooting.md`](./docs/case-studies/service-unreachable-troubleshooting.md)
+
+  * [`runbooks/`](./docs/runbooks/) — repeatable administration procedures
+
+    * [`cloudflare-ddns-wireguard.md`](./docs/runbooks/cloudflare-ddns-wireguard.md)
+    * [`docker-compose-migration.md`](./docs/runbooks/docker-compose-migration.md)
+    * [`git-workflow.md`](./docs/runbooks/git-workflow.md)
+    * [`linux-command-line-workflow.md`](./docs/runbooks/linux-command-line-workflow.md)
+    * [`linux-service-troubleshooting-checklist.md`](./docs/runbooks/linux-service-troubleshooting-checklist.md)
+
+  * [`proxmox/`](./docs/proxmox/) — Proxmox VE installation and virtualization notes
+
+    * [`01-install-proxmox-ve.md`](./docs/proxmox/01-install-proxmox-ve.md)
+
+  * [`images/`](./docs/images/) — architecture diagrams and supporting visuals
+
+* [`examples/`](./examples/README.md) — sanitized example configurations and service examples
+
+  * [`traefik/`](./examples/traefik/README.md) — Traefik reverse proxy example with `whoami` validation and Uptime Kuma routing
+
+    * [`compose.example.yml`](./examples/traefik/compose.example.yml)
+    * [`.env.example`](./examples/traefik/.env.example)
+    * [`whoami.example.yml`](./examples/traefik/whoami.example.yml)
+
+  * [`uptime-kuma/`](./examples/uptime-kuma/README.md) — Uptime Kuma monitoring example with embedded and external MariaDB variants
+
+    * [`compose.embedded-mariadb.example.yml`](./examples/uptime-kuma/compose.embedded-mariadb.example.yml)
+    * [`compose.external-mariadb.example.yml`](./examples/uptime-kuma/compose.external-mariadb.example.yml)
+    * [`.env.example`](./examples/uptime-kuma/.env.example)
+
+* [`scripts/`](./scripts/README.md) — maintenance and administration scripts
+
+  * [`update-laptop.sh`](./scripts/update-laptop.sh)
+  * [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh)
+  * [`start-jellyfin.sh`](./scripts/start-jellyfin.sh)
+
+* [`.gitignore`](./.gitignore) — prevents secrets, local Compose files, runtime data, and sensitive files from being committed
 
 ---
 
