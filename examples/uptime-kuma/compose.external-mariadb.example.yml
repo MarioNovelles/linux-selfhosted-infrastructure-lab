@@ -103,9 +103,9 @@ services:
   mariadb:
     # MariaDB image used as the database backend.
     #
-    # Pinning to a stable major/minor version makes upgrades intentional.
-    # Before changing this version in a real deployment, take a backup and read
-    # the MariaDB upgrade notes.
+    # MariaDB 11.8 is an LTS release line.
+    # The version is pinned to the LTS line instead of using "latest" or "lts"
+    # so database upgrades remain intentional and testable.
     image: mariadb:11.8
 
     # Fixed container name for easier local administration and log inspection.

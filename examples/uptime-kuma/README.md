@@ -145,6 +145,17 @@ The directories have different purposes:
 
 This follows the lab architecture rule that each Compose project should keep its application data and database data in predictable, documented locations.
 
+## Deployment variants
+
+This example includes two deployment variants:
+
+| Variant | Purpose |
+|---|---|
+| `compose.embedded.example.yml` | Simpler deployment using Uptime Kuma's embedded MariaDB option |
+| `compose.external-mariadb.example.yml` | Advanced variant showing an external MariaDB container, private Docker networking, healthchecks, and database separation |
+
+For my lab learning path, I deployed the external MariaDB variant to practice operating a database-backed Docker Compose stack.
+
 ## Security notes
 
 * The MariaDB service has no published host port.

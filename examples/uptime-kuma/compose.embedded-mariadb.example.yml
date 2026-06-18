@@ -1,0 +1,81 @@
+# Uptime Kuma Docker Compose example using embedded MariaDB
+#
+# Purpose:
+# - Demonstrate a simple self-hosted monitoring service.
+# - Use Uptime Kuma v2 with its embedded MariaDB option.
+# - Keep persistent application data in a predictable local folder.
+# - Bind the web interface to localhost by default.
+# - Avoid unnecessary external database complexity for this variant.
+#
+# Intended real deployment path:
+# /srv/docker/uptime-kuma/
+#
+# Public repository note:
+# This is a sanitized example file. Real deployments should copy this to
+# compose.yml and use a private .env file that is not committed to Git.
+
+services:
+  # ---------------------------------------------------------------------------
+  # Uptime Kuma application container
+  # ---------------------------------------------------------------------------
+  uptime-kuma:
+    # Uptime Kuma v2 image.
+    #
+    # The major version is pinned to v2 instead of using "latest".
+    # The Docker Hub page for Uptime Kuma marks ":latest" as deprecated/bad
+    # practice and recommends the v2 tag for current v2 deployments.
+    image: louislam/uptime-kuma:2
+
+    # Fixed container name for easier local administration:
+    # docker logs uptime-kuma
+    # docker exec -it uptime-kuma sh
+    #
+    # Note:
+    # In larger environments, some teams avoid container_name because it can
+    # reduce Compose project flexibility. For this lab, readability is preferred.
+    container_name: uptime-kuma
+
+    # Restart the service automatically unless it was manually stopped.
+    # This is useful for a small always-on lab service after host reboots.
+    restart: unless-stopped
+
+    ports:
+      # Publish Uptime Kuma's web interface to the host.
+      #
+      # Format:
+      # HOST_BIND_ADDRESS:HOST_PORT:CONTAINER_PORT
+      #
+      # The default bind address is 127.0.0.1, which means the service is only
+      # reachable from the Docker host itself.
+      #
+      # In this lab architecture, external access should normally go through a
+      # reverse proxy, VPN path, or controlled firewall rule instead of exposing
+      # the service directly on all network interfaces.
+      - "${UPTIME_KUMA_BIND_ADDRESS:-127.0.0.1}:${UPTIME_KUMA_PORT:-3001}:3001"
+
+    environment:
+      # Time zone used by the application for logs and scheduling.
+      TZ: ${TZ:-Europe/Berlin}
+
+      # Enable Uptime Kuma's embedded MariaDB mode.
+      #
+      # In this mode there is no separate MariaDB container. The database runs
+      # inside the Uptime Kuma container and Uptime Kuma connects to it through
+      # a Unix socket.
+      #
+      # This is simpler than the external MariaDB variant and is suitable for a
+      # small single-service deployment.
+      UPTIME_KUMA_ENABLE_EMBEDDED_MARIADB: "1"
+
+    volumes:
+      # Persistent Uptime Kuma application data.
+      #
+      # On a real Docker host using the planned lab layout, this maps to:
+      # /srv/docker/uptime-kuma/data:/app/data
+      #
+      # This path stores Uptime Kuma runtime data, including embedded MariaDB
+      # data when embedded MariaDB is selected.
+      #
+      # Uptime Kuma documentation warns against unsupported network filesystems
+      # for its data path, so local storage is preferred.
+      - ./data:/app/data
