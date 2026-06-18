@@ -31,8 +31,6 @@ The planned host location for Compose projects is:
 
 I prefer `/srv/docker` because these services are part of the server workload and provide services from the system. This makes `/srv` a clean and Linux-friendly place for self-hosted application stacks and their related data.
 
-/srv/docker directories are owned by root and a restricted admin group. Runtime secrets such as .env are not committed to Git and are permission-restricted on the server. Container-created runtime data is not manually re-owned unless required by the service documentation.
-
 Other options were considered:
 
 | Path              | Notes                                                                                                               |
@@ -344,3 +342,84 @@ The private server keeps the real configuration.
 This keeps the lab practical for daily use while also making the repository useful as a professional portfolio project.
 
 Network exposure decisions are documented separately in [Firewall Policy Notes](./firewall-policy.md). In general, private lab services are designed for VPN-style access rather than direct public exposure.
+
+## `/srv/docker` ownership model
+
+For real deployments, Docker Compose projects are stored under `/srv/docker`.
+
+/srv/docker directories are owned by root and a restricted admin group. Runtime secrets such as .env are not committed to Git and are permission-restricted on the server. Container-created runtime data is not manually re-owned unless required by the service documentation.
+
+Example layout:
+
+```text
+/srv/docker/uptime-kuma/
+├── compose.yml
+├── .env
+├── data/
+└── database/
+```
+
+Instead of making the directory owned by a normal user, keep `root` as the owner and use a dedicated admin group:
+
+```bash
+# Create a group for Docker administrators.
+sudo groupadd --system docker-admins
+
+# Allow the user to manage Docker projects.
+sudo usermod -aG docker-admins <user-name>
+
+# Create the project directory.
+sudo mkdir -p /srv/docker/uptime-kuma
+
+# Set ownership and permissions.
+sudo chown root:docker-admins /srv/docker/uptime-kuma
+sudo chmod 2770 /srv/docker/uptime-kuma
+```
+
+Expected permissions:
+
+```text
+drwxrws--- root docker-admins /srv/docker/uptime-kuma
+```
+
+Create the real deployment files from the public examples:
+
+```bash
+# Create the real Compose file.
+cp compose.example.yml compose.yml
+
+# Create the private environment file.
+cp .env.example .env
+
+# Restrict access to secrets.
+chmod 640 .env
+```
+
+For extra security:
+
+```bash
+# Make root the owner of the .env file.
+sudo chown root:docker-admins .env
+
+# Allow only root and the admin group to access it.
+sudo chmod 640 .env
+
+# Edit the file safely.
+sudoedit .env
+```
+
+Avoid changing ownership of container data directories unless the service documentation specifically requires it:
+
+```bash
+# Avoid changing ownership of database files!
+sudo chown -R <user-name>:<user-name> /srv/docker/uptime-kuma/database/
+```
+
+### Summary
+
+* Store Compose projects under `/srv/docker`
+* Keep `root` as the directory owner
+* Use a dedicated admin group for management
+* Restrict access to `.env` files
+* Leave container-created data ownership unchanged unless required
+
