@@ -156,6 +156,12 @@ This example includes two deployment variants:
 
 For my lab learning path, I deployed the external MariaDB variant to practice operating a database-backed Docker Compose stack.
 
+## Reverse proxy integration
+
+This service was successfully routed through the shared Traefik reverse proxy network.
+
+See [`../traefik/README.md`](../traefik/README.md) for the reverse proxy deployment and validation notes.
+
 ## Security notes
 
 * The MariaDB service has no published host port.
