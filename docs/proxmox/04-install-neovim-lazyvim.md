@@ -205,7 +205,7 @@ MesloLGS Nerd Font
 
 Without a Nerd Font, LazyVim still works, but some icons may appear as squares or missing symbols.
 
-## 13. Update Neovim Later (or use my update script in the scripts folder)
+## 13. Update Neovim Later (or use my update script from /scripts/update-laptop.sh)
 
 To update the Neovim AppImage:
 
@@ -221,7 +221,7 @@ sudo mv nvim-linux-x86_64.appimage /opt/nvim/nvim
 nvim --version
 ```
 
-## 14. Update LazyVim Plugins Later (or the update script)
+## 14. Update LazyVim Plugins Later (or the update script from /scripts/update-laptop.sh)
 
 Open Neovim:
 
@@ -248,3 +248,4 @@ Treesitter, ripgrep, fd, fzf, Git, curl, npm, and gcc installed
 
 This gives the VM a modern terminal editor for managing Docker Compose files, environment files, scripts, and infrastructure documentation.
 
+References: https://www.lazyvim.org/
