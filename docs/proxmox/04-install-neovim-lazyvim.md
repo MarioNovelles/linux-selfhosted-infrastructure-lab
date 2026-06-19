@@ -101,7 +101,7 @@ The output should show a modern Neovim version.
 
 ## 5. Install Neovim Globally
 
-Move the AppImage into `/opt/nvim`:
+Move the AppImage into `/opt/nvim` (for this to work you have to be on /tmp):
 
 ```bash
 sudo mkdir -p /opt/nvim
@@ -133,28 +133,7 @@ Check that Neovim was built with LuaJIT:
 nvim --version | grep -i luajit
 ```
 
-## 6. AppImage Fallback if FUSE Fails
-
-If running `nvim` gives an AppImage or FUSE error, extract the AppImage instead:
-
-```bash
-cd /opt/nvim
-sudo ./nvim --appimage-extract
-```
-
-Then point the `nvim` command to the extracted binary:
-
-```bash
-sudo ln -sf /opt/nvim/squashfs-root/usr/bin/nvim /usr/local/bin/nvim
-```
-
-Verify again:
-
-```bash
-nvim --version
-```
-
-## 7. Back Up Existing Neovim Files
+## 6. Back Up Existing Neovim Files
 
 Before installing LazyVim, back up any old Neovim config:
 
@@ -165,7 +144,7 @@ mv ~/.local/state/nvim ~/.local/state/nvim.bak 2>/dev/null || true
 mv ~/.cache/nvim ~/.cache/nvim.bak 2>/dev/null || true
 ```
 
-## 8. Install LazyVim
+## 7. Install LazyVim
 
 Clone the LazyVim starter configuration:
 
@@ -179,7 +158,7 @@ Remove the starter repo’s Git history:
 rm -rf ~/.config/nvim/.git
 ```
 
-## 9. Start Neovim
+## 10. Start Neovim
 
 ```bash
 nvim
@@ -197,7 +176,7 @@ After it finishes, run these inside Neovim:
 :checkhealth
 ```
 
-## 10. Optional: Install lazygit
+## 11. Optional: Install lazygit
 
 `lazygit` is optional, but useful for Git workflows inside LazyVim.
 
@@ -209,7 +188,7 @@ sudo apt install -y lazygit
 
 If the package is not available, skip it for now. LazyVim still works without it.
 
-## 11. Nerd Font Note
+## 12. Nerd Font Note
 
 LazyVim icons look best with a Nerd Font.
 
@@ -226,7 +205,7 @@ MesloLGS Nerd Font
 
 Without a Nerd Font, LazyVim still works, but some icons may appear as squares or missing symbols.
 
-## 12. Update Neovim Later
+## 13. Update Neovim Later (or use my update script in the scripts folder)
 
 To update the Neovim AppImage:
 
@@ -242,7 +221,7 @@ sudo mv nvim-linux-x86_64.appimage /opt/nvim/nvim
 nvim --version
 ```
 
-## 13. Update LazyVim Plugins Later
+## 14. Update LazyVim Plugins Later (or the update script)
 
 Open Neovim:
 
