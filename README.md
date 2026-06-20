@@ -2,7 +2,7 @@
 
 Practical self-hosted infrastructure lab focused on Linux administration, networking, virtualization, Docker-based services, firewalls, DNS, VPN access, reverse proxies, backups, monitoring, and troubleshooting.
 
-> **Security note:** > This repository intentionally omits or redacts sensitive details such as public IP addresses, real domains, credentials, private keys, full firewall rules, secrets, and production configuration values. Some documents use sanitized example IP addresses when they help explain the setup.
+> **Security note:** This repository intentionally omits or redacts sensitive details such as public IP addresses, real domains, credentials, private keys, full firewall rules, secrets, and production configuration values. Some documents use sanitized example IP addresses when they help explain the setup.
 
 
 ---
