@@ -135,6 +135,34 @@ Operating pattern:
 
 ---
 
+## DNS redundancy design
+
+DNS is treated as critical infrastructure in this lab.
+
+The primary DNS path uses a dedicated DNS VM running Pi-hole and Unbound:
+
+```text
+LAN clients
+→ Pi-hole
+→ Unbound
+→ recursive DNS resolution
+````
+
+To avoid a single point of failure, pfSense DNS Resolver with pfBlockerNG DNSBL remains active as a fallback DNS path.
+
+```text
+Primary DNS:   192.168.33.53 → Pi-hole + Unbound
+Fallback DNS:  192.168.33.1  → pfSense DNS Resolver + pfBlockerNG DNSBL
+```
+
+pfSense continues to provide routing, firewalling, and DHCP.
+
+This design keeps DNS filtering active on both the primary and fallback paths. It also allows the LAN to continue resolving DNS if the Pi-hole VM is offline for maintenance or troubleshooting.
+
+One trade-off is that some clients may query the fallback DNS server even when the primary resolver is healthy. Because of that, Pi-hole statistics may not contain every DNS query from the network.
+
+---
+
 ## Compute Architecture
 
 ### Proxmox VE Node

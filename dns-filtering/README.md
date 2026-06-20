@@ -2,6 +2,21 @@
 
 This folder documents DNS filtering notes, blocklists, allowlists, regex rules, encrypted DNS bypass considerations, and IP blocklist usage evaluated in my lab.
 
+## DNS architecture
+
+This lab uses a redundant DNS filtering design.
+
+```text
+Primary DNS:   Pi-hole + Unbound
+Fallback DNS:  pfSense DNS Resolver + pfBlockerNG DNSBL
+````
+
+Pi-hole provides the main DNS filtering, query visibility, and local DNS records. Unbound provides recursive DNS resolution without relying on public forwarders.
+
+pfSense with pfBlockerNG remains active as a fallback DNS resolver so DNS filtering still exists if the Pi-hole VM is unavailable.
+
+See [`pihole-unbound-recursive-dns.md`](./pihole-unbound-recursive-dns.md) for the implementation runbook.
+
 ## Filtering Approach
 
 Earlier in the lab, I experimented with very aggressive DNS filtering by enabling many blocklists and broad regex rules. This blocked more unwanted traffic, but it also made normal internet use harder because of false positives, broken websites, and extra troubleshooting.
