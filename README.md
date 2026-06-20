@@ -118,7 +118,9 @@ This repository has grown into several sections. The structure below helps locat
   * [`encrypted-dns-providers.txt`](./dns-filtering/encrypted-dns-providers.txt)
   * [`ip-blocklists.md`](./dns-filtering/ip-blocklists.md)
   * [`dns-redirect.md`](./dns-filtering/dns-redirect.md)
-* [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, security notes, and case studies
+* [`ROADMAP.md`](./ROADMAP.md) — project roadmap, current focus, and future learning goals
+* [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, security notes, restore tests, and case studies
+
   * [`architecture.md`](./docs/architecture.md) — high-level lab architecture
   * [`docker-compose-architecture.md`](./docs/docker-compose-architecture.md) — Docker Compose layout, `/srv/docker` structure, and ownership model
   * [`backup-strategy.md`](./docs/backup-strategy.md) — backup planning and restore strategy
@@ -126,6 +128,8 @@ This repository has grown into several sections. The structure below helps locat
   * [`security.md`](./docs/security.md) — security and hardening notes
   * [`services.md`](./docs/services.md) — service inventory and service notes
   * [`troubleshooting.md`](./docs/troubleshooting.md) — general troubleshooting notes
+  * [`restore-tests/`](./docs/restore-tests/) — documented backup and restore tests
+    * [`2026-06-uptime-kuma-restore.md`](./docs/restore-tests/2026-06-uptime-kuma-restore.md) — Uptime Kuma cold restore test
   * [`case-studies/`](./docs/case-studies/) — documented troubleshooting and infrastructure case studies
     * [`service-unreachable-troubleshooting.md`](./docs/case-studies/service-unreachable-troubleshooting.md)
   * [`runbooks/`](./docs/runbooks/) — repeatable administration procedures
