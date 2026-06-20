@@ -21,6 +21,20 @@ Some components are implemented, some were previously tested, and others are pla
 
 ---
 
+## Quick Review Path
+
+If you are reviewing this repository, these are the best starting points:
+
+* [`docs/architecture.md`](./docs/architecture.md) — high-level architecture and design notes
+* [`docs/security.md`](./docs/security.md) — security approach and hardening notes
+* [`docs/backup-strategy.md`](./docs/backup-strategy.md) — backup planning and restore strategy
+* [`docs/restore-tests/2026-06-uptime-kuma-restore.md`](./docs/restore-tests/2026-06-uptime-kuma-restore.md) — tested Uptime Kuma restore
+* [`docs/troubleshooting.md`](./docs/troubleshooting.md) — general troubleshooting approach
+* [`docs/services.md`](./docs/services.md) — service documentation checklist
+* [`ROADMAP.md`](./ROADMAP.md) — current focus, improvements, and future learning goals
+
+---
+
 ## What This Demonstrates
 
 This project demonstrates practical experience with:
@@ -594,14 +608,14 @@ Concrete lessons:
 
 ## Current Focus
 
-* Strengthening practical MariaDB and Apache administration skills
-* Preparing for LPIC-1
-* Improving infrastructure documentation
+This is a short overview of my current focus. For more detail, see the full project roadmap: [`ROADMAP.md`](./ROADMAP.md).
+
+* Strengthening MariaDB, Apache, and LPIC-1 skills
 * Expanding backup and restore testing
+* Improving monitoring, alerting, and documentation
 * Publishing sanitized configuration examples
-* Improving monitoring and alerting
-* Keeping internal services behind VPN-style access and hardening intentionally exposed services
-* Planning VLAN-based segmentation with managed switch hardware
-* Reducing pfSense service coupling by evaluating Pi-hole for DNS filtering and a dedicated reverse proxy / ACME workflow outside pfSense
+* Keeping internal services private and hardening exposed services
+* Planning VLAN-based network segmentation
+* Reducing pfSense service coupling
 * Building a clean portfolio of practical Linux and networking projects
 
