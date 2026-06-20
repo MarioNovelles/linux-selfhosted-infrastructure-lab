@@ -12,7 +12,9 @@ This repository documents a private, self-managed infrastructure environment tha
 
 This lab is built around practical infrastructure work, not just running applications. I use it to practice installing, maintaining, documenting, and troubleshooting Linux-based services in a realistic home and small-business-style environment.
 
-The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, Cloudflare DNS, Tailscale VPN-style access, monitoring, VoIP, local AI experimentation, and pfSense as the central edge platform. pfSense currently handles firewalling, pfBlockerNG DNS/IP filtering, Suricata IDS/IPS visibility, ACME/TLS certificate management, and HAProxy reverse proxy routing.
+The current lab includes Linux servers, Proxmox virtualization, TrueNAS storage, Proxmox Backup Server, Docker Compose services, Cloudflare DNS, Tailscale VPN-style access, monitoring, VoIP, local AI experimentation, and pfSense as the central edge firewall/router platform.
+
+pfSense handles routing, firewalling, DHCP, pfBlockerNG DNS/IP filtering fallback, Suricata IDS/IPS visibility, and selected edge services. DNS is being decoupled into a dedicated Pi-hole + Unbound resolver, with pfSense and pfBlockerNG kept as a fallback DNS filtering path because DNS is critical infrastructure. Docker-based services are being moved toward a dedicated Traefik reverse proxy layer instead of relying only on pfSense HAProxy.
 
 Some components are implemented, some were previously tested, and others are planned or being improved. The goal of this repository is to show practical learning, structured troubleshooting, security awareness, and documentation habits without publishing sensitive configuration details.
 
@@ -24,10 +26,11 @@ This project demonstrates practical experience with:
 
 - Installing and maintaining Linux server environments
 - Running self-hosted services with Docker Compose
-- Managing reverse proxy access with HAProxy
-- Managing DNS and ACME/TLS certificate workflows
+- Managing reverse proxy access with Traefik and previously pfSense HAProxy
+- Managing DNS, DHCP, recursive DNS, filtering, and ACME/TLS certificate workflows
+- Operating pfSense-based firewalling, DHCP, pfBlockerNG fallback DNS/IP filtering, Suricata visibility, ACME certificate workflows, and previous HAProxy reverse proxy routing
+- Designing DNS redundancy with Pi-hole + Unbound as the primary resolver and pfSense + pfBlockerNG as the fallback DNS path
 - Using VPN tools for secure remote access
-- Operating pfSense-based firewalling, DNS/IP filtering with pfBlockerNG, Suricata visibility, ACME certificate workflows, and HAProxy reverse proxy routing
 - Working with Proxmox VE, Proxmox Backup Server, and TrueNAS
 - Troubleshooting Linux services, containers, DNS, firewall, and connectivity issues
 - Planning backups and recovery workflows
@@ -107,6 +110,7 @@ This repository has grown into several sections. The structure below helps locat
 
 * [`README.md`](./README.md) — main overview of the lab
 * [`dns-filtering/`](./dns-filtering/README.md) — DNS filtering notes, blocklists, allowlists, regex rules, and DNS enforcement notes
+  * [`pihole-unbound-recursive-dns.md`](./dns-filtering/pihole-unbound-recursive-dns.md)
   * [`blocklists.md`](./dns-filtering/blocklists.md)
   * [`allowlists.md`](./dns-filtering/allowlists.md)
   * [`regex.txt`](./dns-filtering/regex.txt)
@@ -131,6 +135,9 @@ This repository has grown into several sections. The structure below helps locat
     * [`linux-service-troubleshooting-checklist.md`](./docs/runbooks/linux-service-troubleshooting-checklist.md)
   * [`proxmox/`](./docs/proxmox/) — Proxmox VE installation and virtualization notes
     * [`01-install-proxmox-ve.md`](./docs/proxmox/01-install-proxmox-ve.md)
+    * [`02-install-ubuntu-vm.md`](./docs/proxmox/02-install-ubuntu-vm.md)
+    * [`03-enable-amd64v3-packages.md`](./docs/proxmox/03-enable-amd64v3-packages.md)
+    * [`04-install-neovim-lazyvim.md`](./docs/proxmox/04-install-neovim-lazyvim.md)
   * [`images/`](./docs/images/) — architecture diagrams and supporting visuals
 * [`examples/`](./examples/README.md) — sanitized example configurations and service examples
   * [`traefik/`](./examples/traefik/README.md) — Traefik reverse proxy example with `whoami` validation and Uptime Kuma routing
@@ -145,6 +152,7 @@ This repository has grown into several sections. The structure below helps locat
   * [`update-laptop.sh`](./scripts/update-laptop.sh)
   * [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh)
   * [`start-jellyfin.sh`](./scripts/start-jellyfin.sh)
+  * [`system/lab-login-summary.sh`](./scripts/system/lab-login-summary.sh)
 * [`.gitignore`](./.gitignore) — prevents secrets, local Compose files, runtime data, and sensitive files from being committed
 
 ---
@@ -155,10 +163,13 @@ This section lists the infrastructure building blocks: platforms, network/securi
 
 | Component | Status | Purpose | Notes |
 |---|---|---|---|
-| pfSense | Implemented | Edge firewall/router and security platform | Central platform for firewalling, routing, pfBlockerNG, Suricata, ACME certificates, and HAProxy reverse proxying |
-| pfBlockerNG | Implemented | DNS/IP filtering | Managed through pfSense for DNS filtering and IP block lists |
+| pfSense | Implemented | Edge firewall/router and DHCP platform | Central platform for routing, firewalling, DHCP, pfBlockerNG fallback DNS/IP filtering, Suricata visibility, and selected edge services |
+| pfBlockerNG | Implemented | Fallback DNS/IP filtering | Kept active in pfSense as a fallback DNS filtering path if the primary Pi-hole resolver is unavailable |
+| HAProxy | Previously implemented | Reverse proxy | Previously managed through the pfSense HAProxy package; Docker services are being moved toward Traefik to reduce reverse proxy coupling to pfSense |
+| Pi-hole | In progress | Primary DNS filtering and local DNS | Dedicated DNS VM planned/being configured as the primary resolver and local DNS layer |
+| Unbound | In progress | Recursive DNS resolver | Used with Pi-hole so DNS queries are resolved recursively instead of forwarded to public upstream resolvers |
+| Traefik | In progress | Docker reverse proxy | Used as the dedicated reverse proxy layer for Docker services, validated with whoami and Uptime Kuma routing |
 | Suricata | Implemented | IDS/IPS visibility | Managed through pfSense for traffic alerts and security monitoring |
-| HAProxy | Implemented | Reverse proxy | Managed through the pfSense HAProxy package; future improvement is evaluating a dedicated reverse proxy outside pfSense |
 | ACME / Let's Encrypt | Implemented | TLS certificates | Managed through the pfSense ACME package; future improvement is evaluating a dedicated ACME workflow outside pfSense |
 | OpenWrt | Implemented | Wireless access point role | Used as a dumb WAP with main Wi-Fi and separate guest Wi-Fi |
 | Cloudflare DNS | Implemented | DNS and domain management | Used for DNS/domain routing |
@@ -169,8 +180,6 @@ This section lists the infrastructure building blocks: platforms, network/securi
 | Proxmox Backup Server | Implemented | Backup and restore platform | Used for VM/container backup workflows |
 | Docker | Implemented | Container runtime | Used for self-hosted services |
 | Docker Compose | Implemented | Service deployment | Used to define and operate multi-container services |
-| Pi-hole | Previously implemented / planned again | DNS filtering | Planned as a possible dedicated DNS filtering layer outside pfSense |
-| Traefik | Planned | Reverse proxy exploration | Planned for comparison and for evaluating reverse proxy / certificate management outside pfSense |
 | Headscale | Planned | Self-hosted Tailscale control server | Planned for future experimentation |
 
 ---
@@ -211,6 +220,19 @@ This section lists the applications and service-like workloads that run on top o
 The current network uses pfSense and OpenWrt-based components. OpenWrt provides wireless access point functionality, while pfSense handles firewall/router duties.
 
 In this setup, pfSense also manages several edge and security services through packages: pfBlockerNG for DNS/IP filtering, Suricata for IDS/IPS visibility, ACME for Let's Encrypt certificate workflows, and HAProxy for reverse proxy routing.
+
+### DNS Redundancy
+
+DNS is treated as critical infrastructure in this lab.
+
+The primary DNS path is being moved to a dedicated Pi-hole + Unbound DNS VM. Pi-hole provides DNS filtering, query visibility, and local DNS records, while Unbound provides recursive DNS resolution without relying on public forwarders.
+
+pfSense with pfBlockerNG DNSBL remains active as a fallback DNS resolver. This avoids making DNS dependent on a single VM and keeps DNS filtering available during Pi-hole maintenance or failure.
+
+```text
+Primary DNS:   Pi-hole + Unbound
+Fallback DNS:  pfSense DNS Resolver + pfBlockerNG DNSBL
+```
 
 As a future improvement, I want to reduce how many supporting services are tightly coupled to pfSense. The goal is to keep pfSense focused on routing, firewalling, and edge security, while moving some service-level functions to dedicated hosts or VMs where appropriate. This includes evaluating Pi-hole for DNS filtering and evaluating a dedicated reverse proxy / certificate workflow, for example with Traefik or a Linux-hosted HAProxy and ACME setup.
 
@@ -311,6 +333,9 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - HAProxy
 - Suricata
 - Basic defensive security lab practice with Kali Linux, nmap, Wireshark, and authorized network/service exposure checks
+- Pi-hole
+- Unbound recursive DNS
+- Redundant DNS resolver design
 
 ### Containers and Services
 
@@ -328,6 +353,7 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - Ollama
 - Open WebUI
 - FreePBX
+- Traefik
 
 ### Administration and Troubleshooting Tools
 
@@ -362,6 +388,9 @@ At the moment, this is documented at a high level only. Real device names, MAC a
 - Used logs, service status checks, and network tools to troubleshoot problems
 - Created simple Bash scripts for maintenance tasks
 - Documented service roles, architecture decisions, and recovery planning
+- Designed a redundant DNS filtering setup with Pi-hole + Unbound as the primary DNS path and pfSense + pfBlockerNG as fallback
+- Began decoupling reverse proxy routing from pfSense by deploying Traefik for Docker-based services
+- Validated Docker reverse proxy routing with Traefik, a whoami test service, and Uptime Kuma
 
 ---
 
