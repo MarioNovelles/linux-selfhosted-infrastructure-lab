@@ -2,7 +2,8 @@
 
 Practical self-hosted infrastructure lab focused on Linux administration, networking, virtualization, Docker-based services, firewalls, DNS, VPN access, reverse proxies, backups, monitoring, and troubleshooting.
 
-> **Security note:** This repository intentionally omits or redacts sensitive details such as public IP addresses, real domains, credentials, private keys, internal addressing, exact firewall rules, secrets, and production configuration values.
+> **Security note:** > This repository intentionally omits or redacts sensitive details such as public IP addresses, real domains, credentials, private keys, full firewall rules, secrets, and production configuration values. Some documents use sanitized example IP addresses when they help explain the setup.
+
 
 ---
 
@@ -148,6 +149,7 @@ This repository has grown into several sections. The structure below helps locat
     * [`compose.embedded-mariadb.example.yml`](./examples/uptime-kuma/compose.embedded-mariadb.example.yml)
     * [`compose.external-mariadb.example.yml`](./examples/uptime-kuma/compose.external-mariadb.example.yml)
     * [`.env.example`](./examples/uptime-kuma/.env.example)
+  *  More examples are planned and will be added when they are tested and documented.
 * [`scripts/`](./scripts/README.md) — maintenance and administration scripts
   * [`update-laptop.sh`](./scripts/update-laptop.sh)
   * [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh)
