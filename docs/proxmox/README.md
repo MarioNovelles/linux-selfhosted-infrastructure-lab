@@ -13,7 +13,7 @@ This documentation is intentionally sanitized. It does not publish real internal
 | Document                                                                   | Description                                                 |
 | -------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | [`01-install-proxmox-ve.md`](./01-install-proxmox-ve.md)                   | Proxmox VE installation notes                               |
-| [`02-install-ubuntu-vm.md`](./02-install-ubuntu-vm.md)                     | Ubuntu Server VM installation notes                         |
+| [`02-install-ubuntu-vm.md`](./02-install-ubuntu-vm.md) | Ubuntu Server VM installation notes, including Proxmox VM options such as start at boot |
 | [`03-ubuntu-server-first-steps.md`](./03-ubuntu-server-first-steps.md)     | First checks and basic setup after installing Ubuntu Server |
 | [`04-enable-amd64v3-packages.md`](./04-enable-amd64v3-packages.md)         | Optional AMD64-v3 package notes                             |
 | [`05-install-qemu-guest-agent.md`](./05-install-qemu-guest-agent.md)       | QEMU guest agent setup for Proxmox VMs                      |

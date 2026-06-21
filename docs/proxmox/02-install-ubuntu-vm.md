@@ -64,7 +64,7 @@ Name: ubuntu-docker
 ```text
 ISO: Ubuntu Server amd64
 Guest OS: Linux
-Version: 6.x - 2.6 Kernel
+Version: 7.x - 2.6 Kernel
 ```
 
 ### System
@@ -99,7 +99,6 @@ Type: host
 
 ```text
 Memory: 5120 MiB
-Ballooning: Disabled
 ```
 
 ### Network
@@ -139,12 +138,6 @@ Hostname: ubuntu-docker
 
 After installation, reboot the VM.
 
-If needed, remove the ISO:
-
-```text
-Hardware → CD/DVD Drive → Do not use any media
-```
-
 ## Step 4: Update Ubuntu
 
 ```bash
@@ -153,6 +146,9 @@ sudo apt update
 
 # Install available system updates
 sudo apt full-upgrade -y
+
+# Autoremove unnecessary packages
+sudo apt autoremove -y
 
 # Reboot after updates
 sudo reboot
@@ -164,13 +160,13 @@ The QEMU Guest Agent was enabled in the Proxmox VM settings. It also needs to be
 
 ```bash
 # Install the guest agent and useful basic tools
-sudo apt install -y qemu-guest-agent htop curl ca-certificates
+sudo apt install -y qemu-guest-agent
 
 # Enable and start the guest agent service
-sudo systemctl enable --now qemu-guest-agent
+sudo systemctl start qemu-guest-agent
 ```
 
-Verify it is running:
+Verify it is running, reboot and verify it autostart at boot after reboot:
 
 ```bash
 # Check the guest agent service status
@@ -178,6 +174,8 @@ systemctl status qemu-guest-agent
 ```
 
 After this, the VM IP address should appear in the Proxmox Summary tab.
+
+* Note: I do not rely on systemctl enable for this service because it can appear as a static unit.
 
 ## Step 6: Connect with SSH
 
@@ -226,6 +224,20 @@ RAM: about 5 GiB
 Disk: about 100 GB
 ```
 
+## 8. Enable VM autostart
+
+After creating the Ubuntu Server VM, I enable autostart so the VM starts automatically when the Proxmox host reboots.
+
+This is important for services that should come back online after a host reboot, such as a Docker host VM.
+
+* In the Proxmox web UI:
+
+```text
+Proxmox-VE → Ubuntu-VM → Options → Start at boot → Edit → Yes
+```
+
+* Important: Proxmox also has Start/Shutdown order, where lower order numbers start earlier; shutdown happens in reverse order. This is useful when one VM depends on another, like DNS or storage starting before apps.
+
 ## Final result
 
 ```text
@@ -238,6 +250,7 @@ Proxmox VE host
     └── QEMU Guest Agent installed
 ```
 
+* enabled autostart after reboot in proxmox web interface
 The VM is now ready for Docker Engine and Docker Compose installation.
 
 ## What I learned
