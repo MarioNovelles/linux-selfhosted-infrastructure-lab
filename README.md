@@ -124,14 +124,23 @@ Planned managed VLAN switch
 This repository has grown into several sections. The structure below helps locate documentation, scripts, runbooks, and sanitized service examples more quickly.
 
 * [`README.md`](./README.md) — main overview of the lab
-* [`dns-filtering/`](./dns-filtering/README.md) — DNS filtering notes, blocklists, allowlists, regex rules, and DNS enforcement notes
-  * [`pihole-unbound-recursive-dns.md`](./dns-filtering/pihole-unbound-recursive-dns.md)
-  * [`blocklists.md`](./dns-filtering/blocklists.md)
-  * [`allowlists.md`](./dns-filtering/allowlists.md)
-  * [`regex.txt`](./dns-filtering/regex.txt)
-  * [`encrypted-dns-providers.txt`](./dns-filtering/encrypted-dns-providers.txt)
-  * [`ip-blocklists.md`](./dns-filtering/ip-blocklists.md)
-  * [`dns-redirect.md`](./dns-filtering/dns-redirect.md)
+* [`dns-filtering/`](./dns-filtering/README.md) — DNS filtering, Pi-hole + Unbound, pfSense DNS enforcement, allowlists, blocklists, and troubleshooting notes
+  * [`allowlists/`](./dns-filtering/allowlists/)
+    * [`allowlists.md`](./dns-filtering/allowlists/allowlists.md)
+    * [`allow-regex.txt`](./dns-filtering/allowlists/allow-regex.txt)
+    * [`commonly-whitelisted-from-pihole.md`](./dns-filtering/allowlists/commonly-whitelisted-from-pihole.md)
+    * [`pfblockerng-official-whitelist.txt`](./dns-filtering/allowlists/pfblockerng-official-whitelist.txt)
+  * [`blocklists/`](./dns-filtering/blocklists/)
+    * [`blocklists.md`](./dns-filtering/blocklists/blocklists.md)
+    * [`block-regex.txt`](./dns-filtering/blocklists/block-regex.txt)
+    * [`encrypted-dns-providers.txt`](./dns-filtering/blocklists/encrypted-dns-providers.txt)
+    * [`ip-blocklists.md`](./dns-filtering/blocklists/ip-blocklists.md)
+  * [`pihole-unbound/`](./dns-filtering/pihole-unbound/)
+    * [`01-install-pihole-unbound.md`](./dns-filtering/pihole-unbound/01-install-pihole-unbound.md)
+    * [`02-configure-pfsense-dhcp-dns.md`](./dns-filtering/pihole-unbound/02-configure-pfsense-dhcp-dns.md)
+    * [`03-firewall-dns-enforcement-rules.md`](./dns-filtering/pihole-unbound/03-firewall-dns-enforcement-rules.md)
+    * [`04-troubleshoot-unbound-servfail.md`](./dns-filtering/pihole-unbound/04-troubleshoot-unbound-servfail.md)
+    * [`05-troubleshoot-dns-vm-static-ip.md`](./dns-filtering/pihole-unbound/05-troubleshoot-dns-vm-static-ip.md)
 * [`ROADMAP.md`](./ROADMAP.md) — project roadmap, current focus, and future learning goals
 * [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, security notes, restore tests, and case studies
   * [`architecture.md`](./docs/architecture.md) — high-level lab architecture
