@@ -107,7 +107,7 @@ Before installing DNS services, I want to confirm that the VM itself has working
 sudo apt update
 
 # Install dig, which is useful for DNS testing.
-sudo apt install dnsutils
+sudo apt install dig dnsutils
 ```
 
 Why:
@@ -161,7 +161,7 @@ Create a Pi-hole-specific Unbound configuration file:
 
 ```bash
 # Open a new Unbound config file.
-sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf
+sudo nvim /etc/unbound/unbound.conf.d/pi-hole.conf
 ```
 
 Paste this configuration:
