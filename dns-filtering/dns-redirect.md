@@ -47,3 +47,4 @@ Exact interfaces, internal addresses, aliases, and production firewall rules are
 ## Reference
 
 - Netgate pfSense documentation: Redirecting Client DNS Requests
+  https://docs.netgate.com/pfsense/en/latest/recipes/dns-redirect.html
