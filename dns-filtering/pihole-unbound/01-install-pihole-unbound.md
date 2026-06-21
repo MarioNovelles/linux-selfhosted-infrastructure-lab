@@ -6,8 +6,25 @@ Pi-hole is used for DNS filtering, local DNS records, and query visibility.
 
 Unbound is used as a local recursive DNS resolver, so DNS queries are not forwarded to public upstream resolvers like Cloudflare, Google, or Quad9.
 
+## VM sizing
+
+This service runs on a dedicated Ubuntu Server VM.
+
+The base VM setup follows my existing Proxmox Ubuntu VM notes. The main difference is that this VM needs fewer resources than the Docker host.
+
+```text
+vCPU:    2
+RAM:     2 GB
+Storage: 16 GB
+```
+
+Why:
+
+DNS is important infrastructure, but Pi-hole and Unbound do not need the same resources as the Docker host VM.
+
 ## Lab values
 
+* The IP addresses shown here are example private lab values(not real ip values).
 ```text
 DNS VM hostname: ubuntu-dns
 DNS VM IP:       192.168.67.53
@@ -383,56 +400,7 @@ http://192.168.67.53/admin/
 
 ---
 
-## 11. Change pfSense DHCP only after testing
-
-Before changing DHCP, these should work:
-
-```bash
-dig pi-hole.net @127.0.0.1 -p 5335
-dig @127.0.0.1 cloudflare.com
-dig @192.168.67.53 cloudflare.com
-```
-
-Then configure pfSense DHCP to hand out Pi-hole as DNS:
-
-```text
-DNS server: 192.168.67.53
-Gateway:    192.168.67.1
-```
-
-Why:
-
-pfSense remains the router and firewall. Pi-hole becomes the DNS server for clients.
-
----
-
-## 12. Renew DHCP on clients
-
-After changing pfSense DHCP, renew the network connection on clients.
-
-On Linux, check the active DNS server:
-
-```bash
-# Show current DNS configuration.
-resolvectl status
-```
-
-Then test normal DNS:
-
-```bash
-# This should now use Pi-hole automatically.
-dig cloudflare.com
-```
-
-Expected:
-
-```text
-SERVER: 192.168.67.53#53
-```
-
----
-
-## 13. Add local DNS records later
+## 11. Add local DNS records later
 
 After Pi-hole is working, I can add local DNS records in Pi-hole.
 
@@ -465,50 +433,17 @@ ubuntu-docker
 → Traefik, Uptime Kuma, Nextcloud, other Docker services
 ```
 
-## Fallback DNS design
+## Next steps
 
-DNS is critical infrastructure. I do not want the whole LAN to lose DNS resolution if the dedicated Pi-hole VM is offline or under maintenance.
+After Pi-hole and Unbound are working locally, continue with the pfSense DNS configuration:
 
-For that reason, pfSense DNS filtering with pfBlockerNG DNSBL is kept active as a fallback DNS path.
+1. [`02-configure-pfsense-dhcp-dns.md`](./02-configure-pfsense-dhcp-dns.md)
+2. [`03-firewall-dns-enforcement-rules.md`](./03-firewall-dns-enforcement-rules.md)
 
-The intended DNS design is:
+Troubleshooting notes:
 
-```text
-Primary DNS:   192.168.67.53  → Pi-hole + Unbound
-Fallback DNS:  192.168.67.1   → pfSense DNS Resolver + pfBlockerNG DNSBL
-```
-
-pfSense remains the router, firewall, and DHCP server.
-
-In pfSense DHCP, LAN clients can receive both DNS servers:
-
-```text
-DNS server 1: 192.168.67.53
-DNS server 2: 192.168.67.1
-```
-
-Why:
-
-* Pi-hole provides the main DNS filtering, local DNS records, and query visibility.
-* Unbound provides recursive DNS resolution without external forwarders.
-* pfSense with pfBlockerNG remains available as a backup DNS resolver.
-* If the Pi-hole VM is down, clients can still resolve DNS through pfSense.
-
-Important limitation:
-
-Client devices do not always use DNS servers strictly as “primary first, fallback second.” Some clients may query the second DNS server even when the first one is healthy.
-
-Because of that, pfSense DNS filtering is kept active so the fallback path still has DNS filtering instead of becoming an unfiltered bypass.
-
-This design favors reliability while still keeping DNS filtering active on both paths.
-
-### DNS filtering and recursive DNS
-
-| Component | Role |
-|---|---|
-| Pi-hole | Primary DNS filtering, query visibility, local DNS records |
-| Unbound | Local recursive DNS resolver for Pi-hole |
-| pfSense DNS Resolver + pfBlockerNG | Fallback DNS filtering path |
+1. [`04-troubleshoot-unbound-servfail.md`](./04-troubleshoot-unbound-servfail.md)
+2. [`05-troubleshoot-dns-vm-static-ip.md`](./05-troubleshoot-dns-vm-static-ip.md)
 
 ## References:
 
