@@ -47,7 +47,7 @@ Result: the service was still `active (running)`.
 I also checked the VM settings in the Proxmox web UI:
 
 ```text id="n7abfo"
-VM → Options → QEMU Guest Agent → Enabled
+Ubuntu VM → Options → QEMU Guest Agent → Enabled
 ```
 
 ## Notes
