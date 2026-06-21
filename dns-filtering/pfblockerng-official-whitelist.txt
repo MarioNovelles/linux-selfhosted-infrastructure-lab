@@ -1,0 +1,50 @@
+# pfBlockerNG DNSBL default whitelist notes
+# Based on the pfBlockerNG default DNSBL whitelist from the pfSense package wizard.
+# Official source: pfSense/FreeBSD-ports pfblockerng_wizard.inc
+# https://raw.githubusercontent.com/pfsense/FreeBSD-ports/devel/net/pfSense-pkg-pfBlockerNG-devel/files/usr/local/www/wizards/pfblockerng_wizard.inc
+s3.amazonaws.com
+s3-1.amazonaws.com # CNAME for (s3.amazonaws.com)
+.github.com
+.githubusercontent.com
+github.map.fastly.net # CNAME for (raw.githubusercontent.com)
+.gitlab.com
+.sourceforge.net
+.fls-na.amazon.com # alexa
+.control.kochava.com # alexa 2
+.device-metrics-us-2.amazon.com # alexa 3
+.amazon-adsystem.com # amazon app ads
+.px.moatads.com # amazon app 2
+.wildcard.moatads.com.edgekey.net # CNAME for (px.moatads.com)
+.e13136.g.akamaiedge.net # CNAME for (px.moatads.com)
+.secure-gl.imrworldwide.com # amazon app 3
+.pixel.adsafeprotected.com # amazon app 4
+.anycast.pixel.adsafeprotected.com # CNAME for (pixel.adsafeprotected.com)
+.bs.serving-sys.com # amazon app 5
+.bs.eyeblaster.akadns.net # CNAME for (bs.serving-sys.com)
+.bsla.eyeblaster.akadns.net # CNAME for (bs.serving-sys.com)
+.adsafeprotected.com # amazon app 6
+.anycast.static.adsafeprotected.com # CNAME for (static.adsafeprotected.com)
+google.com
+www.google.com
+youtube.com
+www.youtube.com
+youtube-ui.l.google.com # CNAME for (youtube.com)
+stackoverflow.com
+www.stackoverflow.com
+dropbox.com
+www.dropbox.com
+www.dropbox-dns.com # CNAME for (dropbox.com)
+.adsafeprotected.com
+control.kochava.com
+secure-gl.imrworldwide.com
+pbs.twimg.com # twitter images
+www.pbs.twimg.com # twitter images
+cs196.wac.edgecastcdn.net # CNAME for (pbs.twimg.com)
+cs2-wac.apr-8315.edgecastcdns.net # CNAME for (pbs.twimg.com)
+cs2-wac-us.8315.ecdns.net # CNAME for (pbs.twimg.com)
+cs45.wac.edgecastcdn.net # CNAME for (pbs.twimg.com)
+cs2-wac.apr-8315.edgecastcdns.net # CNAME for (pbs.twimg.com)
+cs2-wac-us.8315.ecdns.net # CNAME for (pbs.twimg.com)
+cs45.wac.edgecastcdn.net # CNAME for (pbs.twimg.com)
+.pfsense.org
+.netgate.com
