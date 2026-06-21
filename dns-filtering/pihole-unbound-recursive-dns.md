@@ -144,7 +144,7 @@ Create a Pi-hole-specific Unbound configuration file:
 
 ```bash
 # Open a new Unbound config file.
-sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf
+sudo nvim /etc/unbound/unbound.conf.d/pi-hole.conf
 ```
 
 Paste this configuration:
