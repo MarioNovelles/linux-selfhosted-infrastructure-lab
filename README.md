@@ -134,7 +134,6 @@ This repository has grown into several sections. The structure below helps locat
   * [`dns-redirect.md`](./dns-filtering/dns-redirect.md)
 * [`ROADMAP.md`](./ROADMAP.md) — project roadmap, current focus, and future learning goals
 * [`docs/`](./docs/README.md) — general documentation, architecture notes, runbooks, security notes, restore tests, and case studies
-
   * [`architecture.md`](./docs/architecture.md) — high-level lab architecture
   * [`docker-compose-architecture.md`](./docs/docker-compose-architecture.md) — Docker Compose layout, `/srv/docker` structure, and ownership model
   * [`backup-strategy.md`](./docs/backup-strategy.md) — backup planning and restore strategy
@@ -153,10 +152,14 @@ This repository has grown into several sections. The structure below helps locat
     * [`linux-command-line-workflow.md`](./docs/runbooks/linux-command-line-workflow.md)
     * [`linux-service-troubleshooting-checklist.md`](./docs/runbooks/linux-service-troubleshooting-checklist.md)
   * [`proxmox/`](./docs/proxmox/) — Proxmox VE installation and virtualization notes
-    * [`01-install-proxmox-ve.md`](./docs/proxmox/01-install-proxmox-ve.md)
-    * [`02-install-ubuntu-vm.md`](./docs/proxmox/02-install-ubuntu-vm.md)
-    * [`03-enable-amd64v3-packages.md`](./docs/proxmox/03-enable-amd64v3-packages.md)
-    * [`04-install-neovim-lazyvim.md`](./docs/proxmox/04-install-neovim-lazyvim.md)
+    * [`01-install-proxmox-ve.md`](./docs/proxmox/01-install-proxmox-ve.md) — Proxmox VE installation notes
+    * [`02-install-ubuntu-vm.md`](./docs/proxmox/02-install-ubuntu-vm.md) — Ubuntu Server VM installation notes
+    * [`03-ubuntu-server-first-steps.md`](./docs/proxmox/03-ubuntu-server-first-steps.md) — first steps after installing Ubuntu Server
+    * [`04-enable-amd64v3-packages.md`](./docs/proxmox/04-enable-amd64v3-packages.md) — optional AMD64-v3 package notes
+    * [`05-install-qemu-guest-agent.md`](./docs/proxmox/05-install-qemu-guest-agent.md) — QEMU guest agent setup for Proxmox VMs
+    * [`06-unattended-security-updates.md`](./docs/proxmox/06-unattended-security-updates.md) — automatic security update notes
+    * [`07-install-docker.md`](./docs/proxmox/07-install-docker.md) — Docker Engine installation notes
+    * [`08-install-neovim-lazyvim.md`](./docs/proxmox/08-install-neovim-lazyvim.md) — Neovim and LazyVim setup notes
   * [`images/`](./docs/images/) — architecture diagrams and supporting visuals
 * [`examples/`](./examples/README.md) — sanitized example configurations and service examples
   * [`traefik/`](./examples/traefik/README.md) — Traefik reverse proxy example with `whoami` validation and Uptime Kuma routing
@@ -167,7 +170,7 @@ This repository has grown into several sections. The structure below helps locat
     * [`compose.embedded-mariadb.example.yml`](./examples/uptime-kuma/compose.embedded-mariadb.example.yml)
     * [`compose.external-mariadb.example.yml`](./examples/uptime-kuma/compose.external-mariadb.example.yml)
     * [`.env.example`](./examples/uptime-kuma/.env.example)
-  *  More examples are planned and will be added when they are tested and documented.
+  * More examples are planned and will be added when they are tested and documented.
 * [`scripts/`](./scripts/README.md) — maintenance and administration scripts
   * [`update-laptop.sh`](./scripts/update-laptop.sh)
   * [`update-ubuntu-server.sh`](./scripts/update-ubuntu-server.sh)
