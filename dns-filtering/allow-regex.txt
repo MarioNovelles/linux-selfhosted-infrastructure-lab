@@ -1,0 +1,35 @@
+# DNS filtering regex allowlist rules used or evaluated in my lab.
+# Intended for DNS-level filtering tools such as Pi-hole.
+# Regex allow rules can weaken blocking because allowlist rules take priority over deny rules.
+# Test carefully before enabling broadly.
+#
+# Reference:
+# https://discourse.pi-hole.net/t/commonly-whitelisted-domains/212
+#
+# Tip:
+# - In Pi-hole Web UI, add these under Domains -> Regex allowlist.
+# - Keep these separate from normal exact-domain allowlists.
+
+# Google push notifications
+# Allows mtalk.google.com variants used by Android push notifications.
+^((alt)[0-9](-))?mtalk\.google\.com$
+
+# Reddit
+# Allows Reddit media/thumb domains and Reddit short links.
+[a-z]\.thumbs\.redditmedia\.com
+(\.|^)redd\.it$
+(\.|^)reddit\.com$
+
+# WhatsApp
+# Allows WhatsApp CDN and web/media host patterns.
+^whatsapp-cdn-shv-[0-9]{2}-[a-z]{3}[0-9]\.fbcdn\.net$
+^((www|(w[0-9]\.)?web|media((-[a-z]{3}|\.[a-z]{4})[0-9]{1,2}-[0-9](\.|-)(cdn|fna))?)\.)?whatsapp\.(com|net)$
+
+# Twitter / X image CDN
+# Allows twimg.com and subdomains.
+(\.|^)twimg\.com$
+
+# Rumble
+# Allows rmbl.ws and subdomains.
+# The source text described a wildcard allowlist need, but did not provide a command.
+(\.|^)rmbl\.ws$
