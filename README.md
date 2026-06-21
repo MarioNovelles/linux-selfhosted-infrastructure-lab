@@ -128,7 +128,7 @@ This repository has grown into several sections. The structure below helps locat
   * [`allowlists/`](./dns-filtering/allowlists/)
     * [`allowlists.md`](./dns-filtering/allowlists/allowlists.md)
     * [`allow-regex.txt`](./dns-filtering/allowlists/allow-regex.txt)
-    * [`commonly-whitelisted-from-pihole.md`](./dns-filtering/allowlists/commonly-whitelisted-from-pihole.md)
+    * [`commonly-whitelisted-from-pihole.txt`](./dns-filtering/allowlists/commonly-whitelisted-from-pihole.txt)
     * [`pfblockerng-official-whitelist.txt`](./dns-filtering/allowlists/pfblockerng-official-whitelist.txt)
   * [`blocklists/`](./dns-filtering/blocklists/)
     * [`blocklists.md`](./dns-filtering/blocklists/blocklists.md)
