@@ -76,6 +76,8 @@ The diagram above is a sanitized public overview. It avoids real domains, IP add
 
 For the detailed topology, service placement, storage design, and architecture trade-offs, see [Architecture](./docs/architecture.md).
 
+- **Redundancy:** DNS uses Pi-hole + Unbound with pfSense DNS Resolver/pfBlockerNG as fallback, and remote access uses pfSense Tailscale plus a second Tailscale subnet router on `ubuntu-docker`.
+
 <pre>
 Internet
    |

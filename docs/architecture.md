@@ -146,7 +146,7 @@ LAN clients
 → Pi-hole
 → Unbound
 → recursive DNS resolution
-````
+```
 
 To avoid a single point of failure, pfSense DNS Resolver with pfBlockerNG DNSBL remains active as a fallback DNS path.
 
@@ -162,6 +162,45 @@ This design keeps DNS filtering active on both the primary and fallback paths. I
 One trade-off is that some clients may query the fallback DNS server even when the primary resolver is healthy. Because of that, Pi-hole statistics may not contain every DNS query from the network.
 
 ---
+## Remote access redundancy design
+
+Remote access is also treated as an important recovery path in this lab.
+
+pfSense runs the primary Tailscale subnet router and advertises the lab LAN to my Tailnet.
+
+To avoid relying on only one Tailscale service, `ubuntu-docker` also runs Tailscale as a second subnet router advertising the same LAN route.
+
+```text
+Primary remote access path:
+  Tailscale on pfSense
+  → lab LAN
+
+Fallback remote access path:
+  Tailscale on ubuntu-docker
+  → lab LAN
+```
+
+Both subnet routers advertise the same subnet:
+
+Advertised subnet: 192.168.33.0/24
+
+The goal is not full high availability for every service. The goal is to keep an administrative path into the lab if the Tailscale service on pfSense fails.
+
+I chose ubuntu-docker instead of ubuntu-dns because the DNS VM should stay focused on Pi-hole and Unbound. Keeping remote access separate from DNS also makes troubleshooting easier when DNS is the service being investigated.
+
+This gives the lab redundancy for two important operational paths:
+
+```text
+DNS:
+  Primary:  Pi-hole + Unbound on ubuntu-dns
+  Fallback: pfSense DNS Resolver with pfBlockerNG DNSBL
+
+Remote access:
+  Primary:  Tailscale on pfSense
+  Fallback: Tailscale subnet router on ubuntu-docker
+```
+
+  ---
 
 ## Compute Architecture
 
