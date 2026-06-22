@@ -165,6 +165,7 @@ This repository has grown into several sections. The structure below helps locat
     * [`linux-command-line-workflow.md`](./docs/runbooks/linux-command-line-workflow.md)
     * [`linux-service-troubleshooting-checklist.md`](./docs/runbooks/linux-service-troubleshooting-checklist.md)
     * [`tailscale-subnet-router-failover.md`](./docs/runbooks/tailscale-subnet-router-failover.md) — second Tailscale subnet router on `ubuntu-docker` for LAN access redundancy
+    * [`disable-ipv6-pfsense.md`](./docs/runbooks/disable-ipv6-pfsense.md) — pfSense IPv6 disablement procedure and validation notes
   * [`proxmox/`](./docs/proxmox/) — Proxmox VE installation and virtualization notes
     * [`01-install-proxmox-ve.md`](./docs/proxmox/01-install-proxmox-ve.md) — Proxmox VE installation notes
     * [`02-install-ubuntu-vm.md`](./docs/proxmox/02-install-ubuntu-vm.md) — Ubuntu Server VM installation notes

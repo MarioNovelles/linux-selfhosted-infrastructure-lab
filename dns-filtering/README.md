@@ -59,6 +59,34 @@ DNS filtering is one layer of control. It does not fully prevent bypass through 
 | [`blocklists/encrypted-dns-providers.txt`](./blocklists/encrypted-dns-providers.txt) | Known encrypted DNS provider entries used or evaluated for DNS bypass reduction |
 | [`blocklists/ip-blocklists.md`](./blocklists/ip-blocklists.md)                       | IP blocklist notes used or evaluated with pfBlockerNG                           |
 
+## IPv6 scope
+
+IPv6 is intentionally not used in this lab DNS filtering design.
+
+The DNS filtering and DNS enforcement rules are based on the IPv4 LAN design:
+
+```text
+Primary DNS:   Pi-hole + Unbound
+Fallback DNS:  pfSense DNS Resolver + pfBlockerNG DNSBL
+```
+
+To avoid accidental DNS bypass through IPv6, pfSense is configured so internal interfaces do not advertise IPv6 to clients.
+
+The intended pfSense IPv6 state is:
+
+```text
+WAN/LAN IPv6 Configuration Type: None
+Router Advertisements: Disabled
+DHCPv6 Server: Disabled
+Allow IPv6: unchecked as a final firewall safety layer
+```
+
+This keeps DNS filtering predictable.
+
+If IPv6 is added to the lab later, it should be designed and documented properly instead of being enabled accidentally.
+
+IPv6 is intentionally out of scope for this DNS filtering design; the pfSense IPv6 disablement procedure is documented in [`docs/runbooks/disable-ipv6-pfsense.md`](../docs/runbooks/disable-ipv6-pfsense.md).
+
 ## Notes
 
 DNS filtering helps improve visibility and reduce unwanted DNS traffic, but it is not a complete security boundary.
