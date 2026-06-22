@@ -2,7 +2,7 @@
 
 This folder contains the main documentation for the self-hosted infrastructure lab.
 
-It includes architecture notes, firewall policy notes, runbooks, and troubleshooting case studies. The goal is to document the reasoning behind the lab setup, not only the final configuration.
+It includes architecture notes, firewall policy notes, runbooks, restore tests, troubleshooting notes, and case studies.
 
 ## Architecture and Policy Notes
 
@@ -19,6 +19,11 @@ It includes architecture notes, firewall policy notes, runbooks, and troubleshoo
 ## Case Studies
 
 - [Service unreachable troubleshooting flow](./case-studies/service-unreachable-troubleshooting.md) — sanitized troubleshooting case study for diagnosing an unreachable service.
+
+## Troubleshooting
+
+* [General troubleshooting notes](./troubleshooting.md) — general approach for investigating Linux, Docker, DNS, and service issues.
+* [GRUB failed systemd unit](./troubleshooting/grubenv-systemd-failed-unit.md) — real lab troubleshooting note for a failed `grub2-common.service` unit caused by a corrupted GRUB environment block.
 
 ## Related Repository Sections
 

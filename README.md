@@ -150,6 +150,8 @@ This repository has grown into several sections. The structure below helps locat
   * [`security.md`](./docs/security.md) — security and hardening notes
   * [`services.md`](./docs/services.md) — service inventory and service notes
   * [`troubleshooting.md`](./docs/troubleshooting.md) — general troubleshooting notes
+  * [`troubleshooting/`](./docs/troubleshooting/) — specific troubleshooting notes from real lab incidents
+    * [`grubenv-systemd-failed-unit.md`](./docs/troubleshooting/grubenv-systemd-failed-unit.md) — failed `grub2-common.service` caused by a corrupted GRUB environment block
   * [`restore-tests/`](./docs/restore-tests/) — documented backup and restore tests
     * [`2026-06-uptime-kuma-restore.md`](./docs/restore-tests/2026-06-uptime-kuma-restore.md) — Uptime Kuma cold restore test
   * [`case-studies/`](./docs/case-studies/) — documented troubleshooting and infrastructure case studies
