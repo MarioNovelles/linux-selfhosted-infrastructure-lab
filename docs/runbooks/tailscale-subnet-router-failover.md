@@ -54,16 +54,28 @@ I did not use `--accept-routes` because this VM is advertising the LAN route, no
 
 ## Approve the route
 
-In the Tailscale admin console:
+Advertising the subnet from the Linux VM is not enough by itself.
+
+After running `tailscale up --advertise-routes=192.168.33.0/24`, the route is only requested. It still needs to be approved in the Tailscale admin console before clients can use it.
+
+I went to:
 
 ```text
-Machines
-→ ubuntu-docker-subnet-router
+https://login.tailscale.com/admin/machines
+```
+
+Then:
+
+```text
+ubuntu-docker-subnet-router
+→ Options
 → Edit route settings
 → Enable 192.168.33.0/24
 ```
 
-I also disabled key expiry for this machine because it is infrastructure.
+This allows `ubuntu-docker` to actually advertise the LAN subnet to the Tailnet.
+
+I also disabled key expiry for this machine because it is infrastructure and should not unexpectedly require re-authentication.
 
 ## Verify
 
