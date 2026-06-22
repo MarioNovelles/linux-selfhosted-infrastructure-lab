@@ -16,6 +16,8 @@ It includes architecture notes, firewall policy notes, runbooks, restore tests, 
 - [Git workflow](./runbooks/git-workflow.md) — basic Git workflow used for reviewing, committing, and pushing repository changes.
 - [Cloudflare DDNS for WireGuard remote access](./runbooks/cloudflare-ddns-wireguard.md) — dynamic DNS approach used earlier for WireGuard access before CGNAT.
 - [Tailscale subnet router failover](./runbooks/tailscale-subnet-router-failover.md) — second Tailscale subnet router on `ubuntu-docker` for LAN access redundancy.
+- [Disable IPv6 on pfSense](./runbooks/disable-ipv6-pfsense.md) — pfSense steps for disabling IPv6 configuration, DHCPv6, router advertisements, and IPv6 forwarding as a lab policy decision.
+- [Disable IPv6 on pfSense](./runbooks/disable-ipv6-pfsense.md) — pfSense steps for disabling IPv6 configuration, DHCPv6, router advertisements, and IPv6 forwarding as a lab policy decision.
 
 ## Case Studies
 

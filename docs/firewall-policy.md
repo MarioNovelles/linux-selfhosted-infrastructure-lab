@@ -66,6 +66,12 @@ IPv6 should not be left unmanaged. If IPv6 is enabled but not intentionally conf
 
 In this lab, IPv6 is treated cautiously until it is fully designed and documented.
 
+IPv6 is intentionally not used in this lab at the moment.
+
+The full pfSense IPv6 disablement procedure is documented here:
+
+- [Disable IPv6 on pfSense](./runbooks/disable-ipv6-pfsense.md)
+
 ## Safety Notes
 
 This document is intentionally sanitized. It does not publish:
