@@ -8,8 +8,7 @@ The goal is to avoid random restarts and first find which layer is failing.
 
 Before changing anything, I ask:
 
-```text id="fi59ms"
-What changed?
+```textWhat changed?
 What is broken?
 What is affected?
 Which layer is failing?
@@ -17,8 +16,7 @@ Which layer is failing?
 
 ## First checks
 
-```bash id="a79gfl"
-# Check basic system status
+```bash# Check basic system status
 hostnamectl
 uptime
 
@@ -32,8 +30,7 @@ systemctl --failed
 
 ## Service checks
 
-```bash id="9qu806"
-# Check service status
+```bash# Check service status
 systemctl status <service-name>
 
 # Read recent service logs
@@ -45,8 +42,7 @@ sudo ss -tulpn
 
 ## Docker checks
 
-```bash id="2d0r0p"
-# Show Compose containers
+```bash# Show Compose containers
 docker compose ps
 
 # Read recent Compose logs
@@ -60,8 +56,7 @@ docker compose config
 
 If DNS resolution fails:
 
-```bash id="trwfun"
-# Check which DNS servers the client received
+```bash# Check which DNS servers the client received
 resolvectl status
 
 # Test Pi-hole directly using the sanitized example DNS VM IP
@@ -106,8 +101,7 @@ For more detailed troubleshooting, I use:
 
 After fixing something, I should write down:
 
-```text id="wqklm8"
-Problem:
+```textProblem:
 Cause:
 Fix:
 How I verified it:

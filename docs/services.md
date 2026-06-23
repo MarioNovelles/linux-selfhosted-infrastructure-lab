@@ -8,8 +8,7 @@ The goal is not only to know which tools are running. I also want to know where 
 
 For every important service, I try to document:
 
-```text id="1oed2a"
-Service:
+```textService:
 Purpose:
 Where it runs:
 Access method:
@@ -24,8 +23,7 @@ Security notes:
 
 When I add or review a service, I ask:
 
-```text id="46ai5a"
-Does this service need to be exposed?
+```textDoes this service need to be exposed?
 Where is the data stored?
 Does it use a database?
 How is it backed up?
@@ -35,8 +33,7 @@ How do I know if it is down?
 
 ## Example: Uptime Kuma
 
-```text id="t6q1kl"
-Service: Uptime Kuma
+```textService: Uptime Kuma
 Purpose: monitor important lab services
 Where it runs: Docker Compose
 Access method: private access
