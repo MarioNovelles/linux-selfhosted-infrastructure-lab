@@ -1,0 +1,64 @@
+services:
+  traefik:
+    image: traefik:${TRAEFIK_VERSION:-v3.7}
+    container_name: traefik
+    restart: unless-stopped
+
+    security_opt:
+      - no-new-privileges:true
+
+    networks:
+      - proxy
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/certs:ro"
+      - "./dynamic:/dynamic:ro"
+
+    command:
+      # Entry points
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+
+      # Dynamic file provider for local TLS certificate configuration
+      - "--providers.file.filename=/dynamic/tls.yml"
+
+      # Docker provider
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=${TRAEFIK_PROXY_NETWORK:-proxy}"
+
+      # Dashboard
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+
+      # Logs
+      - "--log.level=${TRAEFIK_LOG_LEVEL:-INFO}"
+      - "--accesslog=true"
+
+    labels:
+      - "traefik.enable=true"
+
+      # Dashboard router
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.tls=true"
+
+      # Dashboard basic auth
+      - "traefik.http.middlewares.traefik-dashboard-auth.basicauth.users=${TRAEFIK_DASHBOARD_AUTH}"
+      - "traefik.http.routers.traefik-dashboard.middlewares=traefik-dashboard-auth@docker"
+
+networks:
+  proxy:
+    external: true
+    name: ${TRAEFIK_PROXY_NETWORK:-proxy}
+
