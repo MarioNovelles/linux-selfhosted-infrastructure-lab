@@ -1,10 +1,10 @@
 # Traefik Reverse Proxy Migration
 
-This folder documents a staged Traefik reverse proxy migration for the homelab.
+This folder documents my Traefik reverse proxy migration for the homelab.
 
-The lab already has a working pfSense-managed setup for local DNS, reverse proxying, and Let's Encrypt certificates. Traefik is being introduced because more Docker services are moving to the `ubuntu-docker` VM inside Proxmox, where Docker labels and Compose examples are easier to document in Git.
+The lab already has a working pfSense setup for local DNS, HAProxy reverse proxying, and Let's Encrypt certificates through the pfSense ACME package. I am introducing Traefik because more Docker services are moving to the `ubuntu-docker` VM inside Proxmox, where Docker labels and Compose examples are easier to document in Git.
 
-This is not a one-shot replacement. pfSense remains the known-good fallback while Traefik is tested service by service.
+This is not meant to be a one-shot replacement. The existing pfSense setup stays available as the known-good fallback while Traefik is tested one service at a time.
 
 ## Current baseline
 
@@ -21,15 +21,15 @@ pfSense ACME package
 → Let's Encrypt certificates using Cloudflare DNS validation
 ```
 
-This baseline is documented in:
+The baseline is documented in:
 
 ```text
 00-existing-pfsense-dns-haproxy-acme.md
 ```
 
-## Target direction
+## Where this is going
 
-Target Traefik direction:
+Target direction:
 
 ```text
 Pi-hole
@@ -48,11 +48,25 @@ Cloudflare DNS-01 ACME
 → future certificate automation after validation
 ```
 
+The main goal is to move Docker-hosted services from direct `IP:port` access to clean internal service names, while keeping rollback options available.
+
+Example:
+
+```text
+Before:
+  http://DOCKER_HOST_IP:3000
+
+After:
+  https://service.lab.example.com
+```
+
 ## Why Traefik
 
-Traefik is useful for the Docker side of the lab because routing can be kept close to the service definition.
+Traefik is useful for the Docker side of this lab because routing can live close to the service definition.
 
-Instead of only managing reverse proxy rules through a web interface, the Traefik examples can show:
+With the current pfSense HAProxy setup, reverse proxy rules are managed through the pfSense web interface. That works, and I am keeping it as a fallback.
+
+For Docker services, Traefik lets me document more of the routing setup in Git:
 
 ```text
 Compose files
@@ -63,7 +77,7 @@ validation commands
 rollback notes
 ```
 
-This makes the migration easier to review in Git.
+This makes the migration easier to review and easier to repeat later.
 
 ## Documentation order
 
@@ -113,7 +127,7 @@ Real deployment files are kept outside the repository:
 └── dynamic/
 ```
 
-## What is committed
+## Committed vs local files
 
 The repository only includes sanitized example files:
 
@@ -124,9 +138,7 @@ whoami.example.yml
 dynamic/tls.example.yml
 ```
 
-These files are safe examples and do not contain real secrets.
-
-## What is not committed
+These files are examples only. They do not contain real secrets, real certificates, or real runtime values.
 
 The real runtime files are not committed:
 
@@ -142,7 +154,7 @@ These files may contain local hostnames, generated password hashes, Cloudflare t
 
 ## Migration approach
 
-The migration should stay gradual.
+The migration stays gradual.
 
 Planned order:
 
@@ -189,11 +201,11 @@ keep pfSense ACME certificate management unchanged
 restore the previous Compose file
 ```
 
-This is why the pfSense setup is kept as the fallback until Traefik routing and certificate automation are fully validated.
+This is why the pfSense setup stays available until Traefik routing and certificate automation are fully validated.
 
 ## Security notes
 
-The example is designed for a private homelab.
+This example is designed for a private homelab.
 
 Important security choices:
 
@@ -207,7 +219,15 @@ expose only ports 80 and 443 from Traefik
 avoid direct host port publishing for services after migration
 ```
 
-The Docker socket mount used by Traefik is a known security trade-off. It should be documented and treated carefully.
+The Docker socket mount used by Traefik is a known security trade-off. I am documenting it here because it should be treated carefully, even in a lab.
+
+## Later public demo
+
+The real lab documentation is the main focus first.
+
+After the real Traefik deployment is working and validated, I plan to add a smaller public demo that can be run without pfSense, Cloudflare, or private lab DNS.
+
+That demo will be separate from the real lab notes and will use only sanitized example values.
 
 ## References
 
