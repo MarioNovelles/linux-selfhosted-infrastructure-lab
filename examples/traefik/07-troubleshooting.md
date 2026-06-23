@@ -1,20 +1,27 @@
 # 07 - Troubleshooting
 
-This document collects common troubleshooting checks for the Traefik reverse proxy migration.
+This document collects troubleshooting checks for the Traefik reverse proxy migration.
 
-The goal is to separate problems into clear areas:
+The goal is to avoid guessing. Start with DNS, then check Traefik, Docker networking, labels, TLS, and the target container.
+
+## Debug order
+
+Use this order when troubleshooting:
 
 ```text
-DNS
-Traefik container
-Docker network
-Traefik labels
-TLS certificates
-dashboard access
-service container health
+1. Does DNS resolve to the Traefik host?
+2. Is Traefik running?
+3. Are ports 80 and 443 listening?
+4. Is the target container running?
+5. Is the target container attached to the proxy network?
+6. Are Traefik labels present and correct?
+7. Does the Host rule match the requested hostname?
+8. Is the internal service port correct?
+9. Do Traefik logs show an error?
+10. Does the route work with curl --resolve?
 ```
 
-Troubleshooting should start with the simplest checks first.
+This order helps separate DNS problems from Traefik, Docker, and application problems.
 
 ## Quick status checks
 
@@ -37,7 +44,7 @@ Check listening ports:
 ss -tulpn | grep -E ':80|:443|:8080'
 ```
 
-Expected:
+Expected result:
 
 ```text
 80/tcp is listening
@@ -71,7 +78,7 @@ Check pfSense DNS Resolver directly:
 dig @PFSENSE_IP whoami.lab.example.com
 ```
 
-Expected result:
+Expected pattern:
 
 ```text
 whoami.lab.example.com
@@ -80,17 +87,17 @@ whoami.lab.example.com
 
 If Pi-hole and pfSense return different answers, fix the local DNS records so both resolvers match.
 
-## Test without DNS
+## Test without working DNS
 
-If DNS is not working, test Traefik directly with a Host header:
+If DNS is not working yet, force the hostname to resolve to the Docker host IP for one request:
 
 ```bash
-curl -k -H "Host: whoami.lab.example.com" https://DOCKER_HOST_IP/
+curl -k --resolve whoami.lab.example.com:443:DOCKER_HOST_IP https://whoami.lab.example.com/
 ```
 
-If this works but the normal hostname does not, the issue is probably DNS.
+If this works but normal hostname access does not, the problem is probably DNS.
 
-If this does not work, the issue is probably Traefik, Docker networking, labels, TLS, or the target container.
+If this does not work either, check Traefik, Docker networking, labels, TLS, and the target container.
 
 ## Dashboard checks
 
@@ -99,8 +106,6 @@ The dashboard URL should include the trailing slash:
 ```text
 https://traefik.lab.example.com/dashboard/
 ```
-
-The trailing slash is important.
 
 Check with curl:
 
@@ -116,19 +121,19 @@ basic auth required
 no insecure dashboard on port 8080
 ```
 
-Check that port 8080 is not exposed:
+Check that port `8080` is not exposed:
 
 ```bash
 ss -tulpn | grep ':8080'
 ```
 
-Expected:
+Expected result:
 
 ```text
 no output
 ```
 
-If port 8080 is exposed, check the Traefik Compose file for:
+If port `8080` is exposed, check the Traefik Compose file for:
 
 ```text
 api.insecure=true
@@ -151,16 +156,16 @@ Test HTTP to HTTPS redirect:
 curl -I http://whoami.lab.example.com
 ```
 
-Expected:
+Expected result:
 
 ```text
 301 Moved Permanently
 ```
 
-Test with a Host header:
+Test without relying on DNS:
 
 ```bash
-curl -k -H "Host: whoami.lab.example.com" https://DOCKER_HOST_IP/
+curl -k --resolve whoami.lab.example.com:443:DOCKER_HOST_IP https://whoami.lab.example.com/
 ```
 
 ## Docker label checks
@@ -171,7 +176,7 @@ Inspect the container:
 docker inspect whoami
 ```
 
-Check that the labels exist:
+Check that the expected labels exist:
 
 ```text
 traefik.enable=true
@@ -181,7 +186,7 @@ traefik.http.routers.whoami.tls=true
 traefik.http.services.whoami.loadbalancer.server.port=80
 ```
 
-The Host rule must match the DNS name being used by the client.
+The `Host(...)` rule must match the DNS name being used by the client.
 
 ## Docker network checks
 
@@ -191,7 +196,7 @@ Check that Traefik and the routed container are both attached to the same extern
 docker network inspect proxy
 ```
 
-Expected:
+Expected result:
 
 ```text
 traefik container is attached
@@ -201,13 +206,11 @@ target service container is attached
 If the target container is missing, attach it through the Compose file:
 
 ```yaml
-networks:
-  - proxy
-```
+services:
+  app:
+    networks:
+      - proxy
 
-And define the external network:
-
-```yaml
 networks:
   proxy:
     external: true
@@ -234,7 +237,7 @@ Check that the certificate files exist on the Docker host:
 ls -l /srv/docker/traefik/certs
 ```
 
-Expected:
+Expected files:
 
 ```text
 local.crt
@@ -247,7 +250,7 @@ Check the dynamic TLS config:
 cat /srv/docker/traefik/dynamic/tls.yml
 ```
 
-Expected:
+Expected shape:
 
 ```yaml
 tls:
@@ -267,7 +270,7 @@ The host folder is mounted into the container as:
 
 ## ACME checks
 
-ACME with Cloudflare and Let's Encrypt should only be tested after local HTTPS and whoami routing work.
+ACME with Cloudflare and Let's Encrypt should only be tested after local HTTPS and the `whoami` route work.
 
 Check that `acme.json` exists:
 
@@ -293,7 +296,7 @@ Check Traefik logs:
 docker logs traefik --tail=200
 ```
 
-Check for ACME or DNS challenge messages.
+Look for ACME or DNS challenge messages.
 
 If testing DNS-01, check the TXT record:
 
@@ -305,42 +308,23 @@ If staging certificates work but browsers still warn, that is expected because L
 
 ## Common symptoms and fixes
 
-| Symptom                                   | Likely cause                                | Check                                                         | Fix                                                       |
-| ----------------------------------------- | ------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
-| Hostname does not resolve                 | Missing or wrong DNS override               | `dig service.lab.example.com`                                 | Add or fix Pi-hole and pfSense DNS records                |
-| Pi-hole and pfSense return different IPs  | DNS fallback mismatch                       | Run the Pi-hole and pfSense `dig` checks from the DNS section | Mirror important records in both                          |
-| Dashboard shows 404                       | Missing trailing slash or router rule issue | Open `/dashboard/`                                            | Use `/dashboard/` and check dashboard labels              |
-| Dashboard exposed on 8080                 | Insecure dashboard enabled                  | Check listening ports with the port validation command above  | Remove `api.insecure=true` and `8080:8080`                |
-| Route returns 404                         | Host rule mismatch                          | `docker inspect container`                                    | Fix the `Host(...)` label                                 |
-| Route returns 502                         | Wrong internal service port                 | Check app docs and logs                                       | Fix `loadbalancer.server.port`                            |
-| Service ignored by Traefik                | Missing enable label                        | `docker inspect container`                                    | Add `traefik.enable=true`                                 |
-| Service unreachable                       | Not on proxy network                        | `docker network inspect proxy`                                | Attach service to `proxy`                                 |
-| HTTP does not redirect                    | Redirect flags missing                      | `docker compose config`                                       | Add web-to-websecure redirect flags                       |
-| Browser certificate warning               | Self-signed cert or staging cert            | Browser or curl output                                        | Expected until production ACME works                      |
-| ACME fails with Cloudflare                | Token or DNS permissions issue              | Traefik logs                                                  | Check Cloudflare API token and DNS zone access            |
-| `acme.json` permission error              | Wrong file permissions                      | `ls -l acme.json`                                             | Set `chmod 600 acme.json`                                 |
-| App still reachable by IP and port        | Old direct port still published             | `docker ps`                                                   | Remove direct `ports:` after Traefik validation           |
-| Works with Host header but not normal URL | DNS issue                                   | Host-header curl test                                         | Fix local DNS                                             |
-| Works on LAN but not VPN                  | VPN DNS or route issue                      | Check client DNS and routes                                   | Confirm VPN client uses lab DNS and can reach Docker host |
-
-## Debug order
-
-Use this order when troubleshooting:
-
-```text
-1. Is DNS resolving to the Traefik host?
-2. Is Traefik running?
-3. Are ports 80 and 443 listening?
-4. Is the target container running?
-5. Is the target container on the proxy network?
-6. Are Traefik labels present and correct?
-7. Does the Host rule match the requested hostname?
-8. Is the internal service port correct?
-9. Do Traefik logs show an error?
-10. Does the route work with a manual Host header?
-```
-
-This order helps avoid guessing.
+| Symptom                                   | Likely cause                                | Check                          | Fix                                                       |
+| ----------------------------------------- | ------------------------------------------- | ------------------------------ | --------------------------------------------------------- |
+| Hostname does not resolve                 | Missing or wrong DNS override               | `dig service.lab.example.com`  | Add or fix Pi-hole and pfSense DNS records                |
+| Pi-hole and pfSense return different IPs  | DNS fallback mismatch                       | Run direct resolver checks     | Mirror important records in both                          |
+| Dashboard shows 404                       | Missing trailing slash or router rule issue | Open `/dashboard/`             | Use `/dashboard/` and check dashboard labels              |
+| Dashboard exposed on 8080                 | Insecure dashboard enabled                  | Check listening ports          | Remove `api.insecure=true` and `8080:8080`                |
+| Route returns 404                         | Host rule mismatch                          | `docker inspect container`     | Fix the `Host(...)` label                                 |
+| Route returns 502                         | Wrong internal service port                 | App docs and logs              | Fix `loadbalancer.server.port`                            |
+| Service ignored by Traefik                | Missing enable label                        | `docker inspect container`     | Add `traefik.enable=true`                                 |
+| Service unreachable                       | Not on proxy network                        | `docker network inspect proxy` | Attach service to `proxy`                                 |
+| HTTP does not redirect                    | Redirect flags missing                      | `docker compose config`        | Add web-to-websecure redirect flags                       |
+| Browser certificate warning               | Self-signed cert or staging cert            | Browser or curl output         | Expected until production ACME works                      |
+| ACME fails with Cloudflare                | Token or DNS permissions issue              | Traefik logs                   | Check Cloudflare token and DNS zone permissions           |
+| `acme.json` permission error              | Wrong file permissions                      | `ls -l acme.json`              | Set `chmod 600 acme.json`                                 |
+| App still reachable by IP and port        | Old direct port still published             | `docker ps`                    | Remove direct `ports:` after Traefik validation           |
+| Works with `--resolve` but not normal URL | DNS issue                                   | `curl --resolve ...`           | Fix local DNS                                             |
+| Works on LAN but not VPN                  | VPN DNS or route issue                      | Client DNS and routes          | Confirm VPN client uses lab DNS and can reach Docker host |
 
 ## Rollback checks
 
