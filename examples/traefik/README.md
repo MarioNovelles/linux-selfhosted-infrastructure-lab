@@ -105,7 +105,7 @@ examples/traefik/
 Real deployment files are kept outside the repository:
 
 ```text
-/opt/traefik/
+/srv/docker/traefik/
 ├── compose.yml
 ├── .env
 ├── acme.json

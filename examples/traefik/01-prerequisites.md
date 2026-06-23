@@ -95,20 +95,20 @@ The real Traefik deployment files should live outside the Git repository.
 Example runtime path:
 
 ```text
-/opt/traefik
+/srv/docker/traefik
 ```
 
 Create the folder structure:
 
 ```bash
-sudo mkdir -p /opt/traefik/{certs,dynamic}
-sudo chown -R "$USER:$USER" /opt/traefik
+sudo mkdir -p /srv/docker/traefik/{certs,dynamic}
+sudo chown -R "$USER:$USER" /srv/docker/traefik
 ```
 
 Expected layout:
 
 ```text
-/opt/traefik/
+/srv/docker/traefik/
 ├── certs/
 └── dynamic/
 ```
@@ -116,7 +116,7 @@ Expected layout:
 The real runtime files will later be added here:
 
 ```text
-/opt/traefik/
+/srv/docker/traefik/
 ├── compose.yml
 ├── .env
 ├── acme.json
@@ -144,9 +144,9 @@ These are copied into the runtime folder when building the real deployment.
 Example:
 
 ```bash
-cp examples/traefik/compose.example.yml /opt/traefik/compose.yml
-cp examples/traefik/.env.example /opt/traefik/.env
-cp examples/traefik/dynamic/tls.example.yml /opt/traefik/dynamic/tls.yml
+cp examples/traefik/compose.example.yml /srv/docker/traefik/compose.yml
+cp examples/traefik/.env.example /srv/docker/traefik/.env
+cp examples/traefik/dynamic/tls.example.yml /srv/docker/traefik/dynamic/tls.yml
 ```
 
 The copied files must be edited before use.
@@ -194,9 +194,9 @@ Before moving to the next step, confirm:
 Docker works
 Docker Compose works
 proxy network exists
-/opt/traefik exists
-/opt/traefik/certs exists
-/opt/traefik/dynamic exists
+/srv/docker/traefik exists
+/srv/docker/traefik/certs exists
+/srv/docker/traefik/dynamic exists
 real runtime files are outside the Git repository
 ```
 
@@ -206,7 +206,7 @@ Useful commands:
 docker --version
 docker compose version
 docker network ls | grep proxy
-ls -la /opt/traefik
+ls -la /srv/docker/traefik
 find examples/traefik -maxdepth 3 -type f | sort
 git status --short
 ```
@@ -219,7 +219,7 @@ Rollback options:
 
 ```bash
 docker network rm proxy
-sudo rm -rf /opt/traefik
+sudo rm -rf /srv/docker/traefik
 ```
 
 Only remove the `proxy` network if no containers are using it.

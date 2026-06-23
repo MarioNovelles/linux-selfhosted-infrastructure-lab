@@ -39,14 +39,14 @@ The real deployment runs outside the Git repository.
 Example runtime path:
 
 ```text
-/opt/traefik
+/srv/docker/traefik
 ```
 
 Create the folder structure if it does not already exist:
 
 ```bash
-sudo mkdir -p /opt/traefik/{certs,dynamic}
-sudo chown -R "$USER:$USER" /opt/traefik
+sudo mkdir -p /srv/docker/traefik/{certs,dynamic}
+sudo chown -R "$USER:$USER" /srv/docker/traefik
 ```
 
 ## Copy example files
@@ -54,15 +54,15 @@ sudo chown -R "$USER:$USER" /opt/traefik
 From the repository root, copy the example files into the runtime folder:
 
 ```bash
-cp examples/traefik/compose.example.yml /opt/traefik/compose.yml
-cp examples/traefik/.env.example /opt/traefik/.env
-cp examples/traefik/dynamic/tls.example.yml /opt/traefik/dynamic/tls.yml
+cp examples/traefik/compose.example.yml /srv/docker/traefik/compose.yml
+cp examples/traefik/.env.example /srv/docker/traefik/.env
+cp examples/traefik/dynamic/tls.example.yml /srv/docker/traefik/dynamic/tls.yml
 ```
 
 Edit the real `.env` file:
 
 ```bash
-nano /opt/traefik/.env
+nano /srv/docker/traefik/.env
 ```
 
 At minimum, replace:
@@ -87,7 +87,7 @@ Generate a dashboard username and password hash:
 htpasswd -nbB admin "CHANGE_THIS_PASSWORD" | sed -e 's/\$/\$\$/g'
 ```
 
-Copy the full output into `/opt/traefik/.env`.
+Copy the full output into `/srv/docker/traefik/.env`.
 
 Example shape:
 
@@ -105,15 +105,15 @@ Replace `lab.example.com` with the local lab domain used in DNS:
 
 ```bash
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout /opt/traefik/certs/local.key \
-  -out /opt/traefik/certs/local.crt \
+  -keyout /srv/docker/traefik/certs/local.key \
+  -out /srv/docker/traefik/certs/local.crt \
   -subj "/CN=*.lab.example.com"
 ```
 
 Check that the files exist:
 
 ```bash
-ls -l /opt/traefik/certs
+ls -l /srv/docker/traefik/certs
 ```
 
 Expected files:
@@ -128,7 +128,7 @@ local.key
 Check the copied TLS file:
 
 ```bash
-cat /opt/traefik/dynamic/tls.yml
+cat /srv/docker/traefik/dynamic/tls.yml
 ```
 
 Expected shape:
@@ -145,7 +145,7 @@ The paths are container paths, not host paths.
 The host files are mounted into the container here:
 
 ```text
-/opt/traefik/certs
+/srv/docker/traefik/certs
 → /certs
 ```
 
@@ -170,7 +170,7 @@ docker network ls | grep proxy
 From the runtime folder:
 
 ```bash
-cd /opt/traefik
+cd /srv/docker/traefik
 docker compose config
 ```
 
@@ -181,7 +181,7 @@ This checks that the Compose file and `.env` values render correctly.
 Start Traefik:
 
 ```bash
-cd /opt/traefik
+cd /srv/docker/traefik
 docker compose up -d
 ```
 
@@ -288,14 +288,14 @@ browser warns about the self-signed certificate
 Stop Traefik:
 
 ```bash
-cd /opt/traefik
+cd /srv/docker/traefik
 docker compose down
 ```
 
 Remove the runtime folder only if needed:
 
 ```bash
-sudo rm -rf /opt/traefik
+sudo rm -rf /srv/docker/traefik
 ```
 
 Do not change the existing pfSense HAProxy or pfSense ACME setup during this step.

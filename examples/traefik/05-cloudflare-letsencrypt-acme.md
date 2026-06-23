@@ -111,7 +111,7 @@ The Cloudflare token must not be committed to Git.
 The real token belongs in the real runtime `.env` file:
 
 ```text
-/opt/traefik/.env
+/srv/docker/traefik/.env
 ```
 
 Example variable name:
@@ -131,7 +131,7 @@ Traefik stores certificate account and certificate data in `acme.json`.
 Example runtime file:
 
 ```text
-/opt/traefik/acme.json
+/srv/docker/traefik/acme.json
 ```
 
 This file should not be committed.
@@ -139,8 +139,8 @@ This file should not be committed.
 Recommended permissions:
 
 ```bash
-touch /opt/traefik/acme.json
-chmod 600 /opt/traefik/acme.json
+touch /srv/docker/traefik/acme.json
+chmod 600 /srv/docker/traefik/acme.json
 ```
 
 The file may contain private key material and certificate data, so it should be treated as sensitive.
@@ -202,7 +202,7 @@ Traefik ACME should be tested separately and only promoted after validation.
 When this step is implemented later, validate:
 
 ```text
-Cloudflare token is only in /opt/traefik/.env
+Cloudflare token is only in /srv/docker/traefik/.env
 acme.json exists
 acme.json permissions are 600
 Traefik logs show ACME challenge activity
@@ -215,7 +215,7 @@ production ACME is tested only after staging succeeds
 Useful commands:
 
 ```bash
-ls -l /opt/traefik/acme.json
+ls -l /srv/docker/traefik/acme.json
 docker logs traefik --tail=200
 dig TXT _acme-challenge.lab.example.com
 curl -vk https://whoami.lab.example.com/

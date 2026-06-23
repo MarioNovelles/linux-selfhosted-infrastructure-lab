@@ -56,8 +56,8 @@ If DNS is not ready yet, the route can still be tested with a manual Host header
 Create a small runtime folder for the test container:
 
 ```bash
-mkdir -p /opt/traefik-test
-cd /opt/traefik-test
+mkdir -p /srv/docker/traefik-test
+cd /srv/docker/traefik-test
 ```
 
 Copy the example file from the repository:
@@ -168,7 +168,7 @@ bad gateway errors
 Check the test container logs:
 
 ```bash
-cd /opt/traefik-test
+cd /srv/docker/traefik-test
 docker compose logs --tail=100
 ```
 
@@ -249,7 +249,7 @@ The warning should go away later when ACME and trusted certificates are configur
 Stop the whoami test container:
 
 ```bash
-cd /opt/traefik-test
+cd /srv/docker/traefik-test
 docker compose down
 ```
 
