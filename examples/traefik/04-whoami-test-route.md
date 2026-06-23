@@ -2,24 +2,13 @@
 
 This step validates Traefik routing with a simple test container.
 
-The goal is to prove that Traefik can:
-
-```text
-read Docker labels
-match a hostname rule
-route traffic through the proxy network
-forward the request to a container
-add reverse proxy headers
-redirect HTTP to HTTPS
-```
-
-This is done before routing any real service.
+The goal is to prove that Traefik can read Docker labels, match a hostname rule, use the shared `proxy` network, and forward traffic to a container before routing any real service.
 
 ## Why use whoami
 
 The `whoami` container is useful because it returns request details back to the client.
 
-This makes it easy to verify:
+This makes it easy to check:
 
 ```text
 requested hostname
@@ -49,21 +38,24 @@ dig whoami.lab.example.com
 
 The result should point to the Traefik Docker host.
 
-If DNS is not ready yet, the route can still be tested with a manual Host header later in this document.
-
-## Runtime test folder
+## Create the test runtime folder
 
 Create a small runtime folder for the test container:
 
 ```bash
 mkdir -p /srv/docker/traefik-test
-cd /srv/docker/traefik-test
 ```
 
-Copy the example file from the repository:
+From the repository root, copy the example Compose file:
 
 ```bash
-cp /path/to/repo/examples/traefik/whoami.example.yml compose.yml
+cp examples/traefik/whoami.example.yml /srv/docker/traefik-test/compose.yml
+```
+
+Move into the runtime folder:
+
+```bash
+cd /srv/docker/traefik-test
 ```
 
 ## Start whoami
@@ -80,13 +72,13 @@ Check status:
 docker compose ps
 ```
 
-Expected:
+Expected result:
 
 ```text
 whoami container is running
 ```
 
-## Confirm it joined the proxy network
+## Confirm the proxy network
 
 Inspect the shared proxy network:
 
@@ -94,7 +86,7 @@ Inspect the shared proxy network:
 docker network inspect proxy
 ```
 
-The `whoami` container should appear in the network.
+The `whoami` container should appear in the `proxy` network.
 
 ## Test the HTTPS route
 
@@ -112,8 +104,7 @@ Expected signs:
 
 ```text
 Hostname: whoami
-IP information
-Request headers
+request headers
 X-Forwarded-* headers
 ```
 
@@ -133,37 +124,27 @@ Expected result:
 
 This confirms that HTTP traffic is redirected to HTTPS.
 
-## Test without DNS
+## Test without working DNS
 
-If DNS is not working yet, test Traefik directly by sending the Host header to the Docker host IP:
+If DNS is not ready yet, test the route by forcing the hostname to resolve to the Docker host IP for this request:
 
 ```bash
-curl -k -H "Host: whoami.lab.example.com" https://DOCKER_HOST_IP/
+curl -k --resolve whoami.lab.example.com:443:DOCKER_HOST_IP https://whoami.lab.example.com/
 ```
 
-If this works but the normal hostname does not, the problem is probably DNS.
+This helps separate DNS problems from Traefik routing problems.
 
-If this does not work either, the problem is probably Traefik, Docker labels, the proxy network, or the container.
+If this works but normal hostname access does not, the problem is probably DNS.
 
-## Check Traefik logs
+If this does not work either, check Traefik, Docker labels, the `proxy` network, and the `whoami` container.
+
+## Check logs
 
 Check Traefik logs:
 
 ```bash
 docker logs traefik --tail=100
 ```
-
-Useful things to look for:
-
-```text
-router creation
-service discovery
-certificate loading
-routing errors
-bad gateway errors
-```
-
-## Check whoami logs
 
 Check the test container logs:
 
@@ -172,31 +153,13 @@ cd /srv/docker/traefik-test
 docker compose logs --tail=100
 ```
 
-## Validation checklist
-
-Before moving to real services, confirm:
+Useful things to look for:
 
 ```text
-whoami.lab.example.com resolves to the Traefik host
-Traefik container is running
-whoami container is running
-whoami is attached to the proxy network
-HTTPS route works
-HTTP redirects to HTTPS
-forwarded headers appear in the response
-Traefik logs do not show routing errors
-```
-
-Useful commands:
-
-```bash
-dig whoami.lab.example.com
-docker ps
-docker network inspect proxy
-curl -k https://whoami.lab.example.com/
-curl -I http://whoami.lab.example.com
-curl -k -H "Host: whoami.lab.example.com" https://DOCKER_HOST_IP/
-docker logs traefik --tail=100
+router creation
+service discovery
+routing errors
+bad gateway errors
 ```
 
 ## Common problems
@@ -233,7 +196,7 @@ Confirm:
 
 ```text
 traefik.enable=true
-Host rule matches the test hostname
+Host rule matches whoami.lab.example.com
 router uses the websecure entrypoint
 service port is 80
 ```
@@ -243,6 +206,33 @@ service port is 80
 This is expected during the local self-signed certificate phase.
 
 The warning should go away later when ACME and trusted certificates are configured.
+
+## Validation checklist
+
+Before moving to real services, confirm:
+
+```text
+whoami.lab.example.com resolves to the Traefik host
+Traefik container is running
+whoami container is running
+whoami is attached to the proxy network
+HTTPS route works
+HTTP redirects to HTTPS
+forwarded headers appear in the response
+Traefik logs do not show routing errors
+```
+
+Useful commands:
+
+```bash
+dig whoami.lab.example.com
+docker ps
+docker network inspect proxy
+curl -k https://whoami.lab.example.com/
+curl -I http://whoami.lab.example.com
+curl -k --resolve whoami.lab.example.com:443:DOCKER_HOST_IP https://whoami.lab.example.com/
+docker logs traefik --tail=100
+```
 
 ## Stop the test route
 
@@ -263,7 +253,7 @@ Rollback options:
 stop the whoami container
 remove the whoami DNS record
 leave Traefik running for dashboard testing
-or stop Traefik if needed
+stop Traefik if needed
 ```
 
 No existing pfSense HAProxy or pfSense ACME configuration should be changed during this step.
