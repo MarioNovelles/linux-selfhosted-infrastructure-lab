@@ -2,9 +2,9 @@
 
 This step documents the planned certificate automation path for Traefik.
 
-The lab already has a working certificate workflow through the pfSense ACME package with Cloudflare DNS validation. That existing setup should stay in place while Traefik is being tested.
+The lab already has a working certificate workflow through the pfSense ACME package with Cloudflare DNS validation. That setup should stay in place while Traefik routing is being tested.
 
-The goal of this step is to document how Traefik will later request and renew Let's Encrypt certificates using ACME DNS-01 through Cloudflare.
+Traefik ACME is not enabled in the first local HTTPS setup. It will be tested later, after the dashboard, `whoami`, and at least one non-critical service route work reliably.
 
 ## Current certificate baseline
 
@@ -33,9 +33,9 @@ Traefik
 → certificate stored in acme.json
 ```
 
-Traefik will eventually manage certificates directly for routes handled by Traefik.
+Traefik will eventually manage certificates for routes handled by Traefik.
 
-This should only be done after:
+This should only happen after:
 
 ```text
 local Traefik HTTPS works
@@ -45,35 +45,9 @@ one non-critical service route works
 rollback to pfSense is documented
 ```
 
-## What ACME means here
-
-ACME is the protocol used to request and renew certificates automatically.
-
-In this setup:
-
-```text
-Traefik acts as the ACME client
-Let's Encrypt acts as the certificate authority
-Cloudflare DNS is used to prove domain ownership
-```
-
-The DNS-01 challenge works by creating a temporary DNS TXT record.
-
-High-level flow:
-
-```text
-1. Traefik asks Let's Encrypt for a certificate
-2. Let's Encrypt asks for DNS proof
-3. Traefik uses the Cloudflare API token to create a TXT record
-4. Let's Encrypt checks the TXT record
-5. Let's Encrypt issues the certificate
-6. Traefik stores the certificate data in acme.json
-7. Traefik renews the certificate automatically later
-```
-
 ## Why use DNS-01
 
-DNS-01 is useful for this lab because services may be internal only.
+DNS-01 is useful for this lab because some services are internal only.
 
 With DNS-01:
 
@@ -84,13 +58,25 @@ wildcard certificates are possible
 Cloudflare can validate domain ownership through DNS
 ```
 
-This is different from HTTP-01, where the certificate authority needs to reach the service over HTTP.
+This is different from HTTP-01, where Let's Encrypt needs to reach the service over HTTP.
 
-## Staging before production
+## How the DNS-01 flow works
+
+High-level flow:
+
+```text
+1. Traefik asks Let's Encrypt for a certificate
+2. Let's Encrypt asks for DNS proof
+3. Traefik uses the Cloudflare API token to create a TXT record
+4. Let's Encrypt checks the TXT record
+5. Let's Encrypt issues the certificate
+6. Traefik stores the certificate data in acme.json
+7. Traefik renews the certificate later
+```
+
+## Test staging before production
 
 Let's Encrypt staging should be tested before production.
-
-Staging is useful because it lets me test the ACME workflow without risking production rate limits.
 
 Planned order:
 
@@ -120,40 +106,48 @@ Example variable name:
 CF_DNS_API_TOKEN=CHANGEME_CLOUDFLARE_DNS_TOKEN
 ```
 
-The repository should only include a placeholder in `.env.example`.
+The repository should only include placeholders in `.env.example`.
 
-The token should be scoped as narrowly as possible for DNS validation.
+The token should be scoped only for the DNS changes needed by the ACME challenge.
 
 ## acme.json
 
-Traefik stores certificate account and certificate data in `acme.json`.
+Traefik stores ACME account and certificate data in `acme.json`.
 
-Example runtime file:
+Runtime file:
 
 ```text
 /srv/docker/traefik/acme.json
 ```
 
-This file should not be committed.
-
-Recommended permissions:
+Create it before enabling ACME:
 
 ```bash
 touch /srv/docker/traefik/acme.json
 chmod 600 /srv/docker/traefik/acme.json
 ```
 
-The file may contain private key material and certificate data, so it should be treated as sensitive.
+This file may contain private key material and certificate data, so it should not be committed.
 
 ## Future Compose changes
 
 The local HTTPS setup uses a self-signed certificate loaded through the file provider.
 
-The future ACME setup will add a certificate resolver.
+The future ACME setup will need:
 
-Example shape:
+```text
+Cloudflare token available to Traefik
+acme.json mounted into the Traefik container
+ACME certificate resolver configured
+router labels pointing to the resolver
+```
+
+Example Compose shape:
 
 ```yaml
+volumes:
+  - "./acme.json:/acme.json"
+
 command:
   - "--certificatesresolvers.cloudflare.acme.email=${LETSENCRYPT_EMAIL}"
   - "--certificatesresolvers.cloudflare.acme.storage=/acme.json"
@@ -179,7 +173,7 @@ labels:
   - "traefik.http.routers.app.tls.certresolver=cloudflare"
 ```
 
-For wildcard certificates, the exact label pattern may be adjusted later after testing.
+The exact label pattern may be adjusted after testing, especially if wildcard certificates are used.
 
 ## What stays on pfSense for now
 
@@ -197,9 +191,9 @@ existing working reverse proxy routes
 
 Traefik ACME should be tested separately and only promoted after validation.
 
-## Validation plan
+## Future validation checklist
 
-When this step is implemented later, validate:
+When this step is implemented, validate:
 
 ```text
 Cloudflare token is only in /srv/docker/traefik/.env
