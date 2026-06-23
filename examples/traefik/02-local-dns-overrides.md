@@ -2,22 +2,22 @@
 
 This step documents the local DNS plan for the Traefik migration.
 
-Traefik routing depends on hostnames. Before testing Traefik routes, the lab needs local DNS names that point to the Docker host running Traefik.
+Traefik routes requests by hostname, so the lab needs DNS records that point Traefik-managed names to the Docker host running Traefik.
 
-Example goal:
+Example:
 
 ```text
 whoami.lab.example.com
 → DOCKER_HOST_IP
 ```
 
-## Current DNS baseline
+## DNS baseline
 
 The lab already uses pfSense DNS Resolver Host Overrides for internal service names.
 
-During the Traefik migration, pfSense DNS Resolver remains important because it provides a known-good fallback DNS path.
+During the Traefik migration, pfSense remains important because it provides the fallback DNS path.
 
-The intended DNS model is:
+Intended DNS model:
 
 ```text
 Pi-hole
@@ -27,9 +27,9 @@ pfSense DNS Resolver
 → fallback DNS path with important host overrides mirrored
 ```
 
-## Why local DNS matters
+Important Traefik hostnames should exist in both places so DNS still works if a client falls back to pfSense.
 
-Traefik uses hostname-based routing.
+## Why local DNS matters
 
 A client requests:
 
@@ -37,14 +37,14 @@ A client requests:
 https://whoami.lab.example.com
 ```
 
-Local DNS resolves that name to the Docker host running Traefik:
+Local DNS resolves that hostname to the Docker host running Traefik:
 
 ```text
 whoami.lab.example.com
 → DOCKER_HOST_IP
 ```
 
-Traefik then reads the requested hostname and sends the request to the correct container based on Docker labels.
+Traefik then uses the requested hostname and Docker labels to route the request to the correct container.
 
 Traffic flow:
 
@@ -56,22 +56,9 @@ client
 → target Docker container
 ```
 
-## DNS source of truth
+## Example DNS records
 
-For the lab, the documented intended DNS records should be treated as the source of truth.
-
-The records should then be created in both:
-
-```text
-Pi-hole Local DNS
-pfSense DNS Resolver Host Overrides
-```
-
-This keeps the primary and fallback DNS paths consistent.
-
-## Example records
-
-Use sanitized examples in Git.
+Use sanitized examples in Git:
 
 ```text
 traefik.lab.example.com  → DOCKER_HOST_IP
@@ -81,11 +68,11 @@ app.lab.example.com      → DOCKER_HOST_IP
 
 All Traefik-routed service names should point to the Traefik host, not directly to the application container.
 
-## Pi-hole local DNS
+## Pi-hole records
 
 In Pi-hole, add local DNS records for the Traefik hostnames.
 
-Example:
+Example path:
 
 ```text
 Local DNS
@@ -102,7 +89,7 @@ DOCKER_HOST_IP
 
 Repeat this for each hostname routed through Traefik.
 
-## pfSense DNS Resolver host overrides
+## pfSense fallback records
 
 In pfSense, mirror the important records as DNS Resolver Host Overrides.
 
@@ -124,7 +111,7 @@ IP Address: DOCKER_HOST_IP
 
 This keeps pfSense available as a fallback resolver if Pi-hole is unavailable or if a client falls back to pfSense.
 
-## Recommended migration approach
+## Migration approach
 
 Do not move every service name at once.
 
@@ -135,8 +122,6 @@ traefik.lab.example.com
 whoami.lab.example.com
 ```
 
-Then add one non-critical real service later.
-
 Safer order:
 
 ```text
@@ -146,22 +131,10 @@ Safer order:
 4. Start Traefik
 5. Test the whoami route
 6. Add one non-critical service name
-7. Migrate more services only after validation
+7. Migrate more services after validation
 ```
 
-## Avoiding confusion during migration
-
-During migration, avoid pointing the same important hostname back and forth repeatedly.
-
-For testing, use a temporary hostname if needed:
-
-```text
-service-traefik.lab.example.com
-```
-
-This allows the existing pfSense HAProxy route to remain untouched while Traefik is being tested.
-
-Example:
+For real services, a temporary Traefik hostname can reduce risk:
 
 ```text
 service.lab.example.com
@@ -175,7 +148,7 @@ After the Traefik route is validated, the main service name can be moved.
 
 ## Validation commands
 
-From a client machine, check DNS resolution:
+From a client machine, check normal DNS resolution:
 
 ```bash
 dig traefik.lab.example.com
@@ -194,7 +167,7 @@ Query pfSense directly:
 dig @PFSENSE_IP whoami.lab.example.com
 ```
 
-Both should return the Traefik Docker host IP.
+Both resolvers should return the Traefik Docker host IP.
 
 Expected pattern:
 
@@ -205,7 +178,7 @@ whoami.lab.example.com
 
 ## Testing without DNS
 
-If DNS is not working yet, Traefik can still be tested by sending a Host header directly to the Traefik host.
+If DNS is not ready yet, Traefik can still be tested by sending a Host header directly to the Traefik host.
 
 Example:
 
@@ -217,9 +190,7 @@ This helps separate DNS problems from Traefik routing problems.
 
 If the Host-header test works but the normal hostname does not, the problem is probably DNS.
 
-## Rollback notes
-
-Rollback should be simple.
+## Rollback approach
 
 If a Traefik route fails, point the DNS record back to the previous known-good path.
 
@@ -232,13 +203,13 @@ disable the Traefik test route
 keep the existing pfSense HAProxy rule available
 ```
 
-If using a temporary Traefik test hostname, rollback is even simpler because the existing production-like hostname was never changed.
+Using a temporary Traefik test hostname makes rollback easier because the original service hostname was never changed.
 
 ## What not to publish
 
-Do not publish sensitive DNS details.
+Do not commit sensitive DNS details.
 
-Avoid committing:
+Avoid publishing:
 
 ```text
 real public domains if you prefer keeping them private
