@@ -305,23 +305,23 @@ If staging certificates work but browsers still warn, that is expected because L
 
 ## Common symptoms and fixes
 
-| Symptom                                   | Likely cause                                | Check                                         | Fix                                                       |                                            |
-| ----------------------------------------- | ------------------------------------------- | --------------------------------------------- | --------------------------------------------------------- | ------------------------------------------ |
-| Hostname does not resolve                 | Missing or wrong DNS override               | `dig service.lab.example.com`                 | Add or fix Pi-hole and pfSense DNS records                |                                            |
-| Pi-hole and pfSense return different IPs  | DNS fallback mismatch                       | `dig @PIHOLE_IP name`, `dig @PFSENSE_IP name` | Mirror important records in both                          |                                            |
-| Dashboard shows 404                       | Missing trailing slash or router rule issue | Open `/dashboard/`                            | Use `/dashboard/` and check dashboard labels              |                                            |
-| Dashboard exposed on 8080                 | Insecure dashboard enabled                  | `ss -tulpn                                    | grep 8080`                                                | Remove `api.insecure=true` and `8080:8080` |
-| Route returns 404                         | Host rule mismatch                          | `docker inspect container`                    | Fix the `Host(...)` label                                 |                                            |
-| Route returns 502                         | Wrong internal service port                 | Check app docs and logs                       | Fix `loadbalancer.server.port`                            |                                            |
-| Service ignored by Traefik                | Missing enable label                        | `docker inspect container`                    | Add `traefik.enable=true`                                 |                                            |
-| Service unreachable                       | Not on proxy network                        | `docker network inspect proxy`                | Attach service to `proxy`                                 |                                            |
-| HTTP does not redirect                    | Redirect flags missing                      | `docker compose config`                       | Add web-to-websecure redirect flags                       |                                            |
-| Browser certificate warning               | Self-signed cert or staging cert            | Browser/curl output                           | Expected until production ACME works                      |                                            |
-| ACME fails with Cloudflare                | Token or DNS permissions issue              | Traefik logs                                  | Check Cloudflare API token and DNS zone access            |                                            |
-| `acme.json` permission error              | Wrong file permissions                      | `ls -l acme.json`                             | Set `chmod 600 acme.json`                                 |                                            |
-| App still reachable by IP and port        | Old direct port still published             | `docker ps`                                   | Remove direct `ports:` after Traefik validation           |                                            |
-| Works with Host header but not normal URL | DNS issue                                   | Host-header curl test                         | Fix local DNS                                             |                                            |
-| Works on LAN but not VPN                  | VPN DNS or route issue                      | Check client DNS and routes                   | Confirm VPN client uses lab DNS and can reach Docker host |                                            |
+| Symptom                                   | Likely cause                                | Check                                                         | Fix                                                       |
+| ----------------------------------------- | ------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
+| Hostname does not resolve                 | Missing or wrong DNS override               | `dig service.lab.example.com`                                 | Add or fix Pi-hole and pfSense DNS records                |
+| Pi-hole and pfSense return different IPs  | DNS fallback mismatch                       | Run the Pi-hole and pfSense `dig` checks from the DNS section | Mirror important records in both                          |
+| Dashboard shows 404                       | Missing trailing slash or router rule issue | Open `/dashboard/`                                            | Use `/dashboard/` and check dashboard labels              |
+| Dashboard exposed on 8080                 | Insecure dashboard enabled                  | Check listening ports with the port validation command above  | Remove `api.insecure=true` and `8080:8080`                |
+| Route returns 404                         | Host rule mismatch                          | `docker inspect container`                                    | Fix the `Host(...)` label                                 |
+| Route returns 502                         | Wrong internal service port                 | Check app docs and logs                                       | Fix `loadbalancer.server.port`                            |
+| Service ignored by Traefik                | Missing enable label                        | `docker inspect container`                                    | Add `traefik.enable=true`                                 |
+| Service unreachable                       | Not on proxy network                        | `docker network inspect proxy`                                | Attach service to `proxy`                                 |
+| HTTP does not redirect                    | Redirect flags missing                      | `docker compose config`                                       | Add web-to-websecure redirect flags                       |
+| Browser certificate warning               | Self-signed cert or staging cert            | Browser or curl output                                        | Expected until production ACME works                      |
+| ACME fails with Cloudflare                | Token or DNS permissions issue              | Traefik logs                                                  | Check Cloudflare API token and DNS zone access            |
+| `acme.json` permission error              | Wrong file permissions                      | `ls -l acme.json`                                             | Set `chmod 600 acme.json`                                 |
+| App still reachable by IP and port        | Old direct port still published             | `docker ps`                                                   | Remove direct `ports:` after Traefik validation           |
+| Works with Host header but not normal URL | DNS issue                                   | Host-header curl test                                         | Fix local DNS                                             |
+| Works on LAN but not VPN                  | VPN DNS or route issue                      | Check client DNS and routes                                   | Confirm VPN client uses lab DNS and can reach Docker host |
 
 ## Debug order
 
