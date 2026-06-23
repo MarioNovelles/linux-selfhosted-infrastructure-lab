@@ -44,8 +44,7 @@ That is why I need backups and restore tests.
 
 For each important Docker service, I should know:
 
-```text id="i6ws31"
-Service:
+```textService:
 Compose file:
 Data folder:
 Database:
@@ -59,8 +58,7 @@ Restore tested:
 
 Example for a simple Docker service folder:
 
-```bash id="sujrlr"
-# Create a backup folder
+```bash# Create a backup folder
 mkdir -p ~/backups/example-service
 
 # Copy service data and keep permissions/timestamps
@@ -72,8 +70,7 @@ cp /srv/docker/example-service/compose.yml ~/backups/example-service/
 
 If the service uses a database, I may also need a database dump.
 
-```bash id="3bc2n3"
-# Example pattern: replace container, user, and database name
+```bash# Example pattern: replace container, user, and database name
 docker exec <database-container> \
   mariadb-dump -u <database-user> -p <database-name> > <database-name>.sql
 ```
@@ -84,8 +81,7 @@ I do not commit `.env` files or database dumps to Git.
 
 When I test a restore, I should write down:
 
-```text id="qqnxif"
-Service:
+```textService:
 Backup source:
 Restore target:
 Date:
