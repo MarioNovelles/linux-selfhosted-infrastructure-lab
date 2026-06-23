@@ -2,13 +2,11 @@
 
 This step documents how to move real Docker services behind Traefik.
 
-This should only happen after the `whoami` test route works.
-
-The goal is to migrate services gradually, starting with one non-critical service, while keeping the existing pfSense HAProxy path available as fallback.
+This should only happen after the `whoami` test route works. The goal is to migrate one service at a time while keeping the existing pfSense HAProxy path available as a fallback.
 
 ## Before moving a real service
 
-Confirm these steps already work:
+Confirm these already work:
 
 ```text
 Traefik starts successfully
@@ -20,13 +18,11 @@ HTTP redirects to HTTPS
 pfSense HAProxy remains available as fallback
 ```
 
-Do not move important services first.
-
-Start with a low-risk service.
+Do not move an important service first. Start with a low-risk service.
 
 ## Migration idea
 
-Before Traefik, a service may be accessed directly with a host-published port:
+Before Traefik, a service may be accessed through a direct host-published port:
 
 ```text
 http://DOCKER_HOST_IP:3000
@@ -50,23 +46,21 @@ client
 
 ## DNS record
 
-Create or update the local DNS record.
-
-Example:
+Create or update the local DNS record:
 
 ```text
 service.lab.example.com
 → DOCKER_HOST_IP
 ```
 
-This record should exist in both:
+The record should exist in both:
 
 ```text
 Pi-hole Local DNS
 pfSense DNS Resolver Host Overrides
 ```
 
-This keeps primary DNS and fallback DNS consistent.
+This keeps the primary DNS path and fallback DNS path consistent.
 
 ## Network pattern
 
@@ -133,9 +127,7 @@ networks:
     name: proxy
 ```
 
-The important part is that the database is not attached to the `proxy` network.
-
-Only the application container needs to be reachable by Traefik.
+The important part is that the database is not attached to the `proxy` network. Only the application container needs to be reachable by Traefik.
 
 ## About `loadbalancer.server.port`
 
@@ -147,9 +139,7 @@ Example:
 - "traefik.http.services.example-app.loadbalancer.server.port=3000"
 ```
 
-This is not necessarily the old host-published port.
-
-It should match the port the application listens on inside the container.
+This is not always the same as the old host-published port. It should match the port the application listens on inside the container.
 
 ## Removing direct port publishing
 
@@ -160,9 +150,9 @@ ports:
   - "3000:3000"
 ```
 
-After Traefik works, the direct port can usually be removed.
+After the Traefik route works, the direct port can usually be removed.
 
-The safer order is:
+Safer order:
 
 ```text
 1. Keep the old port published at first
@@ -181,15 +171,15 @@ Use this workflow for each real service:
 
 ```text
 1. Pick one non-critical service
-2. Confirm current access path works
+2. Confirm the current access path works
 3. Back up the current Compose file
 4. Add the service to the proxy network
 5. Add Traefik labels
-6. Add local DNS record
+6. Add or update the local DNS record
 7. Restart only that service stack
 8. Test through Traefik
-9. Check logs
-10. Remove direct host port only after validation
+9. Check application and Traefik logs
+10. Remove the direct host port only after validation
 11. Document what changed
 ```
 
@@ -201,7 +191,7 @@ Before changing a real service Compose file, make a copy:
 cp compose.yml compose.yml.before-traefik.$(date +%F-%H%M%S)
 ```
 
-Or, if the service is documented in Git, make sure the current state is committed before editing.
+If the service is documented in Git, make sure the current state is committed before editing.
 
 ## Start or restart the service
 
@@ -222,11 +212,6 @@ Check logs:
 
 ```bash
 docker compose logs --tail=100
-```
-
-Check Traefik logs:
-
-```bash
 docker logs traefik --tail=100
 ```
 
@@ -253,8 +238,10 @@ curl -I http://app.lab.example.com
 Test without relying on DNS:
 
 ```bash
-curl -k -H "Host: app.lab.example.com" https://DOCKER_HOST_IP/
+curl -k --resolve app.lab.example.com:443:DOCKER_HOST_IP https://app.lab.example.com/
 ```
+
+If the `--resolve` test works but normal hostname access does not, the problem is probably DNS.
 
 ## Validation checklist
 
@@ -282,6 +269,7 @@ docker network inspect proxy
 docker inspect example-app
 curl -k https://app.lab.example.com/
 curl -I http://app.lab.example.com
+curl -k --resolve app.lab.example.com:443:DOCKER_HOST_IP https://app.lab.example.com/
 docker logs traefik --tail=100
 ```
 
@@ -327,9 +315,9 @@ known issues
 
 Avoid committing real secrets, real `.env` files, or full service exports containing private values.
 
-## Good service migration note
+## Example migration note
 
-Example documentation note:
+Example note for a migrated service:
 
 ```text
 This service was migrated from direct host port access to Traefik routing.
@@ -345,9 +333,7 @@ The service now joins the shared proxy network and uses Traefik labels for routi
 
 ## What this step shows
 
-This step should show practical migration work.
-
-It demonstrates:
+This step demonstrates practical migration work:
 
 ```text
 Docker networking
