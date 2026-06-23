@@ -1,13 +1,13 @@
 # 03 - Traefik Local HTTPS Setup
 
-This step documents the first Traefik deployment using local self-signed HTTPS.
+This step starts Traefik with local self-signed HTTPS.
 
-The goal is to get Traefik running safely before adding Cloudflare or Let's Encrypt ACME automation.
+The goal is to prove that Traefik can start, listen on ports `80` and `443`, redirect HTTP to HTTPS, and protect the dashboard with basic authentication before adding Cloudflare or Let's Encrypt ACME automation.
 
 At this stage:
 
 ```text
-Traefik starts on ubuntu-docker
+Traefik runs on ubuntu-docker
 ports 80 and 443 are exposed
 HTTP redirects to HTTPS
 the dashboard is protected with basic auth
@@ -30,28 +30,19 @@ HTTPS entrypoint works
 HTTP redirects to HTTPS
 ```
 
-Using a self-signed certificate first keeps the initial test local and avoids changing the existing certificate workflow too early.
+Using a self-signed certificate keeps the first test local and avoids changing the working pfSense certificate workflow too early.
 
-## Runtime directory
+## Runtime path
 
-The real deployment runs outside the Git repository.
-
-Example runtime path:
+The real deployment runs outside the Git repository:
 
 ```text
 /srv/docker/traefik
 ```
 
-Create the folder structure if it does not already exist:
+This path should already exist from the prerequisites step.
 
-```bash
-sudo mkdir -p /srv/docker/traefik/{certs,dynamic}
-sudo chown -R "$USER:$USER" /srv/docker/traefik
-```
-
-## Copy example files
-
-From the repository root, copy the example files into the runtime folder:
+From the repository root, copy the example files into the runtime folder if they are not already there:
 
 ```bash
 cp examples/traefik/compose.example.yml /srv/docker/traefik/compose.yml
@@ -71,6 +62,8 @@ At minimum, replace:
 TRAEFIK_DASHBOARD_HOST=traefik.lab.example.com
 TRAEFIK_DASHBOARD_AUTH=admin:CHANGEME_GENERATED_HTPASSWD_HASH
 ```
+
+Do not commit the real `.env` file.
 
 ## Create dashboard credentials
 
@@ -99,15 +92,38 @@ Do not commit the real generated value.
 
 ## Create the local certificate
 
-Create a self-signed wildcard certificate for local testing.
+Create a local self-signed certificate for testing.
 
 Replace `lab.example.com` with the local lab domain used in DNS:
+
+```bash
+cat > /srv/docker/traefik/certs/local-openssl.cnf <<'EOF'
+[req]
+default_bits       = 2048
+prompt             = no
+default_md         = sha256
+x509_extensions    = v3_req
+distinguished_name = dn
+
+[dn]
+CN = *.lab.example.com
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = *.lab.example.com
+DNS.2 = traefik.lab.example.com
+EOF
+```
+
+Generate the certificate and key:
 
 ```bash
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout /srv/docker/traefik/certs/local.key \
   -out /srv/docker/traefik/certs/local.crt \
-  -subj "/CN=*.lab.example.com"
+  -config /srv/docker/traefik/certs/local-openssl.cnf
 ```
 
 Check that the files exist:
@@ -121,7 +137,10 @@ Expected files:
 ```text
 local.crt
 local.key
+local-openssl.cnf
 ```
+
+The browser will still warn about the certificate because it is self-signed. That is expected in this step.
 
 ## Check the dynamic TLS config
 
@@ -140,29 +159,13 @@ tls:
       keyFile: /certs/local.key
 ```
 
-The paths are container paths, not host paths.
+The paths are container paths.
 
-The host files are mounted into the container here:
+The host files are mounted into the container like this:
 
 ```text
 /srv/docker/traefik/certs
 → /certs
-```
-
-## Create the proxy network
-
-Traefik expects the external Docker network to exist:
-
-```bash
-docker network create proxy
-```
-
-If it already exists, that is fine.
-
-Verify it:
-
-```bash
-docker network ls | grep proxy
 ```
 
 ## Validate the Compose file
@@ -199,17 +202,10 @@ docker logs traefik --tail=100
 
 ## Verify listening ports
 
-Check that Traefik is listening on ports 80 and 443:
+Check that Traefik is listening on ports `80` and `443`:
 
 ```bash
 ss -tulpn | grep -E ':80|:443'
-```
-
-Expected:
-
-```text
-80/tcp
-443/tcp
 ```
 
 The insecure dashboard port should not be exposed:
@@ -218,7 +214,7 @@ The insecure dashboard port should not be exposed:
 ss -tulpn | grep ':8080'
 ```
 
-Expected:
+Expected result:
 
 ```text
 no output
@@ -241,9 +237,13 @@ https://traefik.lab.example.com/dashboard/
 
 The trailing slash is important.
 
-Because this step uses a self-signed certificate, the browser will show a certificate warning. That is expected.
+Expected result:
 
-The dashboard should ask for the basic auth username and password.
+```text
+browser shows a self-signed certificate warning
+dashboard asks for basic auth
+dashboard loads after login
+```
 
 ## Validation commands
 
@@ -266,7 +266,7 @@ Check ports:
 ss -tulpn | grep -E ':80|:443|:8080'
 ```
 
-Check dashboard response from a client:
+Check the dashboard response:
 
 ```bash
 curl -k -I https://traefik.lab.example.com/dashboard/
@@ -298,9 +298,7 @@ Remove the runtime folder only if needed:
 sudo rm -rf /srv/docker/traefik
 ```
 
-Do not change the existing pfSense HAProxy or pfSense ACME setup during this step.
-
-This keeps the existing pfSense path available as the known-good fallback.
+Do not change the existing pfSense HAProxy or pfSense ACME setup during this step. That keeps the existing pfSense path available as the known-good fallback.
 
 ## Notes
 
