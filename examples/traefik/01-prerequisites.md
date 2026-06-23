@@ -1,37 +1,40 @@
 # 01 - Prerequisites
 
-This step documents what needs to exist before deploying Traefik.
+This step prepares the Docker host before deploying Traefik.
 
-The goal is to make sure the Docker host is ready, the runtime folder exists, and the shared proxy network is available before any reverse proxy configuration is started.
+The goal is to make sure Docker works, the shared proxy network exists, and the real runtime directory is ready. Traefik is not started in this step.
 
 ## Target host
 
-Traefik will run on the Docker VM inside Proxmox.
-
-Example lab role:
+Traefik will run on the Docker VM inside Proxmox:
 
 ```text
 ubuntu-docker
 ```
 
-This host is used for Docker Compose services and will become the main reverse proxy host for Docker-based applications.
+This host runs Docker Compose services and will become the reverse proxy host for Docker-based applications.
 
-## Required packages
+## Required tools
 
-The host should have:
+The host should already have:
 
 ```text
 Docker Engine
 Docker Compose plugin
+```
+
+This step also uses:
+
+```text
 openssl
 apache2-utils
 ```
 
-`openssl` is used for the first local self-signed certificate.
+`openssl` is used later for the first local self-signed certificate.
 
 `apache2-utils` provides `htpasswd`, which is used to generate the Traefik dashboard basic authentication hash.
 
-Install helper packages if needed:
+Install the helper packages if needed:
 
 ```bash
 sudo apt update
@@ -52,13 +55,13 @@ Check Docker Compose:
 docker compose version
 ```
 
-Check that the Docker service is running:
+Check that Docker is running:
 
 ```bash
 systemctl status docker --no-pager -l
 ```
 
-A basic container test can also be used:
+Optional basic test:
 
 ```bash
 docker run --rm hello-world
@@ -66,46 +69,39 @@ docker run --rm hello-world
 
 ## Create the proxy network
 
-Traefik and routed containers will share an external Docker network.
+Traefik and routed containers will share an external Docker network named `proxy`.
 
-Create it once:
+Create it if it does not already exist:
 
 ```bash
-docker network create proxy
+docker network inspect proxy >/dev/null 2>&1 || docker network create proxy
 ```
 
-If the network already exists, Docker will print an error. That is not a problem.
-
-Verify the network:
+Verify it:
 
 ```bash
 docker network ls | grep proxy
-```
-
-Inspect it if needed:
-
-```bash
 docker network inspect proxy
 ```
 
 ## Create the runtime directory
 
-The real Traefik deployment files should live outside the Git repository.
+The real Traefik deployment files live outside the Git repository.
 
-Example runtime path:
+Runtime path:
 
 ```text
 /srv/docker/traefik
 ```
 
-Create the folder structure:
+Create the directory structure:
 
 ```bash
 sudo mkdir -p /srv/docker/traefik/{certs,dynamic}
 sudo chown -R "$USER:$USER" /srv/docker/traefik
 ```
 
-Expected layout:
+Expected layout at this stage:
 
 ```text
 /srv/docker/traefik/
@@ -113,7 +109,7 @@ Expected layout:
 └── dynamic/
 ```
 
-The real runtime files will later be added here:
+Later steps will add the real runtime files:
 
 ```text
 /srv/docker/traefik/
@@ -126,9 +122,9 @@ The real runtime files will later be added here:
 
 These real files are not committed to Git.
 
-## Repository example files
+## Copy example files
 
-The repository contains sanitized examples only:
+The repository contains sanitized examples:
 
 ```text
 examples/traefik/
@@ -139,9 +135,7 @@ examples/traefik/
     └── tls.example.yml
 ```
 
-These are copied into the runtime folder when building the real deployment.
-
-Example:
+Copy the Traefik examples into the runtime folder:
 
 ```bash
 cp examples/traefik/compose.example.yml /srv/docker/traefik/compose.yml
@@ -165,11 +159,11 @@ dynamic/tls.yml
 
 These may contain local hostnames, generated dashboard password hashes, Cloudflare tokens, certificates, or environment-specific paths.
 
-## Firewall expectations
+## Firewall expectation
 
-At this stage, Traefik is not running yet.
+Traefik is not running yet.
 
-When Traefik is deployed later, only these ports should be exposed from the Docker host:
+When deployed later, only these ports should be exposed from the Docker host:
 
 ```text
 80/tcp
@@ -178,7 +172,7 @@ When Traefik is deployed later, only these ports should be exposed from the Dock
 
 The insecure dashboard port should not be published.
 
-Check listening ports before deployment:
+Check current listening ports:
 
 ```bash
 ss -tulpn | grep -E ':80|:443|:8080'
@@ -211,11 +205,11 @@ find examples/traefik -maxdepth 3 -type f | sort
 git status --short
 ```
 
-## Rollback notes
+## Cleanup notes
 
-This step is low risk.
+This step is low risk because it only prepares the host.
 
-Rollback options:
+Cleanup commands:
 
 ```bash
 docker network rm proxy
@@ -230,15 +224,8 @@ Check first:
 docker network inspect proxy
 ```
 
-## Notes
-
-This step only prepares the host.
-
-Traefik routing, local DNS records, certificates, and test services are documented in later steps.
-
 ## References
 
 * Docker Compose networking: https://docs.docker.com/compose/how-tos/networking/
-* Docker restart policies: https://docs.docker.com/engine/containers/start-containers-automatically/
 * Traefik Docker setup: https://doc.traefik.io/traefik/setup/docker/
 
